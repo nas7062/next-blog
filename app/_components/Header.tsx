@@ -1,5 +1,6 @@
 import { Search } from "lucide-react";
 import Link from "next/link";
+import SearchInput from "./SearchInput";
 
 const NAV = {
   "": { label: "홈" },
@@ -21,7 +22,7 @@ export default function Header() {
               key={key}
               className="relative pb-1 cursor-pointer
                          after:content-[''] after:absolute after:left-0 after:bottom-0
-                         after:h-[2px] after:w-0 after:bg-current
+                         after:h-0.5 after:w-0 after:bg-current
                          after:transition-all after:duration-300 hover:after:w-full"
             >
               <Link href={"/" + key}>{v.label}</Link>
@@ -29,14 +30,7 @@ export default function Header() {
           ))}
         </ul>
       </nav>
-      <div className="flex relative">
-        <input
-          type="text"
-          placeholder="검색어를 입력하세요."
-          className="w-92 h-10 rounded-2xl border border-gray-300 px-10 focus:border-gray-500 outline-none transition-all duration-500"
-        />
-        <Search className="absolute left-2 top-2" />
-      </div>
+      <SearchInput />
       <div className="ml-auto flex items-center gap-10">
         <button className="px-4 py-2 rounded-2xl bg-green-400 text-white cursor-pointer hover:bg-green-500 transition-all duration-200">
           새 글 작성

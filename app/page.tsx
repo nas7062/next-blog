@@ -1,3 +1,11 @@
+import Post from "./_components/Post";
+
 export default function Home() {
-  return 
+  return (
+    <main>
+      <div>
+        <Post />
+      </div>
+    </main>
+  );
 }

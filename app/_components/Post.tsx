@@ -4,7 +4,12 @@ import nextImage from "@/public/nextImage.png";
 import dayjs from "dayjs";
 export default function Post() {
   return (
-    <div className="flex flex-col w-[350px] shadow-xl gap-4 pb-4 rounded-md">
+    <div
+      className="flex flex-col w-[350px] shadow-xl gap-4 pb-4 rounded-md
+                transition-transform duration-300
+                hover:-translate-y-2 hover:shadow-2xl
+                cursor-pointer"
+    >
       <div>
         <Image
           src={nextImage}

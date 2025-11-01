@@ -3,13 +3,20 @@ import { Search } from "lucide-react";
 export default function Header() {
   return (
     <header className="h-20 flex items-center px-96 gap-10 ">
-      <h1 className="text-4xl">10012</h1>
+      <h1 className="text-4xl font-semibold">10012</h1>
       <nav>
         <ul className="flex text-xl gap-8">
-          <li>홈</li>
-          <li>피드</li>
-          <li>최신</li>
-          <li>차트</li>
+          {["홈", "피드", "최신", "차트"].map((label) => (
+            <li
+              key={label}
+              className="relative pb-1 cursor-pointer
+                 after:content-[''] after:absolute after:left-0 after:bottom-0
+                 after:h-[2px] after:w-0 after:bg-current
+                 after:transition-all after:duration-300 hover:after:w-full"
+            >
+              {label}
+            </li>
+          ))}
         </ul>
       </nav>
       <div className="flex relative">
@@ -25,7 +32,6 @@ export default function Header() {
           새 글 작성
         </button>
         <button className="px-4 py-2 rounded-2xl bg-gray-700 hover:bg-gray-900 text-white  cursor-pointer transition-all duration-200">
-          {" "}
           로그인
         </button>
       </div>

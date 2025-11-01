@@ -2,7 +2,7 @@ import { Search } from "lucide-react";
 
 export default function Header() {
   return (
-    <header className="h-20 flex items-center px-96 gap-10 ">
+    <header className="h-20 flex items-center px-64 gap-10 ">
       <h1 className="text-4xl font-semibold cursor-pointer">10012</h1>
       <nav>
         <ul className="flex text-xl gap-8">

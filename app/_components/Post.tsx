@@ -18,13 +18,14 @@ export default function Post() {
           className="rounded-md"
         />
       </div>
-      <div className="max-w-[330px] px-4">
+      <div className="max-w-[330px] px-4 flex flex-col justify-around min-h-32">
+        <h2 className="text-xl font-semibold">블로그 만들기 후기</h2>
         <p className="whitespace-normal wrap-break-word">
           desriptdesriptdesriptdesriptdesriptdesriptdesriptdesriptdesriptdesriptdesript
         </p>
         <div className="flex gap-4">
           <p>{dayjs(new Date()).format("YYYY년 MM월 DD일")}</p>
-          <p>count</p>
+          <p>1개의 댓글</p>
         </div>
       </div>
       <div className="flex  items-center gap-2 px-4">
@@ -33,10 +34,10 @@ export default function Post() {
           alt="프로필 이미지"
           className="rounded-full w-10 h-10"
         />
-        <p>ninkname</p>
+        <p className="font-semibold">by 10012</p>
         <div className="ml-auto flex gap-1">
           <Heart fill="" />
-          <p>Count</p>
+          <p>1</p>
         </div>
       </div>
     </div>

@@ -3,7 +3,7 @@ import PostList from "../_components/PostList";
 
 export default function SearchPage() {
   return (
-    <main className="flex flex-col gap-6">
+    <main className="flex flex-col gap-8">
       <div className="flex items-center justify-center ">
         <input
           type="text"
@@ -12,6 +12,11 @@ export default function SearchPage() {
         />
         <XCircle className="w-10 h-10 cursor-pointer mr-4" />
         <Search className="w-10 h-10 cursor-pointer" />
+      </div>
+      <div className="flex justify-center">
+        <h3 className="text-2xl text-gray-600">
+          총 10000건의 포스트를 찾았습니다.
+        </h3>
       </div>
       <div className="flex gap-2">
         <p className="border-r border-r-gray-300 pr-2 cursor-pointer ">

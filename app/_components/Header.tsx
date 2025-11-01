@@ -1,20 +1,30 @@
 import { Search } from "lucide-react";
+import Link from "next/link";
+
+const NAV = {
+  "": { label: "홈" },
+  feed: { label: "피드" },
+  latest: { label: "최신" },
+  chart: { label: "차트" },
+} as const;
 
 export default function Header() {
   return (
     <header className="h-20 flex items-center px-64 gap-10 ">
-      <h1 className="text-4xl font-semibold cursor-pointer">10012</h1>
+      <Link className="text-4xl font-semibold cursor-pointer" href="/">
+        10012
+      </Link>
       <nav>
         <ul className="flex text-xl gap-8">
-          {["홈", "피드", "최신", "차트"].map((label) => (
+          {Object.entries(NAV).map(([key, v]) => (
             <li
-              key={label}
+              key={key}
               className="relative pb-1 cursor-pointer
-                 after:content-[''] after:absolute after:left-0 after:bottom-0
-                 after:h-[2px] after:w-0 after:bg-current
-                 after:transition-all after:duration-300 hover:after:w-full"
+                         after:content-[''] after:absolute after:left-0 after:bottom-0
+                         after:h-[2px] after:w-0 after:bg-current
+                         after:transition-all after:duration-300 hover:after:w-full"
             >
-              {label}
+              <Link href={"/" + key}>{v.label}</Link>
             </li>
           ))}
         </ul>

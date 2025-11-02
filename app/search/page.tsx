@@ -1,18 +1,17 @@
-import { Search, XCircle } from "lucide-react";
 import PostList from "../_components/PostList";
+import SearchInput from "./_components/SearchInput";
 
-export default function SearchPage() {
+export default function SearchPage({
+  searchParams,
+}: {
+  searchParams: { q?: string | string[] };
+}) {
+  const raw = searchParams.q;
+  const q = Array.isArray(raw) ? raw[0] : raw ?? "";
+
   return (
     <main className="flex flex-col gap-8">
-      <div className="flex items-center justify-center ">
-        <input
-          type="text"
-          className="text-4xl outline-none min-w-60 "
-          placeholder="검색어 입력"
-        />
-        <XCircle className="w-10 h-10 cursor-pointer mr-4" />
-        <Search className="w-10 h-10 cursor-pointer" />
-      </div>
+      <SearchInput q={q} />
       <div className="flex justify-center">
         <h3 className="text-2xl text-gray-600">
           총 10000건의 포스트를 찾았습니다.

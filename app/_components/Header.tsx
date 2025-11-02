@@ -1,4 +1,3 @@
-import { Search } from "lucide-react";
 import Link from "next/link";
 import SearchInput from "./SearchInput";
 

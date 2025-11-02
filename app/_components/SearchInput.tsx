@@ -12,8 +12,7 @@ export default function SearchInput({ searchParams }: Props) {
         name="q"
         placeholder="검색어를 입력하세요."
         defaultValue={searchParams}
-        className="w-full h-10 rounded-2xl border border-gray-300 pl-10 pr-4
-                   outline-none transition-colors duration-200 focus:border-gray-500"
+        className="w-full h-10 rounded-2xl border border-gray-300 pl-10 pr-4 outline-none transition-colors duration-200 focus:border-gray-500"
         aria-label="검색어 입력"
       />
       <Search

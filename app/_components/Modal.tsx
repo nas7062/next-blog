@@ -1,59 +1,71 @@
 "use client";
 
-import { ReactNode, useEffect, useRef, useState } from "react";
+import { ReactNode, useEffect, useLayoutEffect, useMemo, useRef } from "react";
 import { createPortal } from "react-dom";
 import { useRouter } from "next/navigation";
 
 export default function Modal({ children }: { children: ReactNode }) {
   const router = useRouter();
   const dialogRef = useRef<HTMLDialogElement>(null);
-  const [container, setContainer] = useState<HTMLElement | null>(null);
+  const openingAtRef = useRef<number>(0);
+  const OPEN_GUARD_MS = 120; // 오픈 직후 보호 시간
 
-  useEffect(() => {
-    setContainer(document.getElementById("modal-root"));
-  }, []);
+  const container = useMemo(
+    () =>
+      typeof window !== "undefined"
+        ? document.getElementById("modal-root")
+        : null,
+    []
+  );
 
-  // 열고 스크롤 잠금
-  useEffect(() => {
+  // 열기 + 스크롤 잠금. 한 틱 지연하여 초기 클릭 전파를 회피
+  useLayoutEffect(() => {
     if (!container) return;
     const el = dialogRef.current;
     if (!el) return;
 
-    // showModal은 열린 상태에서 다시 호출하면 DOMException
-    if (!el.open) {
-      try {
-        el.showModal();
-      } catch {
-        el.setAttribute("open", "");
+    let raf = 0;
+    raf = requestAnimationFrame(() => {
+      if (!el.open) {
+        try {
+          el.showModal();
+        } catch {
+          el.setAttribute("open", "");
+        }
       }
-    }
+      openingAtRef.current = performance.now();
+    });
 
     const { overflow } = document.body.style;
     document.body.style.overflow = "hidden";
 
     return () => {
+      cancelAnimationFrame(raf);
       if (el.open) el.close();
       document.body.style.overflow = overflow;
     };
   }, [container]);
 
   const safeClose = () => {
-    // 히스토리가 없으면 백 대신 세이프 라우트로 이동
-    if (window.history.length > 1) {
-      router.back();
-    } else {
-      router.push("/"); // 필요 시 원하는 경로로 변경
-    }
+    // 오픈 직후 의도치 않은 close 방지
+    if (performance.now() - openingAtRef.current < OPEN_GUARD_MS) return;
+
+    if (window.history.length > 1) router.back();
+    else router.push("/");
   };
 
   const onBackdropClick: React.MouseEventHandler<HTMLDialogElement> = (e) => {
-    if (e.target === e.currentTarget) {
-      safeClose();
-    }
+    if (performance.now() - openingAtRef.current < OPEN_GUARD_MS) return;
+    if (e.target === e.currentTarget) safeClose();
   };
 
   const onCancel: React.FormEventHandler<HTMLDialogElement> = (e) => {
-    e.preventDefault(); // 기본 close 막기
+    e.preventDefault();
+    safeClose();
+  };
+
+  // 일부 브라우저에서 close 이벤트가 곧바로 오는 경우 가드
+  const onClose: React.FormEventHandler<HTMLDialogElement> = () => {
     safeClose();
   };
 
@@ -62,11 +74,11 @@ export default function Modal({ children }: { children: ReactNode }) {
   return createPortal(
     <dialog
       ref={dialogRef}
-      className="max-w-[32rem] w-[90vw] max-h-[60vh]  rounded-lg p-4 absolute left-1/2 top-1/2 -translate-1/2  overflow-x-hidden"
+      className="max-w-[32rem] w-[90vw] max-h-[60vh] rounded-lg p-4 absolute left-1/2 top-1/2 -translate-1/2 overflow-x-hidden"
       aria-labelledby="modal-title"
       onClick={onBackdropClick}
       onCancel={onCancel}
-      onClose={safeClose}
+      onClose={onClose}
     >
       {children}
     </dialog>,

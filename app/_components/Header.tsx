@@ -34,9 +34,12 @@ export default function Header() {
         <button className="px-4 py-2 rounded-2xl bg-green-400 text-white cursor-pointer hover:bg-green-500 transition-all duration-200">
           새 글 작성
         </button>
-        <button className="px-4 py-2 rounded-2xl bg-gray-700 hover:bg-gray-900 text-white  cursor-pointer transition-all duration-200">
+        <Link
+          href={"/login"}
+          className="px-4 py-2 rounded-2xl bg-gray-700 hover:bg-gray-900 text-white  cursor-pointer transition-all duration-200"
+        >
           로그인
-        </button>
+        </Link>
       </div>
     </header>
   );

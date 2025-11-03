@@ -1,4 +1,4 @@
-import PostList from "./_components/PostList";
+import PostList from "@/app/_components/PostList";
 
 export default function Home() {
   return (

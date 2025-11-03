@@ -33,9 +33,7 @@ export default function RootLayout({
         <AuthSession>
           <Header />
           <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-            <main className="flex min-h-screen w-full max-w-[80%] flex-col items-center justify-between py-16 px-8 bg-white dark:bg-black sm:items-start">
-              {children}
-            </main>
+            {children}
           </div>
           <div id="modal-root"></div>
         </AuthSession>

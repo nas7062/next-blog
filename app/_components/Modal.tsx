@@ -36,8 +36,7 @@ export default function Modal({ children }: { children: ReactNode }) {
   }, [mounted, container]);
 
   const safeClose = () => {
-    if (window.history.length > 1) router.back();
-    else router.push("/");
+    router.push("/");
   };
 
   if (!mounted || !container) return null;
@@ -45,7 +44,7 @@ export default function Modal({ children }: { children: ReactNode }) {
   return createPortal(
     <dialog
       ref={dialogRef}
-      className="max-w-[32rem] w-[90vw] max-h-[60vh] rounded-lg p-4 absolute left-1/2 top-1/2 -translate-1/2 overflow-x-hidden"
+      className="max-w-[36rem] w-[90vw] max-h-[60vh] rounded-lg p-4 absolute left-1/2 top-1/2 -translate-1/2 overflow-x-hidden"
       aria-labelledby="modal-title"
       onClick={(e) => e.target === e.currentTarget && safeClose()}
       onCancel={(e) => {

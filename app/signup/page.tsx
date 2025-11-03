@@ -1,12 +1,13 @@
 import Link from "next/link";
 import Modal from "../_components/Modal";
+import { onSubmit } from "./_lib/signup";
 
 export default function SignupPage() {
   return (
     <Modal>
       <div className="flex flex-col justify-center p-4 gap-4">
         <h2 className="text-3xl text-center">회원가입</h2>
-        <form action="/login" className="flex flex-col gap-4">
+        <form action={onSubmit} className="flex flex-col gap-4">
           <div className="flex gap-2 ">
             <label
               htmlFor="name"

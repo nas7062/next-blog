@@ -7,17 +7,21 @@ export async function onSubmit(formData: FormData) {
   const email = String(formData.get("email") || "");
   const password = String(formData.get("password") || "");
   const passwordConfirm = String(formData.get("passwordConfirm") || "");
-  if (!email || !password) return;
+  if (!email || !password || !name) return;
   if (password !== passwordConfirm) return;
 
   const res = await fetch(`${baseUrl}/api/auth/signup`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ email, password, name }),
-    // Server Action에서는 캐시 방지 권장
     cache: "no-store",
   });
   console.log(res);
 
-  if (res.ok) redirect("/login");
+  if (!res.ok) {
+    const body = await res.text();
+    console.error("signup 400:", res.status, body);
+    return;
+  }
+  if (res.ok) redirect("/signin");
 }

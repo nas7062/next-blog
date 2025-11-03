@@ -25,17 +25,18 @@ export default function LoginPage() {
       password,
       redirect: false,
     });
-    if (res?.ok) {
-      router.replace("/");
-    } else {
+    console.log(res);
+    if (res?.status !== 200) {
       setMessage("아이디 또는 비밀번호가 올바르지 않습니다.");
+      return;
     }
+    router.replace("/");
   };
   return (
     <Modal>
       <div className="flex flex-col justify-center p-4 gap-4">
         <h2 className="text-3xl text-center">로그인</h2>
-        <form action={onSubmit} className="flex flex-col gap-4">
+        <form onSubmit={onSubmit} className="flex flex-col gap-4">
           <div className="flex gap-2 ">
             <label
               htmlFor="email"
@@ -48,6 +49,8 @@ export default function LoginPage() {
               id="email"
               name="email"
               autoComplete="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               placeholder="이메일을 입력하세요"
               required
               className="border border-gray-300 rounded-md flex-1 px-2 outline-none focus:border-2 focus:border-gray-700 "
@@ -65,6 +68,8 @@ export default function LoginPage() {
               id="password"
               name="password"
               autoComplete="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               placeholder="비밀번호를 입력하세요"
               className="border border-gray-300 rounded-md flex-1 px-2   outline-none focus:border-2 focus:border-gray-700"
               required
@@ -77,6 +82,11 @@ export default function LoginPage() {
             로그인
           </button>
         </form>
+        {message && (
+          <p className="text-sm text-red-600 pt-2" role="alert">
+            {message}
+          </p>
+        )}
         <div className="flex justify-end gap-2 text-green-500">
           <p>아직 회원이 아니신가요?</p>
           <Link href={"/signup"}>

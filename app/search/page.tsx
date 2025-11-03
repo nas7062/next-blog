@@ -1,12 +1,13 @@
+import { use } from "react";
 import PostList from "../_components/PostList";
 import SearchInput from "./_components/SearchInput";
 
 export default function SearchPage({
   searchParams,
 }: {
-  searchParams: { q?: string | string[] };
+  searchParams: Promise<{ q?: string | string[] }>;
 }) {
-  const raw = searchParams.q;
+  const { q: raw } = use(searchParams);
   const q = Array.isArray(raw) ? raw[0] : raw ?? "";
 
   return (

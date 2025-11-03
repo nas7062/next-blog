@@ -35,7 +35,7 @@ export default function Header() {
           새 글 작성
         </button>
         <Link
-          href={"/login"}
+          href={"/signin"}
           className="px-4 py-2 rounded-2xl bg-gray-700 hover:bg-gray-900 text-white  cursor-pointer transition-all duration-200"
         >
           로그인

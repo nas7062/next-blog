@@ -86,7 +86,7 @@ export default function SignupPage() {
         </form>
         <div className="flex justify-end gap-2 text-green-500">
           <p>이미 회원 이신가요?</p>
-          <Link href={"/login"}>
+          <Link href={"/signin"}>
             <strong className="cursor-pointer">로그인</strong>
           </Link>
         </div>

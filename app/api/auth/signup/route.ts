@@ -20,7 +20,7 @@ export async function POST(req: Request) {
     email,
     password,
     options: {
-      data: { name }, // ← user_metadata에 저장
+      data: { name }, // user_metadata에 저장
     },
   });
 

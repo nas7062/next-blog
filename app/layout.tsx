@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist_Mono, Nanum_Gothic } from "next/font/google";
 import "./globals.css";
 import Header from "./_components/Header";
 
-const geistSans = Geist({
+const geistNanum = Nanum_Gothic({
+  weight: "700",
   variable: "--font-geist-sans",
   subsets: ["latin"],
 });
@@ -26,7 +27,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistNanum.variable} ${geistMono.variable} antialiased`}
       >
         <Header />
         <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">

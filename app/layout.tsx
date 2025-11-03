@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist_Mono, Nanum_Gothic } from "next/font/google";
 import "./globals.css";
 import Header from "./_components/Header";
+import AuthSession from "./_components/AuthSession";
 
 const geistNanum = Nanum_Gothic({
   weight: "700",
@@ -29,13 +30,15 @@ export default function RootLayout({
       <body
         className={`${geistNanum.variable} ${geistMono.variable} antialiased`}
       >
-        <Header />
-        <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-          <main className="flex min-h-screen w-full max-w-[80%] flex-col items-center justify-between py-16 px-8 bg-white dark:bg-black sm:items-start">
-            {children}
-          </main>
-        </div>
-        <div id="modal-root"></div>
+        <AuthSession>
+          <Header />
+          <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
+            <main className="flex min-h-screen w-full max-w-[80%] flex-col items-center justify-between py-16 px-8 bg-white dark:bg-black sm:items-start">
+              {children}
+            </main>
+          </div>
+          <div id="modal-root"></div>
+        </AuthSession>
       </body>
     </html>
   );

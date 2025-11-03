@@ -1,13 +1,41 @@
 "use client";
 import Link from "next/link";
 import Modal from "../_components/Modal";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { signIn, useSession } from "next-auth/react";
 
 export default function LoginPage() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [message, setMessage] = useState("");
+  const router = useRouter();
+  const { data: session } = useSession();
+
+  if (session?.user) {
+    router.replace("/home");
+    return null;
+  }
+
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setMessage("");
+    const res = await signIn("credentials", {
+      email,
+      password,
+      redirect: false,
+    });
+    if (res?.ok) {
+      router.replace("/");
+    } else {
+      setMessage("아이디 또는 비밀번호가 올바르지 않습니다.");
+    }
+  };
   return (
     <Modal>
       <div className="flex flex-col justify-center p-4 gap-4">
         <h2 className="text-3xl text-center">로그인</h2>
-        <form action="/login" className="flex flex-col gap-4">
+        <form action={onSubmit} className="flex flex-col gap-4">
           <div className="flex gap-2 ">
             <label
               htmlFor="email"

@@ -9,9 +9,12 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@auth/supabase-adapter": "^1.11.1",
+    "@supabase/supabase-js": "^2.78.0",
     "dayjs": "^1.11.19",
     "lucide-react": "^0.552.0",
     "next": "16.0.1",
+    "next-auth": "^5.0.0-beta.30",
     "react": "19.2.0",
     "react-dom": "19.2.0"
   },

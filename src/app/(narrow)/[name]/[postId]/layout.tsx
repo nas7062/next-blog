@@ -27,7 +27,7 @@ export default function SinglePostLayout({
           <div className="mx-auto max-w-[860px]">{children}</div>
         </article>
 
-        {/* 우측 레일 */}
+        {/* 우측 리스트 */}
         <aside className="hidden lg:block">
           <div className="fixed top-[150] w-[220px] h-[calc(80vh-1.5rem)] overflow-auto pl-4">
             {list}

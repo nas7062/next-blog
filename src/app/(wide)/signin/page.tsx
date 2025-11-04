@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import Modal from "../_components/Modal";
+import Modal from "@/src/app/_components/Modal";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { signIn, useSession } from "next-auth/react";

@@ -1,6 +1,6 @@
 import Link from "next/link";
-import Modal from "../_components/Modal";
 import { onSubmit } from "./_lib/signup";
+import Modal from "../../_components/Modal";
 
 export default function SignupPage() {
   return (

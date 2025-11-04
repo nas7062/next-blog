@@ -16,7 +16,7 @@ export default function SearchInput({ q }: { q: string }) {
       />
 
       <button type="submit" aria-label="검색" className="ml-2">
-        <Search className="w-10 h-10" />
+        <Search className="w-10 h-10 cursor-pointer" />
       </button>
     </form>
   );

@@ -1,6 +1,7 @@
 import { use } from "react";
-import PostList from "../_components/PostList";
+
 import SearchInput from "./_components/SearchInput";
+import PostList from "../../_components/PostList";
 
 export default function SearchPage({
   searchParams,

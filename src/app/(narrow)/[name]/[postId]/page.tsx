@@ -1,3 +1,3 @@
 export default function SignlePostPage() {
-  return <div>fsdfsd</div>;
+  return <div></div>;
 }

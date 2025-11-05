@@ -36,7 +36,7 @@ export default function Modal({ children }: { children: ReactNode }) {
   }, [mounted, container]);
 
   const safeClose = () => {
-    router.push("/");
+    router.back();
   };
 
   if (!mounted || !container) return null;

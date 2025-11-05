@@ -2,10 +2,12 @@ export default function SinglePostLayout({
   children,
   sidebar,
   list,
+  modal,
 }: {
   children: React.ReactNode;
   sidebar: React.ReactNode;
   list: React.ReactNode;
+  modal: React.ReactNode;
 }) {
   return (
     <main className="min-h-screen bg-white">
@@ -34,6 +36,7 @@ export default function SinglePostLayout({
           </div>
         </aside>
       </div>
+      {modal}
     </main>
   );
 }

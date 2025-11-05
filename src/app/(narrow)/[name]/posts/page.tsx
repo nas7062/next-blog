@@ -1,6 +1,7 @@
 import Image from "next/image";
 import nextImage from "@/public/nextImage.png";
 import PostList from "@/src/app/_components/PostList";
+import SinglePostList from "@/src/app/_components/SinglePostList";
 export default function PostPage() {
   return (
     <div className="bg-white flex flex-col">
@@ -26,7 +27,7 @@ export default function PostPage() {
         <p className="text-3xl px-4 py-2">글</p>
         <p className="text-3xl px-4 py-2">소개</p>
       </div>
-      <PostList />
+      <SinglePostList />
     </div>
   );
 }

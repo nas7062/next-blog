@@ -8,6 +8,7 @@ import {
   useRef,
   useState,
 } from "react";
+import TagList from "../../_components/TagList";
 
 export default function WritePage() {
   const editorRef = useRef<Editor>(null);
@@ -58,16 +59,7 @@ export default function WritePage() {
           onChange={(e) => setTag(e.target.value)}
           onKeyDown={handleKeyPress}
         />
-        <div className="flex gap-2">
-          {tags.map((tag, idx) => (
-            <div
-              className="px-4 py-2 text-white bg-green-300 rounded-2xl"
-              key={idx}
-            >
-              {tag}
-            </div>
-          ))}
-        </div>
+        <TagList tags={tags} />
         <div className="bg-white h-[500px]  mt-9 text-left">
           <TuiEditor
             ref={editorRef}

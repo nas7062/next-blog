@@ -31,9 +31,12 @@ export default function Header() {
       </nav>
       <SearchInput />
       <div className="ml-auto flex items-center gap-10">
-        <button className="px-4 py-2 rounded-2xl bg-green-400 text-white cursor-pointer hover:bg-green-500 transition-all duration-200">
+        <Link
+          href={"/write"}
+          className="px-4 py-2 rounded-2xl bg-green-400 text-white cursor-pointer hover:bg-green-500 transition-all duration-200"
+        >
           새 글 작성
-        </button>
+        </Link>
         <Link
           href={"/signin"}
           className="px-4 py-2 rounded-2xl bg-gray-700 hover:bg-gray-900 text-white  cursor-pointer transition-all duration-200"

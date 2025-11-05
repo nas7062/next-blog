@@ -24,8 +24,18 @@ export default function SignlePostPage() {
             <p>{getTimeElapsed(new Date())}</p>
           </div>
           <div className="flex gap-2">
-            <p>수정</p>
-            <p onClick={() => router.push("/nas7062/123/delete")}>삭제</p>
+            <p
+              className="cursor-pointer text-gray-500 hover:text-gray-800"
+              onClick={() => router.push("/write")}
+            >
+              수정
+            </p>
+            <p
+              className="cursor-pointer text-gray-500 hover:text-gray-800"
+              onClick={() => router.push("/nas7062/123/delete")}
+            >
+              삭제
+            </p>
           </div>
         </div>
         <div className="flex gap-2">

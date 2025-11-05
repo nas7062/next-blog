@@ -1,11 +1,20 @@
 "use client";
 import { Editor, Viewer } from "@toast-ui/react-editor";
 import TuiEditor from "./_components/TuiEditor";
-import { FormEventHandler, useEffect, useRef, useState } from "react";
+import {
+  FormEventHandler,
+  KeyboardEvent,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 
 export default function WritePage() {
   const editorRef = useRef<Editor>(null);
   const viewerRef = useRef<Viewer>(null);
+  const [tags, setTags] = useState<string[]>([]);
+  const [title, setTitle] = useState("");
+  const [tag, setTag] = useState("");
   const [getContent, setGetContent] = useState("");
 
   const onSubmit: FormEventHandler<HTMLFormElement> = (event) => {
@@ -20,10 +29,45 @@ export default function WritePage() {
     viewerRef.current?.getInstance().setMarkdown(getContent);
   }, [getContent]);
 
+  const handleTagsPlus = () => {
+    setTags((prev) => [...prev, tag]);
+    setTag("");
+  };
+
+  const handleKeyPress = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      handleTagsPlus();
+    }
+  };
+
   return (
-    <main className="h-screen flex  gap-9 items-center justify-center">
-      <form onSubmit={onSubmit} className="text-center">
-        <h2 className="text-center text-2xl">Toast ui</h2>
+    <main className="h-screen flex gap-9">
+      <form onSubmit={onSubmit} className="text-center flex flex-col">
+        <input
+          type="text"
+          placeholder="제목을 입력하세요"
+          className="h-20 text-4xl outline-none font-semibold"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+        />
+        <input
+          type="text"
+          placeholder="태그를 입력하세요"
+          className="h-14 text-xl outline-none font-semibold"
+          value={tag}
+          onChange={(e) => setTag(e.target.value)}
+          onKeyDown={handleKeyPress}
+        />
+        <div className="flex gap-2">
+          {tags.map((tag, idx) => (
+            <div
+              className="px-4 py-2 text-white bg-green-300 rounded-2xl"
+              key={idx}
+            >
+              {tag}
+            </div>
+          ))}
+        </div>
         <div className="bg-white h-[500px] w-[750px] mt-9 text-left">
           <TuiEditor
             ref={editorRef}
@@ -38,6 +82,7 @@ export default function WritePage() {
             ]}
           />
         </div>
+
         <button
           type="submit"
           className="text-base bg-black text-white py-2 px-5 rounded-full mt-9"
@@ -45,9 +90,7 @@ export default function WritePage() {
           서버에 전달
         </button>
       </form>
-      <p>출력된 HTML</p>
-      <div className="mt-28">
-        <h2 className="text-center text-2xl">Toast ui - Viewer</h2>
+      <div>
         <div className="bg-white h-[500px] w-[750px] mt-9 text-left border border-[#ddd]">
           <Viewer height="100%" ref={viewerRef} initialValue={getContent} />
         </div>

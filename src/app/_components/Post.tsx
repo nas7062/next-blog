@@ -5,7 +5,8 @@ import nextImage from "@/public/nextImage.png";
 import dayjs from "dayjs";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-export default function Post() {
+import { IPost } from "./PostList";
+export default function Post({ post }: { post: IPost }) {
   const [clicked, setClicked] = useState(false);
   const router = useRouter();
 

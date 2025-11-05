@@ -1,10 +1,23 @@
+import { getPostList } from "../_lib/getPostList";
 import Post from "./Post";
 
-export default function PostList() {
+export interface IPost {
+  coverImgUrl: string;
+  createdAt: string;
+  description: string;
+  id: number;
+  searchIndex?: string | null;
+  title: string;
+  updatedAt: string;
+  userId: number;
+}
+
+export default async function PostList() {
+  const posts: IPost[] = await getPostList();
   return (
     <div className="flex flex-wrap gap-x-4 gap-y-8">
-      {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((item, idx) => (
-        <Post key={idx} />
+      {posts.map((post) => (
+        <Post key={post.id} post={post} />
       ))}
     </div>
   );

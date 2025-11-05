@@ -41,7 +41,7 @@ export default function WritePage() {
   };
 
   return (
-    <main className="h-screen flex gap-9">
+    <main className="h-screen w-full flex gap-9">
       <form onSubmit={onSubmit} className="text-center flex flex-col">
         <input
           type="text"
@@ -68,7 +68,7 @@ export default function WritePage() {
             </div>
           ))}
         </div>
-        <div className="bg-white h-[500px] w-[750px] mt-9 text-left">
+        <div className="bg-white h-[500px]  mt-9 text-left">
           <TuiEditor
             ref={editorRef}
             height="100%"
@@ -90,8 +90,8 @@ export default function WritePage() {
           서버에 전달
         </button>
       </form>
-      <div>
-        <div className="bg-white h-[500px] w-[750px] mt-9 text-left border border-[#ddd]">
+      <div className="flex-1">
+        <div className="bg-white h-screen flex-1 mt-9 text-left border border-[#ddd]">
           <Viewer height="100%" ref={viewerRef} initialValue={getContent} />
         </div>
       </div>

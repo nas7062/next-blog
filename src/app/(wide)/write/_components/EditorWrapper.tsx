@@ -1,6 +1,6 @@
-import { Editor } from "@toast-ui/react-editor";
+import { Editor, EditorProps } from "@toast-ui/react-editor";
 
-const EditorWrapper = (props) => {
+const EditorWrapper = (props: EditorProps) => {
   return <Editor {...props} />;
 };
 

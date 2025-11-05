@@ -1,6 +1,5 @@
 import Image from "next/image";
 import nextImage from "@/public/nextImage.png";
-import PostList from "@/src/app/_components/PostList";
 import SinglePostList from "@/src/app/_components/SinglePostList";
 export default function PostPage() {
   return (

@@ -2,11 +2,10 @@
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { createClient } from "@supabase/supabase-js";
-import jwt from "jsonwebtoken";
 
 const sb = createClient(
-  process.env.SUPABASE_URL!,
-  process.env.SUPABASE_ANON_KEY!
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 );
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
@@ -73,6 +72,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       return session;
     },
   },
-  // 필요 시 에러 페이지
-  pages: { signIn: "/signin" },
+  
+  
 });

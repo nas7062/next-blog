@@ -1,7 +1,6 @@
 import { use } from "react";
-
 import SearchInput from "./_components/SearchInput";
-import PostList from "../../_components/PostList";
+import SinglePostList from "../../_components/SinglePostList";
 
 export default function SearchPage({
   searchParams,
@@ -9,10 +8,10 @@ export default function SearchPage({
   searchParams: Promise<{ q?: string | string[] }>;
 }) {
   const { q: raw } = use(searchParams);
-  const q = Array.isArray(raw) ? raw[0] : raw ?? "";
+  const q = Array.isArray(raw) ? raw[0] : (raw ?? "");
 
   return (
-    <main className="flex flex-col gap-8">
+    <main className="flex flex-col justify-center mx-auto  gap-8">
       <SearchInput q={q} />
       <div className="flex justify-center">
         <h3 className="text-2xl text-gray-600">
@@ -25,7 +24,7 @@ export default function SearchPage({
         </p>
         <p className="cursor-pointer">최신순</p>
       </div>
-      <PostList />
+      <SinglePostList />
     </main>
   );
 }

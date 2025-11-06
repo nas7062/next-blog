@@ -11,7 +11,8 @@
   "dependencies": {
     "@auth/supabase-adapter": "^1.11.1",
     "@supabase/supabase-js": "^2.78.0",
-    "@toast-ui/react-editor": "^3.2.3",
+    "@tiptap/react": "^3.10.2",
+    "@tiptap/starter-kit": "^3.10.2",
     "bcryptjs": "^3.0.3",
     "dayjs": "^1.11.19",
     "jsonwebtoken": "^9.0.2",

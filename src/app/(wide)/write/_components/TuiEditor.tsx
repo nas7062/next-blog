@@ -5,6 +5,7 @@ import StarterKit from "@tiptap/starter-kit";
 
 export default function Editor() {
   const editor = useEditor({
+    immediatelyRender: false,
     extensions: [StarterKit],
     content: "<p>안녕하세요 👋</p>", // 초기값 (HTML 가능)
   });

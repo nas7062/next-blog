@@ -3,6 +3,7 @@ import { Geist_Mono, Nanum_Gothic } from "next/font/google";
 import "./globals.css";
 import Header from "./_components/Header";
 import AuthSession from "./_components/AuthSession";
+import { Toaster } from "sonner";
 
 const geistNanum = Nanum_Gothic({
   weight: "700",
@@ -31,6 +32,7 @@ export default function RootLayout({
         className={`${geistNanum.variable} ${geistMono.variable} antialiased`}
       >
         <AuthSession>
+          <Toaster />
           <Header />
           <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
             {children}

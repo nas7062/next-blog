@@ -3,6 +3,19 @@ import TuiEditor from "./_components/TuiEditor";
 import React, { FormEventHandler, KeyboardEvent, useState } from "react";
 import TagList from "../../_components/TagList";
 import Viewer from "./_components/View";
+import { toast } from "sonner";
+import { supabase } from "../../api/supabase";
+import nextImage from "@/public/nextImage.png";
+export interface IPost {
+  coverImgUrl: string;
+  createdAt: string;
+  description: string;
+  id: number;
+  searchIndex?: string | null;
+  title: string;
+  updatedAt: string;
+  userId: number;
+}
 
 export default function WritePage() {
   const [tags, setTags] = useState<string[]>([]);
@@ -10,8 +23,28 @@ export default function WritePage() {
   const [tag, setTag] = useState("");
   const [getContent, setGetContent] = useState("");
 
-  const onSubmit: FormEventHandler<HTMLFormElement> = (event) => {
+  const onSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault();
+    console.log(title, getContent, tags);
+    if (!title || !getContent) {
+      toast.error("글 작성이 실패했습니다");
+      return;
+    } else {
+      const { data, error } = await supabase
+        .from("Post")
+        .insert([
+          {
+            title,
+            description: getContent,
+            createdAt: "2025-01-25",
+            id: 1,
+            updatedAt: "2025-01-25",
+            userId: 1,
+            coverImgUrl: "sadsad.png",
+          },
+        ])
+        .select();
+    }
   };
 
   const handleTagsPlus = () => {

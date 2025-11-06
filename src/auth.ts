@@ -1,12 +1,7 @@
-// auth.ts
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
-import { createClient } from "@supabase/supabase-js";
+import { supabase } from "./app/api/supabase";
 
-const sb = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   session: { strategy: "jwt" },
@@ -26,14 +21,16 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           const password = creds?.password as string;
           if (!email || !password) return null;
 
-          const { data, error } = await sb.auth.signInWithPassword({
+          const { data, error } = await supabase.auth.signInWithPassword({
             email,
             password,
           });
 
+          console.log("signIn data:", data);
+console.log("signIn error:", error);
           if (error || !data.user) return null;
 
-          console.log(data);
+          
           // NextAuth는 최소 id 필요
           return { id: data.user.id, email: data.user.email ?? undefined };
         } catch (e) {
@@ -53,24 +50,17 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       return token;
     },
     async session({ session, token }) {
-      // token.sub, token.email 사용
       if (token?.sub) {
-        // 필요 시 Supabase용 액세스 토큰 발급
-        const signingSecret = process.env.SUPABASE_JWT_SECRET;
-        if (signingSecret && session.expires) {
-          const payload = {
-            aud: "authenticated",
-            exp: Math.floor(new Date(session.expires).getTime() / 1000),
-            sub: token.sub,
-            email: token.email,
-            role: "authenticated",
-          };
-          // @ts-expect-error: 커스텀 필드
-          session.supabaseAccessToken = jwt.sign(payload, signingSecret);
-        }
+        session.user = {
+          id: token.sub,
+          email: token.email,
+        };
+      } else {
+        session.user = null;
       }
+    
       return session;
-    },
+    }
   },
   
   

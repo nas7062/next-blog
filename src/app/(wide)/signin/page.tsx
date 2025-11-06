@@ -13,7 +13,7 @@ export default function LoginPage() {
   const { data: session } = useSession();
 
   if (session?.user) {
-    router.replace("/home");
+    router.replace("/");
     return null;
   }
 

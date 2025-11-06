@@ -1,11 +1,17 @@
 "use client";
 import TuiEditor from "./_components/TuiEditor";
-import React, { FormEventHandler, KeyboardEvent, useState } from "react";
+import React, {
+  FormEventHandler,
+  KeyboardEvent,
+  useEffect,
+  useState,
+} from "react";
 import TagList from "../../_components/TagList";
 import Viewer from "./_components/View";
 import { toast } from "sonner";
 import { supabase } from "../../api/supabase";
 import nextImage from "@/public/nextImage.png";
+
 export interface IPost {
   coverImgUrl: string;
   createdAt: string;
@@ -37,13 +43,17 @@ export default function WritePage() {
             title,
             description: getContent,
             createdAt: "2025-01-25",
-            id: 1,
             updatedAt: "2025-01-25",
             userId: 1,
             coverImgUrl: "sadsad.png",
           },
         ])
         .select();
+      if (error) {
+        console.error("❌ Supabase insert error:", error);
+      } else {
+        console.log("✅ Insert success:", data);
+      }
     }
   };
 

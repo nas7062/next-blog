@@ -1,6 +1,6 @@
 "use client";
 import TuiEditor from "./_components/TuiEditor";
-import { FormEventHandler, KeyboardEvent, useState } from "react";
+import React, { FormEventHandler, KeyboardEvent, useState } from "react";
 import TagList from "../../_components/TagList";
 import Viewer from "./_components/View";
 
@@ -24,10 +24,13 @@ export default function WritePage() {
       handleTagsPlus();
     }
   };
+  const changeContent = (value: string) => {
+    setGetContent(value);
+  };
 
   return (
     <main className="h-screen w-full flex gap-9">
-      <form onSubmit={onSubmit} className="text-center flex flex-col">
+      <form onSubmit={onSubmit} className="text-center flex flex-1 flex-col">
         <input
           type="text"
           placeholder="제목을 입력하세요"
@@ -45,7 +48,7 @@ export default function WritePage() {
         />
         <TagList tags={tags} />
         <div className="bg-white h-[500px]  mt-9 text-left">
-          <TuiEditor />
+          <TuiEditor content={getContent} contentChange={changeContent} />
         </div>
 
         <button
@@ -55,7 +58,7 @@ export default function WritePage() {
           서버에 전달
         </button>
       </form>
-      <div className="flex-1">
+      <div className="w-1/2">
         <div className="bg-white h-screen flex-1 mt-9 text-left border border-[#ddd]">
           <Viewer content={getContent} />
         </div>

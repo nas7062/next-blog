@@ -11,13 +11,13 @@ export default function Post({ post }: { post: IPost }) {
   const [clicked, setClicked] = useState(false);
   const router = useRouter();
   const { data: user } = useSession();
-  console.log(user);
-  const MovePostDetail = () => {
-    router.push(`/nas7062/123`);
+
+  const MovePostDetail = (postId: number) => {
+    router.push(`/${user?.user?.name}/${postId}`);
   };
   const MoveUserPosts = (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
-    router.push(`/nas7062/posts`);
+    router.push(`/${user?.user?.name}/posts`);
   };
 
   return (
@@ -26,7 +26,7 @@ export default function Post({ post }: { post: IPost }) {
                 transition-transform duration-350
                 hover:-translate-y-2 hover:shadow-2xl
                 cursor-pointer"
-      onClick={MovePostDetail}
+      onClick={() => MovePostDetail(post.id)}
       key={post.id}
     >
       <div>

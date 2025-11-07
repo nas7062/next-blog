@@ -6,10 +6,12 @@ import dayjs from "dayjs";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { IPost } from "./PostList";
+import { useSession } from "next-auth/react";
 export default function Post({ post }: { post: IPost }) {
   const [clicked, setClicked] = useState(false);
   const router = useRouter();
-
+  const { data: user } = useSession();
+  console.log(user);
   const MovePostDetail = () => {
     router.push(`/nas7062/123`);
   };

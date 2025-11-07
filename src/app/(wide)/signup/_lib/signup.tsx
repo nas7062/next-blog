@@ -16,7 +16,6 @@ export async function onSubmit(formData: FormData) {
     body: JSON.stringify({ email, password, name }),
     cache: "no-store",
   });
-  console.log(res);
 
   if (!res.ok) {
     const body = await res.text();

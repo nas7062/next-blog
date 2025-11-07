@@ -17,6 +17,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       },
       async authorize(creds) {
         try {
+          
           const email = creds?.email as string;
           const password = creds?.password as string;
           if (!email || !password) return null;
@@ -26,13 +27,11 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             password,
           });
 
-          console.log("signIn data:", data);
-console.log("signIn error:", error);
           if (error || !data.user) return null;
 
-          
+          console.log(data.user.user_metadata.name)
           // NextAuth는 최소 id 필요
-          return { id: data.user.id, email: data.user.email ?? undefined };
+          return { id: data.user.id, email: data.user.email ?? undefined , name : data.user.user_metadata?.name ?? undefined};
         } catch (e) {
           console.error("authorize error:", e);
           return null; // 실패는 null로
@@ -46,6 +45,7 @@ console.log("signIn error:", error);
       if (user) {
         token.sub = user.id;
         token.email = user.email;
+        token.name = user.name;
       }
       return token;
     },
@@ -54,6 +54,7 @@ console.log("signIn error:", error);
         session.user = {
           id: token.sub,
           email: token.email,
+          name : token.name
         };
       } else {
         session.user = null;

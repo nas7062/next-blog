@@ -30,10 +30,10 @@ export default function WritePage() {
   const [tag, setTag] = useState("");
   const [getContent, setGetContent] = useState("");
   const { data: user } = useSession();
-
+  console.log(user);
   const onSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault();
-    console.log(title, getContent, tags);
+
     if (!title || !getContent) {
       toast.error("글 작성이 실패했습니다");
       return;

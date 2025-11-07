@@ -25,22 +25,24 @@ export default function Post({ post }: { post: IPost }) {
                 hover:-translate-y-2 hover:shadow-2xl
                 cursor-pointer"
       onClick={MovePostDetail}
+      key={post.id}
     >
       <div>
         <Image
-          src={nextImage}
-          alt="메인 이미지"
+          src={post.coverImgUrl || nextImage}
+          alt={post.title}
           width={350}
+          height={200}
           className="rounded-md"
         />
       </div>
       <div className="max-w-[330px] px-4 flex flex-col justify-around min-h-32">
-        <h2 className="text-xl font-semibold">블로그 만들기 후기</h2>
-        <p className="whitespace-normal wrap-break-word">
-          desriptdesriptdesriptdesriptdesriptdesriptdesriptdesriptdesriptdesriptdesript
+        <h2 className="text-xl font-semibold">{post.title}</h2>
+        <p className="whitespace-normal break-words line-clamp-5">
+          {post.description}
         </p>
         <div className="flex gap-4">
-          <p>{dayjs(new Date()).format("YYYY년 MM월 DD일")}</p>
+          <p>{dayjs(post.createdAt).format("YYYY년 MM월 DD일")}</p>
           <p>1개의 댓글</p>
         </div>
       </div>
@@ -48,6 +50,8 @@ export default function Post({ post }: { post: IPost }) {
         <div className="flex items-center gap-2" onClick={MoveUserPosts}>
           <Image
             src={nextImage}
+            width={50}
+            height={50}
             alt="프로필 이미지"
             className="rounded-full w-10 h-10"
           />

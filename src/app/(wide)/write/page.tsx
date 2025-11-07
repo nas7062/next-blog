@@ -11,6 +11,7 @@ import Viewer from "./_components/View";
 import { toast } from "sonner";
 import { supabase } from "../../api/supabase";
 import nextImage from "@/public/nextImage.png";
+import { useSession } from "next-auth/react";
 
 export interface IPost {
   coverImgUrl: string;
@@ -28,6 +29,7 @@ export default function WritePage() {
   const [title, setTitle] = useState("");
   const [tag, setTag] = useState("");
   const [getContent, setGetContent] = useState("");
+  const { data: user } = useSession();
 
   const onSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault();

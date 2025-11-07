@@ -4,12 +4,19 @@ import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import "dayjs/locale/ko";
 import { useRouter } from "next/navigation";
+import { use } from "react";
 
 dayjs.extend(relativeTime);
 dayjs.locale("ko");
 
 const Tags = ["nextjs", "react", "프론트엔드"];
-export default function SignlePostPage() {
+export default function SignlePostPage({
+  params,
+}: {
+  params: Promise<{ name: string; postId: string }>;
+}) {
+  const { name, postId } = use(params);
+  console.log(name, postId);
   const router = useRouter();
   const getTimeElapsed = (updatedTime: Date) => {
     return dayjs(updatedTime).fromNow();

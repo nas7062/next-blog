@@ -7,23 +7,21 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import TagList from "./TagList";
 import { IPost } from "./PostList";
+import { useSession } from "next-auth/react";
 
 export default function SinglePost({ post }: { post: IPost }) {
   const [clicked, setClicked] = useState(false);
   const router = useRouter();
-
-  const MovePostDetail = () => {
-    router.push(`/nas7062/123`);
-  };
-  const MoveUserPosts = (e: React.MouseEvent<HTMLDivElement>) => {
-    e.stopPropagation();
-    router.push(`/nas7062/posts`);
+  const { data: user } = useSession();
+  const MovePostDetail = (postId: number) => {
+    router.push(`/${user?.user?.name}/${postId}`);
   };
 
   return (
     <div
       className="flex flex-col w-3xl  gap-4 pb-4 rounded-md cursor-pointer"
-      onClick={MovePostDetail}
+      onClick={() => MovePostDetail(post.id)}
+      key={post.id}
     >
       <div>
         <Image

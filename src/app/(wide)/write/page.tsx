@@ -12,6 +12,7 @@ import { toast } from "sonner";
 import { supabase } from "../../api/supabase";
 import nextImage from "@/public/nextImage.png";
 import { useSession } from "next-auth/react";
+import { useSearchParams } from "next/navigation";
 
 export interface IPost {
   coverImgUrl: string;
@@ -28,9 +29,9 @@ export default function WritePage() {
   const [tags, setTags] = useState<string[]>([]);
   const [title, setTitle] = useState("");
   const [tag, setTag] = useState("");
+  const searchParmas = useSearchParams();
+  const postId = searchParmas.get("id");
   const [getContent, setGetContent] = useState("");
-  const { data: user } = useSession();
-  console.log(user);
   const onSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault();
 

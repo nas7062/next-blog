@@ -1,12 +1,14 @@
 "use client";
-import { Heart } from "lucide-react";
+
 import Image from "next/image";
 import nextImage from "@/public/nextImage.png";
 import dayjs from "dayjs";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import TagList from "./TagList";
-export default function SinglePost() {
+import { IPost } from "./PostList";
+
+export default function SinglePost({ post }: { post: IPost }) {
   const [clicked, setClicked] = useState(false);
   const router = useRouter();
 
@@ -25,17 +27,18 @@ export default function SinglePost() {
     >
       <div>
         <Image
-          src={nextImage}
-          alt="메인 이미지"
+          src={post.coverImgUrl || nextImage}
+          alt={post.title}
           width={768}
-          className="rounded-md"
+          height={400}
+          className="rounded-md "
         />
       </div>
       <div></div>
       <div className="max-w-[740px] px-4 flex flex-col justify-around min-h-32">
-        <h2 className="text-xl font-semibold">블로그 만들기 후기</h2>
-        <p className="whitespace-normal wrap-break-word">
-          desriptdesriptdesriptdesriptdesriptdesriptdesriptdesriptdesriptdesriptdesript
+        <h2 className="text-xl font-semibold">{post.title}</h2>
+        <p className="whitespace-normal wrap-break-word line-clamp-5">
+          {post.description}
         </p>
         <TagList tags={["react", "nextjs", "프론트엔드"]} />
         <div className="flex gap-4">

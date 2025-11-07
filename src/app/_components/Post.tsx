@@ -40,7 +40,7 @@ export default function Post({ post }: { post: IPost }) {
       </div>
       <div className="max-w-[330px] px-4 flex flex-col justify-around min-h-32">
         <h2 className="text-xl font-semibold">{post.title}</h2>
-        <p className="whitespace-normal break-words line-clamp-5">
+        <p className="whitespace-normal wrap-break-word line-clamp-5">
           {post.description}
         </p>
         <div className="flex gap-4">

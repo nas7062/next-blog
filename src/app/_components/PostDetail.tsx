@@ -46,7 +46,7 @@ export default function PostDetail({
           <div className="flex gap-2">
             <p
               className="cursor-pointer text-gray-500 hover:text-gray-800"
-              onClick={() => router.push("/write")}
+              onClick={() => router.push(`/write?`)}
             >
               수정
             </p>

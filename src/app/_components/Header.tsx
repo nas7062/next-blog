@@ -10,7 +10,7 @@ const NAV = {
 
 export default function Header() {
   return (
-    <header className="h-20 flex items-center px-64 gap-10 ">
+    <header className="h-20 flex items-center px-44 gap-10 ">
       <Link className="text-4xl font-semibold cursor-pointer" href="/">
         10012
       </Link>
@@ -19,7 +19,7 @@ export default function Header() {
           {Object.entries(NAV).map(([key, v]) => (
             <li
               key={key}
-              className="relative pb-1 cursor-pointer
+              className="relative pb-1  cursor-pointer
                          after:content-[''] after:absolute after:left-0 after:bottom-0
                          after:h-0.5 after:w-0 after:bg-current
                          after:transition-all after:duration-300 hover:after:w-full"

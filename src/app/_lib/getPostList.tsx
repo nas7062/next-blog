@@ -6,6 +6,6 @@ export async function getPostList() {
     console.error("데이터 패칭 실패", error);
     return [];
   }
-  console.log("데이터 패칭 성공", data);
+  console.log("데이터 패칭 성공");
   return data;
 }

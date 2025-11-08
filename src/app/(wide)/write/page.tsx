@@ -53,9 +53,7 @@ export default function WritePage() {
         ])
         .select();
       if (error) {
-        console.error("❌ Supabase insert error:", error);
-      } else {
-        console.log("✅ Insert success:", data);
+        console.error(" Supabase insert error:", error);
       }
     }
   };

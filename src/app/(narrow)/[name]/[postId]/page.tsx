@@ -1,12 +1,11 @@
-import { use } from "react";
-import SinglePostClient from "./PostDetail";
+import PostDetail from "@/src/app/_components/PostDetail";
 
-export default function Page({
+export default async function Page({
   params,
 }: {
   params: Promise<{ name: string; postId: string }>;
 }) {
-  const { name, postId } = use(params);
-
-  return <SinglePostClient name={name} postId={postId} />;
+  const { name, postId } = await params;
+  const decodedName = decodeURIComponent(name);
+  return <PostDetail name={decodedName} postId={postId} />;
 }

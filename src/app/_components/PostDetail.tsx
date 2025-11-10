@@ -40,7 +40,7 @@ export default function PostDetail({
         <h2 className="text-4xl font-semibold py-4">{post?.title}</h2>
         <div className="flex justify-between">
           <div className="flex gap-2">
-            <p className="font-semibold">{name}</p>
+            <p className="font-semibold">{post?.userId}</p>
             <p>{getTimeElapsed(new Date())}</p>
           </div>
           <div className="flex gap-2">

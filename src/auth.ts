@@ -2,11 +2,10 @@ import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { supabase } from "./app/api/supabase";
 
-
 export const { handlers, auth, signIn, signOut } = NextAuth({
   session: { strategy: "jwt" },
   pages: {
-    signIn: "/signin",  
+    signIn: "/signin",
   },
   providers: [
     Credentials({
@@ -17,7 +16,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       },
       async authorize(creds) {
         try {
-          
           const email = creds?.email as string;
           const password = creds?.password as string;
           if (!email || !password) return null;
@@ -29,9 +27,13 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
           if (error || !data.user) return null;
 
-          console.log(data.user.user_metadata.name)
+          console.log(data.user.user_metadata.name);
           // NextAuth는 최소 id 필요
-          return { id: data.user.id, email: data.user.email ?? undefined , name : data.user.user_metadata?.name ?? undefined};
+          return {
+            id: data.user.id,
+            email: data.user.email ?? undefined,
+            name: data.user.user_metadata?.name ?? undefined,
+          };
         } catch (e) {
           console.error("authorize error:", e);
           return null; // 실패는 null로
@@ -54,15 +56,13 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         session.user = {
           id: token.sub,
           email: token.email,
-          name : token.name
+          name: token.name,
         };
       } else {
         session.user = null;
       }
-    
+
       return session;
-    }
+    },
   },
-  
-  
 });

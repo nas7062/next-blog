@@ -1,5 +1,6 @@
 import Link from "next/link";
 import SearchInput from "./SearchInput";
+import { auth } from "@/src/auth";
 
 const NAV = {
   "": { label: "홈" },
@@ -8,9 +9,13 @@ const NAV = {
   chart: { label: "차트" },
 } as const;
 
-export default function Header() {
+export default async function Header() {
+  const session = await auth();
+
+  console.log(session?.user);
+
   return (
-    <header className="h-20 flex items-center px-44 gap-10 ">
+    <header className="h-20 flex items-center px-48 gap-10 ">
       <Link className="text-4xl font-semibold cursor-pointer" href="/">
         10012
       </Link>
@@ -37,12 +42,18 @@ export default function Header() {
         >
           새 글 작성
         </Link>
-        <Link
-          href={"/signin"}
-          className="px-4 py-2 rounded-2xl bg-gray-700 hover:bg-gray-900 text-white  cursor-pointer transition-all duration-200"
-        >
-          로그인
-        </Link>
+        {!session?.user ? (
+          <Link
+            href={"/signin"}
+            className="px-4 py-2 rounded-2xl bg-gray-700 hover:bg-gray-900 text-white  cursor-pointer transition-all duration-200"
+          >
+            로그인
+          </Link>
+        ) : (
+          <button className="px-4 py-2 rounded-2xl bg-gray-700 hover:bg-gray-900 text-white  cursor-pointer transition-all duration-200">
+            로그아웃
+          </button>
+        )}
       </div>
     </header>
   );

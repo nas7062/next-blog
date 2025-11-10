@@ -22,6 +22,7 @@ export interface IPost {
   title: string;
   updatedAt: string;
   userId: number;
+  Tags?: string[];
 }
 
 export default function WritePage() {
@@ -61,7 +62,9 @@ export default function WritePage() {
             createdAt: "2025-01-25",
             updatedAt: "2025-01-25",
             userId: 1,
-            coverImgUrl: "sadsad.png",
+            coverImgUrl:
+              "https://shopping-phinf.pstatic.net/main_3776194/37761944621.20230614072126.jpg",
+            Tags: tags,
           },
         ])
         .select();
@@ -103,7 +106,7 @@ export default function WritePage() {
           onChange={(e) => setTag(e.target.value)}
           onKeyDown={handleKeyPress}
         />
-        <TagList tags={tags} />
+        <TagList tags={post?.Tags ? post?.Tags : tags} />
         <div className="bg-white h-[500px]  mt-9 text-left">
           <TuiEditor
             content={post ? post.description : getContent}

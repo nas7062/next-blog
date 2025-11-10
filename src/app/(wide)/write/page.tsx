@@ -10,8 +10,7 @@ import TagList from "../../_components/TagList";
 import Viewer from "./_components/View";
 import { toast } from "sonner";
 import { supabase } from "../../api/supabase";
-import nextImage from "@/public/nextImage.png";
-import { useSession } from "next-auth/react";
+
 import { useSearchParams } from "next/navigation";
 
 export interface IPost {
@@ -32,6 +31,20 @@ export default function WritePage() {
   const searchParmas = useSearchParams();
   const postId = searchParmas.get("id");
   const [getContent, setGetContent] = useState("");
+  const [post, SetPost] = useState<IPost>();
+  useEffect(() => {
+    if (!postId) return;
+    const OnUpdate = async () => {
+      const { data } = await supabase
+        .from("Post")
+        .select("*")
+        .eq("id", Number(postId));
+      SetPost(data?.[0]);
+    };
+    OnUpdate();
+  }, [postId]);
+
+  console.log(post);
   const onSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault();
 
@@ -79,7 +92,7 @@ export default function WritePage() {
           type="text"
           placeholder="제목을 입력하세요"
           className="h-20 text-4xl outline-none font-semibold"
-          value={title}
+          value={post ? post.title : title}
           onChange={(e) => setTitle(e.target.value)}
         />
         <input
@@ -92,7 +105,10 @@ export default function WritePage() {
         />
         <TagList tags={tags} />
         <div className="bg-white h-[500px]  mt-9 text-left">
-          <TuiEditor content={getContent} contentChange={changeContent} />
+          <TuiEditor
+            content={post ? post.description : getContent}
+            contentChange={changeContent}
+          />
         </div>
 
         <button

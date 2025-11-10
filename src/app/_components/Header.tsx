@@ -12,8 +12,6 @@ const NAV = {
 export default async function Header() {
   const session = await auth();
 
-  console.log(session?.user);
-
   return (
     <header className="h-20 flex items-center px-48 gap-10 ">
       <Link className="text-4xl font-semibold cursor-pointer" href="/">

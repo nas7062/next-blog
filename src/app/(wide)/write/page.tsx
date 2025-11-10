@@ -12,6 +12,7 @@ import { toast } from "sonner";
 import { supabase } from "../../api/supabase";
 
 import { useSearchParams } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 export interface IPost {
   coverImgUrl: string;
@@ -21,7 +22,7 @@ export interface IPost {
   searchIndex?: string | null;
   title: string;
   updatedAt: string;
-  userId: number;
+  userId: string;
   Tags?: string[];
 }
 
@@ -31,6 +32,8 @@ export default function WritePage() {
   const [tag, setTag] = useState("");
   const searchParmas = useSearchParams();
   const postId = searchParmas.get("id");
+  const { data: user } = useSession();
+
   const [getContent, setGetContent] = useState("");
   const [post, SetPost] = useState<IPost>();
   useEffect(() => {
@@ -48,7 +51,8 @@ export default function WritePage() {
   console.log(post);
   const onSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault();
-
+    const uid = user?.user?.id;
+    if (!uid) return;
     if (!title || !getContent) {
       toast.error("글 작성이 실패했습니다");
       return;
@@ -61,7 +65,7 @@ export default function WritePage() {
             description: getContent,
             createdAt: "2025-01-25",
             updatedAt: "2025-01-25",
-            userId: 1,
+            userId: uid,
             coverImgUrl:
               "https://shopping-phinf.pstatic.net/main_3776194/37761944621.20230614072126.jpg",
             Tags: tags,

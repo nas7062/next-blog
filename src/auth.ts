@@ -1,6 +1,7 @@
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { supabase } from "./app/api/supabase";
+import Kakao from "next-auth/providers/kakao";
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   session: { strategy: "jwt" },
@@ -8,6 +9,10 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     signIn: "/signin",
   },
   providers: [
+    Kakao({
+      clientId: process.env.KAKAO_CLIENT_ID!, // 필수
+      clientSecret: process.env.KAKAO_CLIENT_SECRET || "",
+    }),
     Credentials({
       name: "credentials",
       credentials: {

@@ -81,6 +81,9 @@ export default function LoginPage() {
           >
             로그인
           </button>
+          <button onClick={() => signIn("kakao", { callbackUrl: "/" })}>
+            카카오로 로그인
+          </button>
         </form>
         {message && (
           <p className="text-sm text-red-600 pt-2" role="alert">

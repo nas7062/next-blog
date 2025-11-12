@@ -22,7 +22,7 @@ export default function Post({ post }: { post: IPost }) {
 
   return (
     <div
-      className="flex flex-col w-[350px] shadow-xl gap-4 pb-4 rounded-md
+      className="flex flex-col max-w-[350px] shadow-xl gap-4 pb-4 rounded-md
                 transition-transform duration-350
                 hover:-translate-y-2 hover:shadow-2xl
                 cursor-pointer"

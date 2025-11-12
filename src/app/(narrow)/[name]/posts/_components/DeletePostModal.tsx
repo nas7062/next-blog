@@ -1,6 +1,27 @@
+"use client";
+
 import Modal from "@/src/app/_components/Modal";
+import { supabase } from "@/src/app/api/supabase";
+import { usePathname, useRouter } from "next/navigation";
 
 export default function DeletePostModal() {
+  const pathname = usePathname();
+  const router = useRouter();
+  const postId = pathname.split("/")[2];
+
+  const onDelete = async () => {
+    const respose = await supabase
+      .from("Post")
+      .delete()
+      .eq("id", Number(postId));
+    if (respose.status === 204) {
+      
+      router.back();
+    }
+    else {
+
+    }
+  };
   return (
     <Modal>
       <div className="flex flex-col  gap-4 p-4">
@@ -9,10 +30,16 @@ export default function DeletePostModal() {
         </h2>
         <p className="text-gray-500 text-center">삭제 시 되돌릴 수 없습니다.</p>
         <div className="flex justify-around gap-4">
-          <button className="px-4 py-2 bg-gray-500 text-white flex-1 cursor-pointer hover:bg-gray-400  transition-colors duration-300">
+          <button
+            onClick={() => router.back()}
+            className="px-4 py-2 bg-gray-500 text-white flex-1 cursor-pointer hover:bg-gray-400  transition-colors duration-300"
+          >
             취소
           </button>
-          <button className="px-4 py-2 bg-green-400 text-white flex-1 cursor-pointer hover:bg-green-500 transition-colors duration-300">
+          <button
+            onClick={onDelete}
+            className="px-4 py-2 bg-green-400 text-white flex-1 cursor-pointer hover:bg-green-500 transition-colors duration-300"
+          >
             삭제
           </button>
         </div>

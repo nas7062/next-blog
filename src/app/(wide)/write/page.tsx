@@ -11,7 +11,7 @@ import Viewer from "./_components/View";
 import { toast } from "sonner";
 import { supabase } from "../../api/supabase";
 
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useSession } from "next-auth/react";
 
 export interface IPost {
@@ -32,6 +32,7 @@ export default function WritePage() {
   const [tag, setTag] = useState("");
   const searchParmas = useSearchParams();
   const postId = searchParmas.get("id");
+  const router = useRouter();
   const { data: user } = useSession();
 
   const [getContent, setGetContent] = useState("");
@@ -49,12 +50,12 @@ export default function WritePage() {
   }, [postId]);
 
   console.log(post);
-  const onSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
-    event.preventDefault();
+  const onSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
+    e.preventDefault();
     const uid = user?.user?.id;
     if (!uid) return;
     if (!title || !getContent) {
-      toast.error("글 작성이 실패했습니다");
+      toast.error("제목 또는 내용을 입력 해주세요.");
       return;
     } else {
       const { data, error } = await supabase
@@ -72,8 +73,12 @@ export default function WritePage() {
           },
         ])
         .select();
+      console.log(data);
       if (error) {
+        toast.error("글 작성에 실패했습니다.");
         console.error(" Supabase insert error:", error);
+      } else {
+        router.push(`/${user.user?.name}/${data[0].id}`);
       }
     }
   };
@@ -86,6 +91,7 @@ export default function WritePage() {
   const handleKeyPress = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       handleTagsPlus();
+      e.preventDefault();
     }
   };
   const changeContent = (value: string) => {

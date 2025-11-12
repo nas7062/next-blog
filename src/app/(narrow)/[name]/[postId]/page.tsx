@@ -6,6 +6,7 @@ export default async function Page({
   params: Promise<{ name: string; postId: string }>;
 }) {
   const { name, postId } = await params;
+
   const decodedName = decodeURIComponent(name);
   return <PostDetail name={decodedName} postId={postId} />;
 }

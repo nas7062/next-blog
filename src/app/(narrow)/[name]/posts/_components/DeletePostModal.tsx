@@ -3,7 +3,7 @@
 import Modal from "@/src/app/_components/Modal";
 import { supabase } from "@/src/app/api/supabase";
 import { usePathname, useRouter } from "next/navigation";
-
+import { toast } from "sonner";
 export default function DeletePostModal() {
   const pathname = usePathname();
   const router = useRouter();
@@ -15,11 +15,10 @@ export default function DeletePostModal() {
       .delete()
       .eq("id", Number(postId));
     if (respose.status === 204) {
-      
+      toast.success("데이터가 삭제되었습니다");
       router.back();
-    }
-    else {
-
+    } else {
+      toast.error("데이터 삭제가 실패했습니다.");
     }
   };
   return (

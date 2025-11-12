@@ -69,5 +69,26 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
       return session;
     },
+    async signIn({ user }) {
+      // 로그인 성공 후 Supabase에 유저 존재 확인 → 없으면 생성
+      const { data, error } = await supabase
+        .from("users") 
+        .select("id")
+        .eq("email", user.email)
+        .single();
+
+      if (!data) {
+        await supabase.from("users").insert([
+          {
+            email: user.email,
+            name: user.name,
+            image: user.image,
+            provider: "kakao",
+          },
+        ]);
+      }
+
+      return true;
+    }
   },
 });

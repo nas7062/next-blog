@@ -4,7 +4,8 @@ import Modal from "@/src/app/_components/Modal";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { signIn, useSession } from "next-auth/react";
-
+import kakaoImage from "@/public/kakao_btn.png";
+import Image from "next/image";
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -14,7 +15,6 @@ export default function LoginPage() {
 
   if (session?.user) {
     router.replace("/");
-    return null;
   }
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -77,12 +77,16 @@ export default function LoginPage() {
           </div>
           <button
             type="submit"
-            className=" bg-green-400 py-2 text-xl hover:bg-emerald-400 text-white cursor-pointer transition-colors duration-300"
+            className=" bg-green-400 py-3 text-2xl hover:bg-emerald-400 text-white cursor-pointer transition-colors duration-300"
           >
             로그인
           </button>
-          <button onClick={() => signIn("kakao", { callbackUrl: "/" })}>
-            카카오로 로그인
+          <button className="f-full" onClick={() => signIn("kakao")}>
+            <Image
+              src={kakaoImage}
+              alt="카카오 로그인 버튼"
+              className="w-full h-14"
+            />
           </button>
         </form>
         {message && (

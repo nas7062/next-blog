@@ -16,7 +16,7 @@ export async function onSubmit(formData: FormData) {
     body: JSON.stringify({ email, password, name }),
     cache: "no-store",
   });
-
+  
   if (!res.ok) {
     const body = await res.text();
     console.error("signup 400:", res.status, body);

@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
@@ -20,16 +20,20 @@ export default function PostDetail({
   postId: string;
 }) {
   const router = useRouter();
+  const pathname = usePathname();
   const [post, setPost] = useState<IPost>();
   useEffect(() => {
     if (!postId) return;
     const getPostId = async () => {
       const data = await getPostById(postId);
+      if (data === undefined) {
+        router.back();
+      }
       setPost(data);
     };
     getPostId();
-  }, [postId]);
-
+  }, [postId, pathname, router]);
+  console.log(post);
   const getTimeElapsed = (updatedTime: Date) => {
     return dayjs(updatedTime).fromNow();
   };

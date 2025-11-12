@@ -24,7 +24,7 @@ export default function SearchPage({
         </p>
         <p className="cursor-pointer">최신순</p>
       </div>
-      <SinglePostList />
+      <SinglePostList q={q} />
     </main>
   );
 }

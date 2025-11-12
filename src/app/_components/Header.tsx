@@ -1,6 +1,7 @@
 import Link from "next/link";
 import SearchInput from "./SearchInput";
 import { auth } from "@/src/auth";
+import LogoutButton from "./LogoutButton";
 
 const NAV = {
   "": { label: "홈" },
@@ -48,9 +49,7 @@ export default async function Header() {
             로그인
           </Link>
         ) : (
-          <button className="px-4 py-2 rounded-2xl bg-gray-700 hover:bg-gray-900 text-white  cursor-pointer transition-all duration-200">
-            로그아웃
-          </button>
+          <LogoutButton />
         )}
       </div>
     </header>

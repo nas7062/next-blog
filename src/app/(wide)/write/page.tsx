@@ -49,10 +49,10 @@ export default function WritePage() {
     OnUpdate();
   }, [postId]);
 
-  console.log(post);
   const onSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
     const uid = user?.user?.id;
+    console.log(uid);
     if (!uid) return;
     if (!title || !getContent) {
       toast.error("제목 또는 내용을 입력 해주세요.");

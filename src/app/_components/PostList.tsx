@@ -1,16 +1,6 @@
+import { IPost } from "../(wide)/write/page";
 import { getPostList } from "../_lib/getPostList";
 import Post from "./Post";
-
-export interface IPost {
-  coverImgUrl: string;
-  createdAt: string;
-  description: string;
-  id: number;
-  searchIndex?: string | null;
-  title: string;
-  updatedAt: string;
-  userId: number;
-}
 
 export default async function PostList() {
   const posts: IPost[] = await getPostList();

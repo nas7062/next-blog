@@ -4,14 +4,17 @@ import Image from "next/image";
 import nextImage from "@/public/nextImage.png";
 import dayjs from "dayjs";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { IPost } from "./PostList";
+import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
+import { IPost } from "../(wide)/write/page";
+import { getUserInfo } from "../_lib/getUser";
+import { IUser } from "./PostDetail";
+
 export default function Post({ post }: { post: IPost }) {
   const [clicked, setClicked] = useState(false);
   const router = useRouter();
   const { data: user } = useSession();
-
+  const [writeUser, setWriteUser] = useState<IUser>();
   const MovePostDetail = (postId: number) => {
     router.push(`/${user?.user?.name}/${postId}`);
   };
@@ -19,6 +22,15 @@ export default function Post({ post }: { post: IPost }) {
     e.stopPropagation();
     router.push(`/${user?.user?.name}/posts`);
   };
+
+  useEffect(() => {
+    if (!post?.userId) return;
+    const getUser = async () => {
+      const data = await getUserInfo(post.userId);
+      setWriteUser(data);
+    };
+    getUser();
+  }, [post?.userId]);
 
   return (
     <div
@@ -57,7 +69,7 @@ export default function Post({ post }: { post: IPost }) {
             alt="프로필 이미지"
             className="rounded-full w-10 h-10"
           />
-          <p className="font-semibold">by 10012</p>
+          <p className="font-semibold">by {writeUser?.name || "글쓴이"}</p>
         </div>
 
         <div className="ml-auto flex gap-1">

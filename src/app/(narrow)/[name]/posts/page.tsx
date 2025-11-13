@@ -26,7 +26,6 @@ export default function PostPage() {
         <p className="text-3xl px-4 py-2">글</p>
         <p className="text-3xl px-4 py-2">소개</p>
       </div>
-      <SinglePostList />
     </div>
   );
 }

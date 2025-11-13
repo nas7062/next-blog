@@ -6,11 +6,21 @@ import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import "dayjs/locale/ko";
 import { getPostById } from "../(narrow)/[name]/[postId]/_lib/getPostById";
-import { IPost } from "./PostList";
 import Viewer from "../(wide)/write/_components/View";
+import { getUserInfo } from "../_lib/getUser";
+import { IPost } from "../(wide)/write/page";
 
 dayjs.extend(relativeTime);
 dayjs.locale("ko");
+
+export interface IUser {
+  id: string;
+  email: string;
+  name: string;
+  image?: string;
+  provider?: string;
+  created_at: string;
+}
 
 export default function PostDetail({
   name,
@@ -22,6 +32,7 @@ export default function PostDetail({
   const router = useRouter();
   const pathname = usePathname();
   const [post, setPost] = useState<IPost>();
+  const [user, setUser] = useState<IUser>();
   useEffect(() => {
     if (!postId) return;
     const getPostId = async () => {
@@ -33,7 +44,16 @@ export default function PostDetail({
     };
     getPostId();
   }, [postId, pathname, router]);
-  console.log(post);
+
+  useEffect(() => {
+    if (!post?.userId) return;
+    const getUser = async () => {
+      const data = await getUserInfo(post.userId);
+      setUser(data);
+    };
+    getUser();
+  }, [post?.userId]);
+
   const getTimeElapsed = (updatedTime: Date) => {
     return dayjs(updatedTime).fromNow();
   };
@@ -44,7 +64,7 @@ export default function PostDetail({
         <h2 className="text-4xl font-semibold py-4">{post?.title}</h2>
         <div className="flex justify-between">
           <div className="flex gap-2">
-            <p className="font-semibold">{name}</p>
+            <p className="font-semibold">{user?.name || "글쓴이"}</p>
             <p>{getTimeElapsed(new Date())}</p>
           </div>
           <div className="flex gap-2">

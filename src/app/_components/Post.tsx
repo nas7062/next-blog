@@ -9,9 +9,10 @@ import { useSession } from "next-auth/react";
 import { IPost } from "../(wide)/write/page";
 import { getUserInfo } from "../_lib/getUser";
 import { IUser } from "./PostDetail";
+import { getToggleLike } from "../_lib/getToggleLike";
 
 export default function Post({ post }: { post: IPost }) {
-  const [clicked, setClicked] = useState(false);
+  const [isLike, setIsLike] = useState<boolean>(false);
   const router = useRouter();
   const { data: user } = useSession();
   const [writeUser, setWriteUser] = useState<IUser>();
@@ -32,6 +33,20 @@ export default function Post({ post }: { post: IPost }) {
     getUser();
   }, [post?.userId]);
 
+  const ToggleLike = async () => {};
+
+  useEffect(() => {
+    const getLike = async () => {
+      const response = await getToggleLike(post.id);
+      if (response === undefined) {
+        setIsLike(false);
+      } else {
+        setIsLike(true);
+      }
+    };
+    getLike();
+  }, [post.id]);
+
   return (
     <div
       className="flex flex-col max-w-[350px] shadow-xl gap-4 pb-4 rounded-md
@@ -50,7 +65,7 @@ export default function Post({ post }: { post: IPost }) {
           className="rounded-md"
         />
       </div>
-      <div className="max-w-[330px] px-4 flex flex-col justify-around min-h-32">
+      <div className="max-w-[330px] px-4 flex flex-col justify-around h-32">
         <h2 className="text-xl font-semibold">{post.title}</h2>
         <p className="whitespace-normal wrap-break-word line-clamp-5">
           {post.description}
@@ -76,19 +91,20 @@ export default function Post({ post }: { post: IPost }) {
           <button
             onClick={(e) => {
               e.stopPropagation();
-              setClicked((v) => !v);
+              setIsLike((v) => !v);
             }}
             className="cursor-pointer"
           >
             <Heart
               size={22}
+              onClick={ToggleLike}
               className={
-                clicked
+                isLike
                   ? "text-rose-500 fill-rose-500"
                   : "text-gray-500 fill-transparent"
               }
-              fill={clicked ? "currentColor" : "none"}
-              strokeWidth={clicked ? 1.75 : 2}
+              fill={isLike ? "currentColor" : "none"}
+              strokeWidth={isLike ? 1.75 : 2}
             />
           </button>
           <p>1</p>

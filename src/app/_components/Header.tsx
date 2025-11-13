@@ -33,14 +33,10 @@ export default async function Header() {
           ))}
         </ul>
       </nav>
-      <SearchInput />
+      <div className="flex-1">
+        <SearchInput />
+      </div>
       <div className="ml-auto flex items-center gap-10">
-        <Link
-          href={"/write"}
-          className="px-4 py-2 rounded-2xl bg-green-400 text-white cursor-pointer hover:bg-green-500 transition-all duration-200"
-        >
-          새 글 작성
-        </Link>
         {!session?.user ? (
           <Link
             href={"/signin"}
@@ -49,7 +45,15 @@ export default async function Header() {
             로그인
           </Link>
         ) : (
-          <LogoutButton />
+          <>
+            <Link
+              href={"/write"}
+              className="px-4 py-2 rounded-2xl bg-green-400 text-white cursor-pointer hover:bg-green-500 transition-all duration-200"
+            >
+              새 글 작성
+            </Link>
+            <LogoutButton />
+          </>
         )}
       </div>
     </header>

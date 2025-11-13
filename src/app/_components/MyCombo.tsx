@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Check, ChevronsUpDown } from "lucide-react";
+import { Check } from "lucide-react";
 
 import { cn } from "@/src/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -9,7 +9,6 @@ import {
   Command,
   CommandEmpty,
   CommandGroup,
-  CommandInput,
   CommandItem,
   CommandList,
 } from "@/components/ui/command";
@@ -18,27 +17,17 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import image from "@/public/nextImage.png";
+import Image from "next/image";
 
 const frameworks = [
   {
     value: "next.js",
-    label: "Next.js",
+    label: "나의 글",
   },
   {
     value: "sveltekit",
-    label: "SvelteKit",
-  },
-  {
-    value: "nuxt.js",
-    label: "Nuxt.js",
-  },
-  {
-    value: "remix",
-    label: "Remix",
-  },
-  {
-    value: "astro",
-    label: "Astro",
+    label: "설정",
   },
 ];
 
@@ -50,20 +39,20 @@ export function MyCombo() {
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button
-          variant="outline"
+          variant="ghost"
           role="combobox"
+          className="hover:bg-white"
           aria-expanded={open}
-          className="w-[200px] justify-between"
         >
-          {value
-            ? frameworks.find((framework) => framework.value === value)?.label
-            : "Select framework..."}
-          <ChevronsUpDown className="opacity-50" />
+          <Image
+            src={image}
+            alt="image"
+            className="w-10 h-10 rounded-full cursor-pointer"
+          />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[200px] p-0">
+      <PopoverContent className="w-[150px] p-0">
         <Command>
-          <CommandInput placeholder="Search framework..." className="h-9" />
           <CommandList>
             <CommandEmpty>No framework found.</CommandEmpty>
             <CommandGroup>
@@ -75,6 +64,7 @@ export function MyCombo() {
                     setValue(currentValue === value ? "" : currentValue);
                     setOpen(false);
                   }}
+                  className="cursor-pointer "
                 >
                   {framework.label}
                   <Check

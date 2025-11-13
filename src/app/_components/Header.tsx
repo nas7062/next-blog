@@ -2,6 +2,7 @@ import Link from "next/link";
 import SearchInput from "./SearchInput";
 import { auth } from "@/src/auth";
 import LogoutButton from "./LogoutButton";
+import { MyCombo } from "./MyCombo";
 
 const NAV = {
   "": { label: "홈" },
@@ -53,6 +54,7 @@ export default async function Header() {
               새 글 작성
             </Link>
             <LogoutButton />
+            <MyCombo />
           </>
         )}
       </div>

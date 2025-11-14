@@ -1,8 +1,15 @@
 "use client";
 import { useSession } from "next-auth/react";
-import { useEffect, useState } from "react";
+import { MouseEvent, useCallback, useEffect, useState } from "react";
 import { IUser } from "../../_components/PostDetail";
 import { getUserInfo } from "../../_lib/getUser";
+import { useDropzone } from "react-dropzone";
+
+interface AboutThumbnailPreview {
+  url: string;
+  name: string;
+  size: number;
+}
 
 export default function SettingPage() {
   const { data: user } = useSession();
@@ -10,6 +17,33 @@ export default function SettingPage() {
   const [name, setName] = useState(userData?.name);
   const [descript, setdescript] = useState("");
   const [mode, setMode] = useState<"Update" | "Default">("Default");
+
+  const [thumbnailPreview, setThumbnailPreview] =
+    useState<AboutThumbnailPreview>();
+  //사진이 추가됐을 때 그 사진의 정보 상태담기
+  const onDropThumbnail = useCallback((acceptedFiles: File[]) => {
+    const file = acceptedFiles[0];
+    //file 첫번째 파일을 저장
+    const fileURL = URL.createObjectURL(file);
+    //createObjectURL는 임시로 URL을 저장할수 있는 메서드
+    setThumbnailPreview({ url: fileURL, name: file.name, size: file.size });
+  }, []);
+
+  //저장된 상태 삭제하기 ( 이미지 삭제 )
+  const handleDeleteThumbnail = (e: MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation(); // 이벤트 버블링 막기
+    setThumbnailPreview(undefined);
+  };
+
+  const { getRootProps, isDragActive, getInputProps } = useDropzone({
+    //이미지가 들어가면 실행되는 함수
+    onDrop: onDropThumbnail,
+    //받는 이미지 확장자 리밋 설정
+    accept: {
+      "image/*": [".jpeg", ".jpg", ".png"],
+    },
+  });
+
   const updateInfo = () => {};
 
   const changeMode = () => {
@@ -34,16 +68,27 @@ export default function SettingPage() {
       <div className="flex gap-10">
         <div className="flex flex-col gap-4 justify-center items-center">
           <img
-            src={userData?.image}
-            alt="유저 이미지"
+            src={
+              thumbnailPreview?.url
+                ? thumbnailPreview?.url
+                : userData.image || ""
+            }
+            className="rounded-full"
+            alt="이미지를 업로드해주세요"
             width={100}
             height={100}
-            className="rounded-full"
           />
-          <button className="px-4 py-2 text-sm bg-green-400 text-white hover:bg-green-500 rounded-lg cursor-pointer">
-            이미지 업로드
-          </button>
-          <button className="px-4 py-2 text-sm bg-red-400 text-white hover:bg-red-500 rounded-lg cursor-pointer">
+
+          <div
+            {...getRootProps()}
+            className="px-4 py-2 text-sm bg-green-400 text-white hover:bg-green-500 rounded-lg cursor-pointer"
+          >
+            이미지 업로드 <input {...getInputProps()} />
+          </div>
+          <button
+            onClick={handleDeleteThumbnail}
+            className="px-4 py-2 text-sm bg-red-400 text-white hover:bg-red-500 rounded-lg cursor-pointer"
+          >
             이미지 제거
           </button>
         </div>

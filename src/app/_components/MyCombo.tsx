@@ -19,21 +19,21 @@ import {
 } from "@/components/ui/popover";
 import image from "@/public/nextImage.png";
 import Image from "next/image";
+import Link from "next/link";
 
 const frameworks = [
   {
-    value: "next.js",
+    href: "/posts",
     label: "나의 글",
   },
   {
-    value: "sveltekit",
+    href: "/setting",
     label: "설정",
   },
 ];
 
 export function MyCombo() {
   const [open, setOpen] = React.useState(false);
-  const [value, setValue] = React.useState("");
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -51,30 +51,21 @@ export function MyCombo() {
           />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[150px] p-0">
+      <PopoverContent className="w-[100px] p-0">
         <Command>
           <CommandList>
-            <CommandEmpty>No framework found.</CommandEmpty>
             <CommandGroup>
-              {frameworks.map((framework) => (
-                <CommandItem
-                  key={framework.value}
-                  value={framework.value}
-                  onSelect={(currentValue) => {
-                    setValue(currentValue === value ? "" : currentValue);
-                    setOpen(false);
-                  }}
-                  className="cursor-pointer "
-                >
-                  {framework.label}
-                  <Check
-                    className={cn(
-                      "ml-auto",
-                      value === framework.value ? "opacity-100" : "opacity-0"
-                    )}
-                  />
-                </CommandItem>
-              ))}
+              <div className="flex flex-col text-center ">
+                {frameworks.map((framework) => (
+                  <Link
+                    href={framework.href}
+                    key={framework.label}
+                    className="cursor-pointer border-b hover:bg-gray-100 py-2"
+                  >
+                    {framework.label}
+                  </Link>
+                ))}
+              </div>
             </CommandGroup>
           </CommandList>
         </Command>

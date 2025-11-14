@@ -10,6 +10,7 @@ import { IPost } from "../(wide)/write/page";
 import { getUserInfo } from "../_lib/getUser";
 import { IUser } from "./PostDetail";
 import { getToggleLike } from "../_lib/getToggleLike";
+import { postToggleLike } from "../_lib/postToggleLike";
 
 export default function Post({ post }: { post: IPost }) {
   const [isLike, setIsLike] = useState<boolean>(false);
@@ -33,19 +34,22 @@ export default function Post({ post }: { post: IPost }) {
     getUser();
   }, [post?.userId]);
 
-  const ToggleLike = async () => {};
+  const ToggleLike = async () => {
+    setIsLike(!isLike);
+    if (post.id !== null) await postToggleLike(user?.user?.id, post.id);
+  };
 
   useEffect(() => {
     const getLike = async () => {
-      const response = await getToggleLike(post.id);
-      if (response === undefined) {
+      const response = await getToggleLike(post.id, user?.user?.id);
+      if (response === false) {
         setIsLike(false);
       } else {
         setIsLike(true);
       }
     };
     getLike();
-  }, [post.id]);
+  }, [post.id, user?.user.id]);
 
   return (
     <div

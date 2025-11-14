@@ -17,6 +17,7 @@ export default function Post({ post }: { post: IPost }) {
   const [likeCount, setLikeCount] = useState<number>(post.likeCount || 0);
   const router = useRouter();
   const { data: user } = useSession();
+
   const [writeUser, setWriteUser] = useState<IUser>();
   const MovePostDetail = (postId: number) => {
     router.push(`/${user?.user?.name}/${postId}`);

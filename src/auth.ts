@@ -47,7 +47,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     }),
   ],
   callbacks: {
-    // v5: JWT 전략이면 이후 호출에 user가 undefined일 수 있음 → token 사용
     async jwt({ token, user }) {
       if (user) {
         token.sub = user.id;
@@ -70,14 +69,16 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       return session;
     },
     async signIn({ user }) {
-      // 로그인 성공 후 Supabase에 유저 존재 확인 → 없으면 생성
       const { data, error } = await supabase
         .from("users") 
-        .select("id")
+        .select("*")
         .eq("email", user.email)
-        .single();
-
-      if (!data) {
+        
+      console.log(data,error)
+      if (data) {
+        await supabase.auth.signInWithOAuth({
+          provider: "kakao",
+        });
         await supabase.from("users").insert([
           {
             email: user.email,

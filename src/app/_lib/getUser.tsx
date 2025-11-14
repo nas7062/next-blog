@@ -10,6 +10,5 @@ export async function getUserInfo(userId: string) {
     console.error("데이터 패칭 실패", error);
     return null;
   }
-  console.log("데이터 패칭 성공");
   return data[0];
 }

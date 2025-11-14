@@ -81,6 +81,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         });
         await supabase.from("users").insert([
           {
+            id:user.id,
             email: user.email,
             name: user.name,
             image: user.image,

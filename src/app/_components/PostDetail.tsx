@@ -20,6 +20,7 @@ export interface IUser {
   image?: string;
   provider?: string;
   created_at: string;
+  like?: number[];
 }
 
 export default function PostDetail({

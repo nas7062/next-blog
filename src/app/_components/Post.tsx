@@ -35,21 +35,18 @@ export default function Post({ post }: { post: IPost }) {
   }, [post?.userId]);
 
   const ToggleLike = async () => {
-    setIsLike(!isLike);
-    if (post.id !== null) await postToggleLike(user?.user?.id, post.id);
+    setIsLike((v) => !v);
+    await postToggleLike(user?.user?.id, post.id);
   };
 
   useEffect(() => {
+    if (!user) return;
     const getLike = async () => {
-      const response = await getToggleLike(post.id, user?.user?.id);
-      if (response === false) {
-        setIsLike(false);
-      } else {
-        setIsLike(true);
-      }
+      const liked = await getToggleLike(post.id, user.user.id);
+      setIsLike(liked);
     };
     getLike();
-  }, [post.id, user?.user.id]);
+  }, [post.id, user]);
 
   return (
     <div
@@ -95,13 +92,12 @@ export default function Post({ post }: { post: IPost }) {
           <button
             onClick={(e) => {
               e.stopPropagation();
-              setIsLike((v) => !v);
+              ToggleLike();
             }}
             className="cursor-pointer"
           >
             <Heart
               size={22}
-              onClick={ToggleLike}
               className={
                 isLike
                   ? "text-rose-500 fill-rose-500"

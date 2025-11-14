@@ -15,9 +15,10 @@ export async function postToggleLike(userId: string, postId: number) {
     return null;
   }
 
+  //2.유저 like column 가져옴.
   const currentLikes: number[] = user.like || [];
 
-  // 2. 토글 처리
+  // 3. 토글 처리
   let updatedLikes;
   if (currentLikes.includes(postId)) {
     // 좋아요 취소
@@ -27,7 +28,7 @@ export async function postToggleLike(userId: string, postId: number) {
     updatedLikes = [...currentLikes, postId];
   }
 
-  // 3. updatedLikes 업데이트
+  // 4.해당 유저 updatedLikes 업데이트
   const { data, error } = await supabase
     .from("users")
     .update({ like: updatedLikes })

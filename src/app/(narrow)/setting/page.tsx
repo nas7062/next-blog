@@ -1,6 +1,5 @@
 "use client";
 import { useSession } from "next-auth/react";
-import Image from "next/image";
 import { useEffect, useState } from "react";
 import { IUser } from "../../_components/PostDetail";
 import { getUserInfo } from "../../_lib/getUser";
@@ -8,6 +7,19 @@ import { getUserInfo } from "../../_lib/getUser";
 export default function SettingPage() {
   const { data: user } = useSession();
   const [userData, setUserData] = useState<IUser>();
+  const [name, setName] = useState(userData?.name);
+  const [descript, setdescript] = useState("");
+  const [mode, setMode] = useState<"Update" | "Default">("Default");
+  const updateInfo = () => {};
+
+  const changeMode = () => {
+    if (mode === "Default") {
+      setMode("Update");
+    } else {
+      setMode("Default");
+    }
+  };
+
   useEffect(() => {
     if (!user?.user.id) return;
     const fetchUser = async () => {
@@ -35,15 +47,38 @@ export default function SettingPage() {
             이미지 제거
           </button>
         </div>
-        <div className="flex flex-col gap-4">
-          <h2 className="text-4xl font-semibold">{userData?.name}</h2>
-          <p className="text-gray-600">나만의 기록장</p>
-          <button className="px-2 py-2 text-sm bg-green-400 text-white hover:bg-green-500 rounded-lg cursor-pointer">
-            수정
+        <div className="flex flex-col gap-4 flex-1">
+          {mode === "Default" ? (
+            <>
+              <h2 className="text-4xl font-semibold">{userData?.name}</h2>
+              <p className="text-gray-600">나만의 기록장</p>
+            </>
+          ) : (
+            <>
+              <input
+                type="text"
+                className="border border-gray-300 focus:border-gray-800 rounded-md h-10 px-2"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+              <input
+                type="text"
+                className="border border-gray-300 focus:border-gray-800 rounded-md px-2 "
+                value={descript}
+                onChange={(e) => setdescript(e.target.value)}
+              />
+            </>
+          )}
+
+          <button
+            className="text-green-500 cursor-pointer self-start"
+            onClick={changeMode}
+          >
+            {mode === "Default" ? " 수정하기" : "저장하기"}
           </button>
         </div>
       </div>
-      <div className="flex justify-between items-center">
+      <div className="flex justify-between items-center gap-2">
         <h3 className="text-xl w-28 text-center">테마</h3>
         <button className="flex-1 bg-black text-white py-2 rounded-md cursor-pointer">
           다크
@@ -54,9 +89,13 @@ export default function SettingPage() {
       </div>
       <div className="flex justify-between items-center">
         <h3 className="text-xl w-28 text-center">회원 탈퇴</h3>
-        <button>회원탈퇴</button>
+        <button className="px-4 py-2 text-sm bg-red-400 text-white hover:bg-red-500 rounded-lg cursor-pointer">
+          회원탈퇴
+        </button>
       </div>
-      <p>탈퇴 시 작성하신 포스트 및 댓글이 모두 삭제되며 복구되지 않습니다.</p>
+      <p className="text-gray-400">
+        탈퇴 시 작성하신 포스트 및 댓글이 모두 삭제되며 복구되지 않습니다.
+      </p>
     </div>
   );
 }

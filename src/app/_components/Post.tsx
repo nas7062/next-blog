@@ -14,6 +14,7 @@ import { postToggleLike } from "../_lib/postToggleLike";
 
 export default function Post({ post }: { post: IPost }) {
   const [isLike, setIsLike] = useState<boolean>(false);
+  const [likeCount, setLikeCount] = useState<number>(post.likeCount || 0);
   const router = useRouter();
   const { data: user } = useSession();
   const [writeUser, setWriteUser] = useState<IUser>();
@@ -36,6 +37,11 @@ export default function Post({ post }: { post: IPost }) {
 
   const ToggleLike = async () => {
     setIsLike((v) => !v);
+    if (isLike) {
+      setLikeCount((prev) => prev - 1);
+    } else {
+      setLikeCount((prev) => prev + 1);
+    }
     await postToggleLike(user?.user?.id, post.id);
   };
 
@@ -107,7 +113,7 @@ export default function Post({ post }: { post: IPost }) {
               strokeWidth={isLike ? 1.75 : 2}
             />
           </button>
-          <p>1</p>
+          <p>{likeCount}</p>
         </div>
       </div>
     </div>

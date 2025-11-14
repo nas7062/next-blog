@@ -24,6 +24,7 @@ export interface IPost {
   updatedAt: string;
   userId: string;
   Tags?: string[];
+  likeCount?: number;
 }
 
 export default function WritePage() {

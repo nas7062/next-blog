@@ -4,7 +4,7 @@ import { MouseEvent, useCallback, useEffect, useState } from "react";
 import { IUser } from "../../_components/PostDetail";
 import { getUserInfo } from "../../_lib/getUser";
 import { useDropzone } from "react-dropzone";
-
+import DEFAULT_IMAGE from "@/public/nextImage.png";
 interface AboutThumbnailPreview {
   url: string;
   name: string;
@@ -63,16 +63,13 @@ export default function SettingPage() {
     fetchUser();
   }, [user?.user.id]);
 
+  const imageSrc = thumbnailPreview?.url || userData?.image || DEFAULT_IMAGE;
   return (
     <div className="flex flex-col min-h-screen py-20 gap-10">
       <div className="flex gap-10">
         <div className="flex flex-col gap-4 justify-center items-center">
           <img
-            src={
-              thumbnailPreview?.url
-                ? thumbnailPreview?.url
-                : userData.image || ""
-            }
+            src={imageSrc}
             className="rounded-full"
             alt="이미지를 업로드해주세요"
             width={100}

@@ -7,6 +7,7 @@ import { useDropzone } from "react-dropzone";
 import DEFAULT_IMAGE from "@/public/nextImage.png";
 import { supabase } from "../../api/supabase";
 import { useTheme } from "next-themes";
+import { userDelete } from "./_lib/userDelete";
 interface AboutThumbnailPreview {
   url: string;
   name: string;
@@ -99,10 +100,14 @@ export default function SettingPage() {
     }
   };
   const OnSave = () => {
-    console.log(name, descript);
     setName(name);
     setdescript(descript);
     changeMode();
+  };
+
+  const OnDelete = async () => {
+    const response = await userDelete(user?.user?.id);
+    console.log(response);
   };
 
   useEffect(() => {

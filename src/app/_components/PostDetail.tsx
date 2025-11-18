@@ -21,6 +21,7 @@ export interface IUser {
   provider?: string;
   created_at: string;
   like?: number[];
+  descript?: string;
 }
 
 export default function PostDetail({

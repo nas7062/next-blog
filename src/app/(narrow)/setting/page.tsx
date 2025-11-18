@@ -16,7 +16,7 @@ export default function SettingPage() {
   const { data: user } = useSession();
   const [userData, setUserData] = useState<IUser>();
   const [name, setName] = useState(userData?.name);
-  const [descript, setdescript] = useState("");
+  const [descript, setdescript] = useState(userData?.descript);
   const [mode, setMode] = useState<"Update" | "Default">("Default");
   const [thumbnailFile, setThumbnailFile] = useState<File | null>(null);
 
@@ -37,8 +37,8 @@ export default function SettingPage() {
     e.stopPropagation(); // 이벤트 버블링 막기
     setThumbnailPreview(undefined);
   };
-  console.log(user);
-  const { getRootProps, isDragActive, getInputProps } = useDropzone({
+
+  const { getRootProps, getInputProps } = useDropzone({
     //이미지가 들어가면 실행되는 함수
     onDrop: onDropThumbnail,
     //받는 이미지 확장자 리밋 설정
@@ -59,7 +59,6 @@ export default function SettingPage() {
         .upload(`profile-${user.user.id}`, thumbnailFile, {
           upsert: true,
         });
-      console.log(name, descript, thumbnailFile);
       if (error) {
         console.log("이미지 업로드 실패:", error);
         return;
@@ -72,7 +71,7 @@ export default function SettingPage() {
 
       imageUrl = urlData.publicUrl;
     }
-
+    console.log(imageUrl, user.user.id);
     // 3) DB user table 업데이트
     const { error: updateError } = await supabase
       .from("users")
@@ -110,6 +109,8 @@ export default function SettingPage() {
   }, [user?.user.id]);
 
   const imageSrc = thumbnailPreview?.url || userData?.image || DEFAULT_IMAGE;
+
+  if (!userData) return;
   return (
     <div className="flex flex-col min-h-screen py-20 gap-10">
       <div className="flex gap-10">
@@ -138,8 +139,8 @@ export default function SettingPage() {
         <div className="flex flex-col gap-4 flex-1">
           {mode === "Default" ? (
             <>
-              <h2 className="text-4xl font-semibold">{userData?.name}</h2>
-              <p className="text-gray-600">나만의 기록장</p>
+              <h2 className="text-4xl font-semibold">{userData.name}</h2>
+              <p className="text-gray-600">{userData.descript}</p>
             </>
           ) : (
             <>
@@ -153,6 +154,7 @@ export default function SettingPage() {
               <input
                 type="text"
                 className="border border-gray-300 focus:border-gray-800 rounded-md px-2 "
+                defaultValue={userData?.descript ? userData.descript : descript}
                 value={descript}
                 onChange={(e) => setdescript(e.target.value)}
               />

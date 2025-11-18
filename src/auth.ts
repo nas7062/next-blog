@@ -72,14 +72,14 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       const { data, error } = await supabase
         .from("users") 
         .select("*")
-        .eq("email", user.email)
+        .eq("id", user.id)
         
       console.log(data,error)
       if (data) {
         await supabase.auth.signInWithOAuth({
           provider: "kakao",
         });
-        await supabase.from("users").insert([
+        await supabase.from("users").upsert([
           {
             id:user.id,
             email: user.email,

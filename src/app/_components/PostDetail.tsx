@@ -21,7 +21,7 @@ export interface IUser {
   provider?: string;
   created_at: string;
   like?: number[];
-  descript?: string;
+  descript?: strring;
 }
 
 export default function PostDetail({
@@ -84,7 +84,10 @@ export default function PostDetail({
             </p>
           </div>
         </div>
-        <div>
+        <div
+          className="wmde-markdown wmde-markdown-color
+                 bg-background text-foreground"
+        >
           <Viewer content={post?.description || ""} />
         </div>
       </div>

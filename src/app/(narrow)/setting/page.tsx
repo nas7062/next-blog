@@ -206,7 +206,10 @@ export default function SettingPage() {
 
       <div className="flex justify-between items-center">
         <h3 className="text-xl! w-28 text-center">회원 탈퇴</h3>
-        <button className="px-4 py-2 text-sm bg-red-400 text-white hover:bg-red-500 rounded-lg cursor-pointer">
+        <button
+          onClick={OnDelete}
+          className="px-4 py-2 text-sm bg-red-400 text-white hover:bg-red-500 rounded-lg cursor-pointer"
+        >
           회원탈퇴
         </button>
       </div>

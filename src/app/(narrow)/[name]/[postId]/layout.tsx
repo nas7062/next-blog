@@ -10,7 +10,7 @@ export default function SinglePostLayout({
   modal: React.ReactNode;
 }) {
   return (
-    <main className="min-h-screen bg-white">
+    <main className="min-h-screen">
       <div
         className="
         mx-auto grid gap-6 px-4 py-6

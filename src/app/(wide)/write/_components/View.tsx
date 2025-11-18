@@ -2,7 +2,7 @@ import MDEditor from "@uiw/react-md-editor";
 
 export default function Viewer({ content }: { content: string }) {
   return (
-    <div className="wmde-markdown-var">
+    <div className="wmde-markdown-varb ">
       <MDEditor.Markdown source={content} />
     </div>
   );

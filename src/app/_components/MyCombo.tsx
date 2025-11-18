@@ -38,12 +38,7 @@ export function MyCombo() {
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <Button
-          variant="ghost"
-          role="combobox"
-          className="hover:bg-white"
-          aria-expanded={open}
-        >
+        <Button variant="ghost" role="combobox" aria-expanded={open}>
           <Image
             src={image}
             alt="image"
@@ -60,7 +55,7 @@ export function MyCombo() {
                   <Link
                     href={framework.href}
                     key={framework.label}
-                    className="cursor-pointer border-b hover:bg-gray-100 py-2"
+                    className="cursor-pointer border-b hover:bg-secondary py-2"
                   >
                     {framework.label}
                   </Link>

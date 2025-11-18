@@ -129,7 +129,7 @@ export default function WritePage() {
           type="submit"
           className="text-base bg-black text-white py-2 px-5 rounded-full mt-9"
         >
-          서버에 전달
+          글 작성하기
         </button>
       </form>
       <div className="w-1/2">

@@ -11,6 +11,8 @@ import { getUserInfo } from "../_lib/getUser";
 import { IUser } from "./PostDetail";
 import { getToggleLike } from "../_lib/getToggleLike";
 import { postToggleLike } from "../_lib/postToggleLike";
+import LoginModal from "./LoginModal";
+import { getPostUser } from "../_lib/getPostUser";
 
 export default function Post({ post }: { post: IPost }) {
   const [isLike, setIsLike] = useState<boolean>(false);
@@ -20,23 +22,27 @@ export default function Post({ post }: { post: IPost }) {
 
   const [writeUser, setWriteUser] = useState<IUser>();
   const MovePostDetail = (postId: number) => {
-    router.push(`/${user?.user?.name}/${postId}`);
+    router.push(`/${writeUser?.name}/${postId}`);
   };
   const MoveUserPosts = (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
-    router.push(`/${user?.user?.name}/posts`);
+    router.push(`/${writeUser?.name}/posts`);
   };
 
   useEffect(() => {
     if (!post?.userId) return;
     const getUser = async () => {
-      const data = await getUserInfo(post.userId);
-      setWriteUser(data);
+      const { user } = await getPostUser(post.id);
+      setWriteUser(user);
     };
+
     getUser();
   }, [post?.userId]);
 
+  console.log(writeUser);
+
   const ToggleLike = async () => {
+    if (!user?.user.id) return <LoginModal />;
     setIsLike((v) => !v);
     if (isLike) {
       setLikeCount((prev) => prev - 1);
@@ -85,8 +91,8 @@ export default function Post({ post }: { post: IPost }) {
       </div>
       <div className="flex  items-center gap-2 px-4">
         <div className="flex items-center gap-2" onClick={MoveUserPosts}>
-          <Image
-            src={nextImage}
+          <img
+            src={writeUser?.image || nextImage}
             width={50}
             height={50}
             alt="프로필 이미지"

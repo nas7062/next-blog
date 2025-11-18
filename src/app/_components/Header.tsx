@@ -15,7 +15,7 @@ export default async function Header() {
   const session = await auth();
 
   return (
-    <header className="h-20 relative flex items-center sm:px-10 gap-4  lg:gap-10 ">
+    <header className="h-20 relative flex items-center px-4 md:px-10 gap-4 md:gap-10 ">
       <Link
         className="text-2xl md:text-4xl font-semibold cursor-pointer"
         href="/"
@@ -40,7 +40,7 @@ export default async function Header() {
       <div className="flex-1">
         <SearchInput />
       </div>
-      <div className="ml-auto flex items-center gap-4 lg:gap-10">
+      <div className="ml-auto flex items-center gap-10 ">
         {!session?.user ? (
           <Link
             href={"/signin"}
@@ -52,7 +52,7 @@ export default async function Header() {
           <>
             <Link
               href={"/write"}
-              className="sm:block hidden px-4 py-2 rounded-2xl bg-green-400 text-white cursor-pointer hover:bg-green-500 transition-all duration-200"
+              className="md:block hidden px-4 py-2 rounded-2xl bg-green-400 text-white cursor-pointer hover:bg-green-500 transition-all duration-200"
             >
               새 글 작성
             </Link>

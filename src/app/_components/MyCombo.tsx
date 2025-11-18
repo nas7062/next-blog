@@ -54,7 +54,7 @@ export function MyCombo() {
                       <Link
                         href={framework.href}
                         key={framework.label}
-                        className="block sm:hidden cursor-pointer border-b hover:bg-secondary py-2"
+                        className="block md:hidden cursor-pointer border-b hover:bg-secondary py-2"
                       >
                         {framework.label}
                       </Link>
@@ -72,7 +72,7 @@ export function MyCombo() {
                 })}
                 <button
                   onClick={() => signOut({ redirectTo: "/" })}
-                  className="block sm:hidden  rounded-2xl  py-2 hover:bg-secondary cursor-pointer transition-all duration-200"
+                  className="block md:hidden  rounded-2xl  py-2 hover:bg-secondary cursor-pointer transition-all duration-200"
                 >
                   로그아웃
                 </button>

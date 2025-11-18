@@ -140,8 +140,10 @@ export default function SettingPage() {
         <div className="flex flex-col gap-4 flex-1">
           {mode === "Default" ? (
             <>
-              <h2 className="text-4xl font-semibold">{userData.name}</h2>
-              <p className="text-gray-600">{userData.descript}</p>
+              <h3 className="text-4xl text-primary font-semibold">
+                {userData.name}
+              </h3>
+              <p className="text-gray-500">{userData.descript}</p>
             </>
           ) : (
             <>
@@ -177,7 +179,7 @@ export default function SettingPage() {
         저장하기
       </button>
       <div className="flex justify-between items-center gap-2">
-        <h3 className="text-xl w-28 text-center">테마</h3>
+        <h3 className="text-xl! w-28 text-center">테마</h3>
         <button
           onClick={() => setTheme("dark")}
           className="flex-1 bg-black text-white py-2 rounded-md cursor-pointer"
@@ -193,7 +195,7 @@ export default function SettingPage() {
       </div>
 
       <div className="flex justify-between items-center">
-        <h3 className="text-xl w-28 text-center">회원 탈퇴</h3>
+        <h3 className="text-xl! w-28 text-center">회원 탈퇴</h3>
         <button className="px-4 py-2 text-sm bg-red-400 text-white hover:bg-red-500 rounded-lg cursor-pointer">
           회원탈퇴
         </button>

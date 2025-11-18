@@ -36,7 +36,7 @@ export default function RootLayout({
           <AuthSession>
             <Toaster />
             <Header />
-            <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
+            <div className="flex min-h-screen items-center justify-center font-sans ">
               {children}
             </div>
             <div id="modal-root"></div>

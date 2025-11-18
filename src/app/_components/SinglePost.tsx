@@ -33,7 +33,7 @@ export default function SinglePost({ post }: { post: IPost }) {
         />
       </div>
       <div className="max-w-[740px] px-4 flex flex-col justify-around min-h-32 gap-4">
-        <h2 className="text-xl font-semibold">{post.title}</h2>
+        <p className="text-xl text-primary font-semibold">{post.title}</p>
         <p className="whitespace-normal wrap-break-word line-clamp-5">
           {post.description}
         </p>

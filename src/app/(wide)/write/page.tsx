@@ -100,7 +100,7 @@ export default function WritePage() {
   };
 
   return (
-    <main className="h-screen w-full flex gap-9">
+    <main className="h-screen w-full flex gap-9 text-primary">
       <form onSubmit={onSubmit} className="text-center flex flex-1 flex-col">
         <input
           type="text"
@@ -127,7 +127,7 @@ export default function WritePage() {
 
         <button
           type="submit"
-          className="text-base bg-black text-white py-2 px-5 rounded-full mt-9"
+          className="text-base py-2 px-5 bg-green-500 text-white hover:bg-green-400 cursor-pointer transition-colors duration-300 rounded-full mt-9"
         >
           글 작성하기
         </button>

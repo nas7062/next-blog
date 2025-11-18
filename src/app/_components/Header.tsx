@@ -15,11 +15,14 @@ export default async function Header() {
   const session = await auth();
 
   return (
-    <header className="h-20 flex items-center px-48 gap-10 ">
-      <Link className="text-4xl font-semibold cursor-pointer" href="/">
+    <header className="h-20 relative flex items-center sm:px-10 gap-4  lg:gap-10 ">
+      <Link
+        className="text-2xl md:text-4xl font-semibold cursor-pointer"
+        href="/"
+      >
         10012
       </Link>
-      <nav>
+      <nav className="absolute top-20 left-1/6">
         <ul className="flex text-xl gap-8">
           {Object.entries(NAV).map(([key, v]) => (
             <li
@@ -37,11 +40,11 @@ export default async function Header() {
       <div className="flex-1">
         <SearchInput />
       </div>
-      <div className="ml-auto flex items-center gap-10">
+      <div className="ml-auto flex items-center gap-4 lg:gap-10">
         {!session?.user ? (
           <Link
             href={"/signin"}
-            className="px-4 py-2 rounded-2xl bg-gray-700 hover:bg-gray-900 text-white  cursor-pointer transition-all duration-200"
+            className="px-4 py-2  rounded-2xl bg-gray-700 hover:bg-gray-900 text-white  cursor-pointer transition-all duration-200"
           >
             로그인
           </Link>
@@ -49,7 +52,7 @@ export default async function Header() {
           <>
             <Link
               href={"/write"}
-              className="px-4 py-2 rounded-2xl bg-green-400 text-white cursor-pointer hover:bg-green-500 transition-all duration-200"
+              className="sm:block hidden px-4 py-2 rounded-2xl bg-green-400 text-white cursor-pointer hover:bg-green-500 transition-all duration-200"
             >
               새 글 작성
             </Link>

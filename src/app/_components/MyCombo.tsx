@@ -1,17 +1,9 @@
 "use client";
 
 import * as React from "react";
-import { Check } from "lucide-react";
 
-import { cn } from "@/src/lib/utils";
 import { Button } from "@/components/ui/button";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandItem,
-  CommandList,
-} from "@/components/ui/command";
+import { Command, CommandGroup, CommandList } from "@/components/ui/command";
 import {
   Popover,
   PopoverContent,
@@ -20,6 +12,7 @@ import {
 import image from "@/public/nextImage.png";
 import Image from "next/image";
 import Link from "next/link";
+import { signOut } from "next-auth/react";
 
 const frameworks = [
   {
@@ -29,6 +22,10 @@ const frameworks = [
   {
     href: "/setting",
     label: "설정",
+  },
+  {
+    href: "/write",
+    label: "새 글 작성",
   },
 ];
 
@@ -51,15 +48,34 @@ export function MyCombo() {
           <CommandList>
             <CommandGroup>
               <div className="flex flex-col text-center ">
-                {frameworks.map((framework) => (
-                  <Link
-                    href={framework.href}
-                    key={framework.label}
-                    className="cursor-pointer border-b hover:bg-secondary py-2"
-                  >
-                    {framework.label}
-                  </Link>
-                ))}
+                {frameworks.map((framework) => {
+                  if (framework.label === "새 글 작성") {
+                    return (
+                      <Link
+                        href={framework.href}
+                        key={framework.label}
+                        className="block sm:hidden cursor-pointer border-b hover:bg-secondary py-2"
+                      >
+                        {framework.label}
+                      </Link>
+                    );
+                  } else
+                    return (
+                      <Link
+                        href={framework.href}
+                        key={framework.label}
+                        className="cursor-pointer border-b hover:bg-secondary py-2"
+                      >
+                        {framework.label}
+                      </Link>
+                    );
+                })}
+                <button
+                  onClick={() => signOut({ redirectTo: "/" })}
+                  className="block sm:hidden  rounded-2xl  py-2 hover:bg-secondary cursor-pointer transition-all duration-200"
+                >
+                  로그아웃
+                </button>
               </div>
             </CommandGroup>
           </CommandList>

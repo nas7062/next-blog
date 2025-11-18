@@ -5,6 +5,7 @@ import { IUser } from "../../_components/PostDetail";
 import { getUserInfo } from "../../_lib/getUser";
 import { useDropzone } from "react-dropzone";
 import DEFAULT_IMAGE from "@/public/nextImage.png";
+import { supabase } from "../../api/supabase";
 interface AboutThumbnailPreview {
   url: string;
   name: string;
@@ -17,12 +18,14 @@ export default function SettingPage() {
   const [name, setName] = useState(userData?.name);
   const [descript, setdescript] = useState("");
   const [mode, setMode] = useState<"Update" | "Default">("Default");
+  const [thumbnailFile, setThumbnailFile] = useState<File | null>(null);
 
   const [thumbnailPreview, setThumbnailPreview] =
     useState<AboutThumbnailPreview>();
   //사진이 추가됐을 때 그 사진의 정보 상태담기
   const onDropThumbnail = useCallback((acceptedFiles: File[]) => {
     const file = acceptedFiles[0];
+    setThumbnailFile(file);
     //file 첫번째 파일을 저장
     const fileURL = URL.createObjectURL(file);
     //createObjectURL는 임시로 URL을 저장할수 있는 메서드
@@ -34,7 +37,7 @@ export default function SettingPage() {
     e.stopPropagation(); // 이벤트 버블링 막기
     setThumbnailPreview(undefined);
   };
-
+  console.log(user);
   const { getRootProps, isDragActive, getInputProps } = useDropzone({
     //이미지가 들어가면 실행되는 함수
     onDrop: onDropThumbnail,
@@ -44,7 +47,49 @@ export default function SettingPage() {
     },
   });
 
-  const updateInfo = () => {};
+  const updateInfo = async () => {
+    if (!user?.user.id) return;
+
+    let imageUrl = userData?.image; // 기존 이미지 URL
+
+    // 1) 이미지 새로 업로드한 경우
+    if (thumbnailFile) {
+      const { data, error } = await supabase.storage
+        .from("profile")
+        .upload(`profile-${user.user.id}`, thumbnailFile, {
+          upsert: true,
+        });
+      console.log(name, descript, thumbnailFile);
+      if (error) {
+        console.log("이미지 업로드 실패:", error);
+        return;
+      }
+
+      // 2) 업로드한 파일의 publicURL 만들기
+      const { data: urlData } = supabase.storage
+        .from("profile")
+        .getPublicUrl(`profile-${user.user.id}`);
+
+      imageUrl = urlData.publicUrl;
+    }
+
+    // 3) DB user table 업데이트
+    const { error: updateError } = await supabase
+      .from("users")
+      .update({
+        name: name,
+        descript: descript,
+        image: imageUrl,
+      })
+      .eq("id", user.user.id);
+
+    if (updateError) {
+      console.log("업데이트 실패:", updateError);
+      return;
+    }
+
+    alert("저장 완료!");
+  };
 
   const changeMode = () => {
     if (mode === "Default") {
@@ -53,6 +98,7 @@ export default function SettingPage() {
       setMode("Default");
     }
   };
+  const OnSave = () => {};
 
   useEffect(() => {
     if (!user?.user.id) return;
@@ -100,6 +146,7 @@ export default function SettingPage() {
               <input
                 type="text"
                 className="border border-gray-300 focus:border-gray-800 rounded-md h-10 px-2"
+                defaultValue={userData?.name ? userData.name : name}
                 value={name}
                 onChange={(e) => setName(e.target.value)}
               />
@@ -129,12 +176,19 @@ export default function SettingPage() {
           화이트
         </button>
       </div>
+      <button
+        onClick={updateInfo}
+        className="px-4 py-2 text-sm bg-green-400 text-white hover:bg-green-500 rounded-lg cursor-pointer ml-auto"
+      >
+        저장하기
+      </button>
       <div className="flex justify-between items-center">
         <h3 className="text-xl w-28 text-center">회원 탈퇴</h3>
         <button className="px-4 py-2 text-sm bg-red-400 text-white hover:bg-red-500 rounded-lg cursor-pointer">
           회원탈퇴
         </button>
       </div>
+
       <p className="text-gray-400">
         탈퇴 시 작성하신 포스트 및 댓글이 모두 삭제되며 복구되지 않습니다.
       </p>

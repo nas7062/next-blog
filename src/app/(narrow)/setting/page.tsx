@@ -6,6 +6,7 @@ import { getUserInfo } from "../../_lib/getUser";
 import { useDropzone } from "react-dropzone";
 import DEFAULT_IMAGE from "@/public/nextImage.png";
 import { supabase } from "../../api/supabase";
+import { useTheme } from "next-themes";
 interface AboutThumbnailPreview {
   url: string;
   name: string;
@@ -19,7 +20,7 @@ export default function SettingPage() {
   const [descript, setdescript] = useState(userData?.descript);
   const [mode, setMode] = useState<"Update" | "Default">("Default");
   const [thumbnailFile, setThumbnailFile] = useState<File | null>(null);
-
+  const { setTheme } = useTheme();
   const [thumbnailPreview, setThumbnailPreview] =
     useState<AboutThumbnailPreview>();
   //사진이 추가됐을 때 그 사진의 정보 상태담기
@@ -165,18 +166,9 @@ export default function SettingPage() {
             className="text-green-500 cursor-pointer self-start"
             onClick={changeMode}
           >
-            {mode === "Default" ? " 수정하기" : "저장하기"}
+            {mode === "Default" ? " 수정하기" : "수정완료"}
           </button>
         </div>
-      </div>
-      <div className="flex justify-between items-center gap-2">
-        <h3 className="text-xl w-28 text-center">테마</h3>
-        <button className="flex-1 bg-black text-white py-2 rounded-md cursor-pointer">
-          다크
-        </button>
-        <button className="flex-1 bg-gray-100 text-black py-2 rounded-md cursor-pointer">
-          화이트
-        </button>
       </div>
       <button
         onClick={updateInfo}
@@ -184,6 +176,22 @@ export default function SettingPage() {
       >
         저장하기
       </button>
+      <div className="flex justify-between items-center gap-2">
+        <h3 className="text-xl w-28 text-center">테마</h3>
+        <button
+          onClick={() => setTheme("dark")}
+          className="flex-1 bg-black text-white py-2 rounded-md cursor-pointer"
+        >
+          다크
+        </button>
+        <button
+          onClick={() => setTheme("light")}
+          className="flex-1 bg-gray-100 text-black py-2 rounded-md cursor-pointer"
+        >
+          화이트
+        </button>
+      </div>
+
       <div className="flex justify-between items-center">
         <h3 className="text-xl w-28 text-center">회원 탈퇴</h3>
         <button className="px-4 py-2 text-sm bg-red-400 text-white hover:bg-red-500 rounded-lg cursor-pointer">

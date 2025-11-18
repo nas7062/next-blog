@@ -72,7 +72,7 @@ export default function SettingPage() {
 
       imageUrl = urlData.publicUrl;
     }
-    console.log(imageUrl, user.user.id);
+
     // 3) DB user table 업데이트
     const { error: updateError } = await supabase
       .from("users")
@@ -98,7 +98,12 @@ export default function SettingPage() {
       setMode("Default");
     }
   };
-  const OnSave = () => {};
+  const OnSave = () => {
+    console.log(name, descript);
+    setName(name);
+    setdescript(descript);
+    changeMode();
+  };
 
   useEffect(() => {
     if (!user?.user.id) return;
@@ -141,9 +146,9 @@ export default function SettingPage() {
           {mode === "Default" ? (
             <>
               <h3 className="text-4xl text-primary font-semibold">
-                {userData.name}
+                {name || userData.name}
               </h3>
-              <p className="text-gray-500">{userData.descript}</p>
+              <p className="text-gray-500">{descript || userData.descript}</p>
             </>
           ) : (
             <>
@@ -166,7 +171,7 @@ export default function SettingPage() {
 
           <button
             className="text-green-500 cursor-pointer self-start"
-            onClick={changeMode}
+            onClick={mode === "Default" ? changeMode : OnSave}
           >
             {mode === "Default" ? " 수정하기" : "수정완료"}
           </button>

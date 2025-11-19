@@ -49,8 +49,10 @@ export default function SettingPage() {
     },
   });
 
+  const email = user?.user?.email;
+
   const updateInfo = async () => {
-    if (!user?.user.id) return;
+    if (!email) return;
 
     let imageUrl = userData?.image; // 기존 이미지 URL
 
@@ -58,7 +60,7 @@ export default function SettingPage() {
     if (thumbnailFile) {
       const { data, error } = await supabase.storage
         .from("profile")
-        .upload(`profile-${user.user.id}`, thumbnailFile, {
+        .upload(`profile-${email}`, thumbnailFile, {
           upsert: true,
         });
       if (error) {
@@ -69,7 +71,7 @@ export default function SettingPage() {
       // 2) 업로드한 파일의 publicURL 만들기
       const { data: urlData } = supabase.storage
         .from("profile")
-        .getPublicUrl(`profile-${user.user.id}`);
+        .getPublicUrl(`profile-${email}`);
 
       imageUrl = urlData.publicUrl;
     }
@@ -82,7 +84,7 @@ export default function SettingPage() {
         descript: descript,
         image: imageUrl,
       })
-      .eq("email", user.user.email);
+      .eq("email", email);
 
     if (updateError) {
       console.log("업데이트 실패:", updateError);
@@ -106,18 +108,18 @@ export default function SettingPage() {
   };
 
   const OnDelete = async () => {
-    const response = await userDelete(user?.user?.email);
+    const response = await userDelete(email);
     console.log(response);
   };
 
   useEffect(() => {
-    if (!user?.user.id) return;
+    if (!email) return;
     const fetchUser = async () => {
-      const data = await getUserInfo(user?.user.email);
+      const data = await getUserInfo(email);
       setUserData(data);
     };
     fetchUser();
-  }, [user?.user.email]);
+  }, [email]);
 
   const imageSrc = thumbnailPreview?.url || userData?.image || DEFAULT_IMAGE;
 

@@ -74,10 +74,45 @@ export default function WritePage() {
       "image/*": [".jpeg", ".jpg", ".png"],
     },
   });
-
+  const email = user?.user?.email as string;
   const onSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
     const uid = user?.user?.id;
+
+    let imageUrl = post?.coverImgUrl;
+
+    // 1) 이미지 새로 업로드한 경우
+    if (thumbnailFile) {
+      const { data, error } = await supabase.storage
+        .from("Post")
+        .upload(`Post-${post.id}`, thumbnailFile, {
+          upsert: true,
+        });
+      if (error) {
+        console.log("이미지 업로드 실패:", error);
+        return;
+      }
+
+      // 2) 업로드한 파일의 publicURL 만들기
+      const { data: urlData } = supabase.storage
+        .from("Post")
+        .getPublicUrl(`Post-${post?.id}`);
+
+      imageUrl = urlData.publicUrl;
+    }
+
+    // 3) DB user table 업데이트
+    const { error: updateError } = await supabase
+      .from("Post")
+      .update({
+        coverImgUrl: imageUrl,
+      })
+      .eq("email", email);
+
+    if (updateError) {
+      console.log("업데이트 실패:", updateError);
+      return;
+    }
 
     if (!uid) return;
     if (!title || !getContent) {
@@ -94,7 +129,7 @@ export default function WritePage() {
             updatedAt: new Date().toISOString(),
             userId: uid,
             email: user.user?.email,
-            coverImgUrl: thumbnailPreview?.url || noImage,
+            coverImgUrl: imageUrl || noImage,
             Tags: tags,
           },
         ])

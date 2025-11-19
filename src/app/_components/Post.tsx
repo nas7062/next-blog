@@ -7,11 +7,9 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { IPost } from "../(wide)/write/page";
-
 import { IUser } from "./PostDetail";
 import { getToggleLike } from "../_lib/getToggleLike";
 import { postToggleLike } from "../_lib/postToggleLike";
-import LoginModal from "./LoginModal";
 import { getPostUser } from "../_lib/getPostUser";
 
 export default function Post({ post }: { post: IPost }) {
@@ -41,25 +39,32 @@ export default function Post({ post }: { post: IPost }) {
     getUser();
   }, [post?.id]);
 
+  const email = user?.user?.email as string;
+
   const ToggleLike = async () => {
-    if (!user?.user?.email) return;
+    if (!email) return;
     setIsLike((v) => !v);
     if (isLike) {
       setLikeCount((prev) => prev - 1);
     } else {
       setLikeCount((prev) => prev + 1);
     }
-    await postToggleLike(user?.user?.email, post.id);
+    try {
+      const response = await postToggleLike(email, post.id);
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {
-    if (!user?.user.email) return;
+    if (!email || !post.id) return;
     const getLike = async () => {
-      const liked = await getToggleLike(post.id, user?.user?.email);
+      const liked = await getToggleLike(post.id, email);
       setIsLike(liked);
     };
     getLike();
-  }, [post.id, user?.user.email]);
+  }, [post.id, email]);
 
   return (
     <div
@@ -71,7 +76,7 @@ export default function Post({ post }: { post: IPost }) {
       key={post.id}
     >
       <div>
-        <Image
+        <img
           src={post.coverImgUrl || nextImage}
           alt={post.title}
           width={350}

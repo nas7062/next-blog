@@ -7,7 +7,7 @@ export default function PostsLayout({
 }) {
   return (
     <main className="flex">
-      <div className="w-56">{sidebar}</div>
+      <div className="min-w-40">{sidebar}</div>
       <div className="flex-1">{children}</div>
     </main>
   );

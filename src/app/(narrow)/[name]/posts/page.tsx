@@ -41,7 +41,10 @@ export default function PostPage() {
             alt="이미지"
             className="rounded-full w-32 h-32"
           />
-          <p className="text-4xl">{userData?.name}</p>
+          <div className="flex flex-col gap-2">
+            <p className="text-4xl">{userData?.name}</p>
+            <p className="text-gray-500 ml-2">{userData?.descript}</p>
+          </div>
         </div>
         <div className="flex justify-end gap-4 py-4">
           <p>0 팔로우</p>

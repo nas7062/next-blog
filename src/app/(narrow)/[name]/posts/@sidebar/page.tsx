@@ -39,7 +39,7 @@ export default function Sidebar() {
   });
 
   return (
-    <div className="flex flex-col h-screen mt-96 ">
+    <div className="flex flex-col  h-screen mt-96 ">
       <p className="text-lg font-semibold py-2 border-b-2 border-gray-200">
         태그 목록
       </p>

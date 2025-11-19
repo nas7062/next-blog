@@ -33,7 +33,7 @@ export default function PostPage() {
   }, [id]);
 
   return (
-    <div className="bg-primary text-primary-foreground flex flex-col">
+    <div className="bg-primary text-primary-foreground flex flex-col gap-4">
       <div className="flex flex-col">
         <div className="flex items-center gap-4 p-20 border-b border-gray-200">
           <img

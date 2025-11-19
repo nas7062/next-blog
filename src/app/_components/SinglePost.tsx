@@ -26,9 +26,9 @@ export default function SinglePost({ post }: { post: IPost }) {
         <img
           src={post.coverImgUrl || nextImage}
           alt={post.title}
-          width={768}
+          width={708}
           height={400}
-          className="rounded-xl overflow-hidden "
+          className="rounded-xl overflow-hidden mx-auto"
         />
       </div>
       <div className="max-w-[740px] px-4 flex flex-col justify-around min-h-32 gap-4">

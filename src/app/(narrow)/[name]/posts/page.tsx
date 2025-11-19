@@ -19,7 +19,6 @@ export default function PostPage() {
     fetchPost();
   }, [email]);
 
-  console.log(posts);
   return (
     <div className="bg-primary text-primary-foreground flex flex-col">
       <div className="flex flex-col">

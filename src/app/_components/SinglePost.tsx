@@ -28,7 +28,7 @@ export default function SinglePost({ post }: { post: IPost }) {
           alt={post.title}
           width={768}
           height={400}
-          className="rounded-md "
+          className="rounded-xl overflow-hidden "
         />
       </div>
       <div className="max-w-[740px] px-4 flex flex-col justify-around min-h-32 gap-4">

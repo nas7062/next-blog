@@ -3,8 +3,8 @@ import { getTagList } from "../_lib/getTagList";
 
 export default async function Sidebar() {
   const session = await auth();
-
-  const Tags = await getTagList(session?.user?.email);
+  const email = session?.user?.email as string;
+  const Tags = await getTagList(email);
   const tagList = new Map<string, number>();
   Tags.forEach((row) => {
     const tags = row.Tags ?? [];

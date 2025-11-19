@@ -8,7 +8,7 @@ import DEFAULT_IMAGE from "@/public/nextImage.png";
 import { supabase } from "../../api/supabase";
 import { useTheme } from "next-themes";
 import { userDelete } from "./_lib/userDelete";
-interface AboutThumbnailPreview {
+export interface AboutThumbnailPreview {
   url: string;
   name: string;
   size: number;

@@ -32,7 +32,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
           if (error || !data.user) return null;
 
-          console.log(data.user.user_metadata.name);
+          
           // NextAuth는 최소 id 필요
           return {
             id: data.user.id,

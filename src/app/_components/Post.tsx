@@ -42,7 +42,7 @@ export default function Post({ post }: { post: IPost }) {
   }, [post?.id]);
 
   const ToggleLike = async () => {
-    if (!user?.user?.email) return <LoginModal />;
+    if (!user?.user?.email) return;
     setIsLike((v) => !v);
     if (isLike) {
       setLikeCount((prev) => prev - 1);

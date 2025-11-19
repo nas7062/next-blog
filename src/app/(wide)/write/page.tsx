@@ -1,8 +1,10 @@
 "use client";
 import TuiEditor from "./_components/TuiEditor";
+import noImage from "@/public/noImage.jpg";
 import React, {
   FormEventHandler,
   KeyboardEvent,
+  useCallback,
   useEffect,
   useState,
 } from "react";
@@ -10,9 +12,10 @@ import TagList from "../../_components/TagList";
 import Viewer from "./_components/View";
 import { toast } from "sonner";
 import { supabase } from "../../api/supabase";
-
 import { useRouter, useSearchParams } from "next/navigation";
 import { useSession } from "next-auth/react";
+import { AboutThumbnailPreview } from "../../(narrow)/setting/page";
+import { useDropzone } from "react-dropzone";
 
 export interface IPost {
   coverImgUrl: string;
@@ -36,7 +39,7 @@ export default function WritePage() {
   const postId = searchParmas.get("id");
   const router = useRouter();
   const { data: user } = useSession();
-
+  const [thumbnailFile, setThumbnailFile] = useState<File | null>(null);
   const [getContent, setGetContent] = useState("");
   const [post, SetPost] = useState<IPost>();
   useEffect(() => {
@@ -50,7 +53,28 @@ export default function WritePage() {
     };
     OnUpdate();
   }, [postId]);
-  console.log(user?.user?.id, user?.user?.email);
+
+  const [thumbnailPreview, setThumbnailPreview] =
+    useState<AboutThumbnailPreview>();
+  //사진이 추가됐을 때 그 사진의 정보 상태담기
+  const onDropThumbnail = useCallback((acceptedFiles: File[]) => {
+    const file = acceptedFiles[0];
+    setThumbnailFile(file);
+    //file 첫번째 파일을 저장
+    const fileURL = URL.createObjectURL(file);
+    //createObjectURL는 임시로 URL을 저장할수 있는 메서드
+    setThumbnailPreview({ url: fileURL, name: file.name, size: file.size });
+  }, []);
+
+  const { getRootProps, getInputProps } = useDropzone({
+    //이미지가 들어가면 실행되는 함수
+    onDrop: onDropThumbnail,
+    //받는 이미지 확장자 리밋 설정
+    accept: {
+      "image/*": [".jpeg", ".jpg", ".png"],
+    },
+  });
+
   const onSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
     const uid = user?.user?.id;
@@ -76,7 +100,7 @@ export default function WritePage() {
           },
         ])
         .select();
-      console.log(data);
+
       if (error) {
         toast.error("글 작성에 실패했습니다.");
         console.error(" Supabase insert error:", error);
@@ -134,8 +158,23 @@ export default function WritePage() {
           글 작성하기
         </button>
       </form>
-      <div className="w-1/2">
-        <div className="bg-white h-screen flex-1 mt-9 text-left border border-[#ddd]">
+      <div className="w-1/2 flex flex-col">
+        <div className="flex items-center ">
+          <img
+            src={thumbnailPreview?.url || noImage}
+            alt="이미지를 업로드해주세요"
+            width={100}
+            height={100}
+          />
+          <div
+            {...getRootProps()}
+            className="ml-auto w-32 h-10 px-4 py-2 text-sm bg-green-400 text-white hover:bg-green-500 rounded-lg cursor-pointer"
+          >
+            썸네일 업로드 <input {...getInputProps()} />
+          </div>
+        </div>
+
+        <div className=" h-screen flex-1 mt-9 text-left border border-[#ddd]">
           <Viewer content={getContent} />
         </div>
       </div>

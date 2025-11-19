@@ -7,7 +7,7 @@ export async function postToggleLike(userEmail: string, postId: number) {
   const { data: user, error: selectError } = await supabase
     .from("users")
     .select("like")
-    .eq("userEmail", userEmail);
+    .eq("email", userEmail);
 
   if (selectError) {
     console.error("like 조회 오류", selectError);

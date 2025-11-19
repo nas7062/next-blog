@@ -3,16 +3,18 @@ import nextImage from "@/public/nextImage.png";
 import SinglePostList from "@/src/app/_components/SinglePostList";
 import { IPost } from "@/src/app/(wide)/write/page";
 import { getMyPost } from "@/src/app/_lib/getMyPosts";
-import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
-import { getUserInfo } from "@/src/app/_lib/getUser";
 import { IUser } from "@/src/app/_components/PostDetail";
+import { usePathname } from "next/navigation";
+import { getUserById } from "@/src/app/_lib/getUserById";
+import { GithubIcon, MailIcon } from "lucide-react";
 
 export default function PostPage() {
-  const { data: user } = useSession();
+  const id = usePathname().split("/")[1];
+
   const [userData, setUserData] = useState<IUser>();
   const [posts, setPosts] = useState<IPost[]>();
-  const email = user?.user?.email as string;
+  const email = userData?.email as string;
   useEffect(() => {
     const fetchPost = async () => {
       const data = await getMyPost(email);
@@ -22,13 +24,13 @@ export default function PostPage() {
   }, [email]);
 
   useEffect(() => {
-    if (!email) return;
+    if (!id) return;
     const fetchUser = async () => {
-      const data = await getUserInfo(email);
+      const data = await getUserById(id);
       setUserData(data);
     };
     fetchUser();
-  }, [email]);
+  }, [id]);
 
   return (
     <div className="bg-primary text-primary-foreground flex flex-col">
@@ -39,15 +41,15 @@ export default function PostPage() {
             alt="이미지"
             className="rounded-full w-32 h-32"
           />
-          <p className="text-4xl">{user?.user?.name}</p>
+          <p className="text-4xl">{userData?.name}</p>
         </div>
         <div className="flex justify-end gap-4 py-4">
           <p>0 팔로우</p>
           <p>0 팔로잉</p>
         </div>
         <div className="flex gap-4">
-          <p>github</p>
-          <p>mail</p>
+          <GithubIcon className="w-8 h-8 cursor-pointer" />
+          <MailIcon className="w-8 h-8 cursor-pointer" />
         </div>
       </div>
       <div className="flex justify-center items-center">

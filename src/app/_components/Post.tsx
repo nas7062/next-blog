@@ -1,6 +1,5 @@
 "use client";
 import { Heart } from "lucide-react";
-import Image from "next/image";
 import nextImage from "@/public/nextImage.png";
 import dayjs from "dayjs";
 import { useRouter } from "next/navigation";
@@ -26,7 +25,7 @@ export default function Post({ post }: { post: IPost }) {
   const MoveUserPosts = (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
     if (!writeUser) return;
-    router.push(`/${writeUser?.name}/posts`);
+    router.push(`/${writeUser?.id}/posts`);
   };
 
   useEffect(() => {

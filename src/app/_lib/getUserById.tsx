@@ -1,0 +1,14 @@
+import { supabase } from "../api/supabase";
+
+export async function getUserById(userId: string) {
+  const { data, error } = await supabase
+    .from("users")
+    .select("*")
+    .eq("id", userId);
+
+  if (error) {
+    console.error("데이터 패칭 실패", error);
+    return null;
+  }
+  return data[0];
+}

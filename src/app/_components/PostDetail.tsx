@@ -50,11 +50,11 @@ export default function PostDetail({
   useEffect(() => {
     if (!post?.userId) return;
     const getUser = async () => {
-      const data = await getUserInfo(post.userId);
+      const data = await getUserInfo(post.email);
       setUser(data);
     };
     getUser();
-  }, [post?.userId]);
+  }, [post?.email]);
 
   const getTimeElapsed = (updatedTime: Date) => {
     return dayjs(updatedTime).fromNow();

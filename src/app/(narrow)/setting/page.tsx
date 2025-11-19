@@ -82,7 +82,7 @@ export default function SettingPage() {
         descript: descript,
         image: imageUrl,
       })
-      .eq("id", user.user.id);
+      .eq("email", user.user.email);
 
     if (updateError) {
       console.log("업데이트 실패:", updateError);
@@ -106,18 +106,18 @@ export default function SettingPage() {
   };
 
   const OnDelete = async () => {
-    const response = await userDelete(user?.user?.id);
+    const response = await userDelete(user?.user?.email);
     console.log(response);
   };
 
   useEffect(() => {
     if (!user?.user.id) return;
     const fetchUser = async () => {
-      const data = await getUserInfo(user?.user.id);
+      const data = await getUserInfo(user?.user.email);
       setUserData(data);
     };
     fetchUser();
-  }, [user?.user.id]);
+  }, [user?.user.email]);
 
   const imageSrc = thumbnailPreview?.url || userData?.image || DEFAULT_IMAGE;
 

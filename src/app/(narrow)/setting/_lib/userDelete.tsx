@@ -1,10 +1,10 @@
 import { supabase } from "@/src/app/api/supabase";
 
-export async function userDelete(user_id: string) {
+export async function userDelete(userEmail: string) {
   const { data, error } = await supabase
     .from("users")
     .delete()
-    .eq("id", user_id);
+    .eq("email", userEmail);
 
   if (error) {
     console.error("데이터 패칭 실패", error);

@@ -47,9 +47,16 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     }),
   ],
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user, account }) {
       if (user) {
-        token.sub = user.id;
+        if (account?.provider === "kakao") {
+          // 카카오 로그인일 때는 '고정 id'로 이메일 사용
+          token.sub = user.email ?? token.sub;
+        } else {
+          // credentials 등 다른 로그인은 기존처럼
+          token.sub = user.id;
+        }
+    
         token.email = user.email;
         token.name = user.name;
       }
@@ -58,38 +65,62 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     async session({ session, token }) {
       if (token?.sub) {
         session.user = {
-          id: token.sub,
+          id: token.sub,      // 이제 여기 값이 "이메일 기반 고정 id"
           email: token.email,
           name: token.name,
         };
       } else {
         session.user = null;
       }
-
+    
       return session;
     },
-    async signIn({ user }) {
-      const { data, error } = await supabase
-        .from("users") 
-        .select("*")
-        .eq("id", user.id)
-        
-      console.log(data,error)
-      if (data) {
-        await supabase.auth.signInWithOAuth({
-          provider: "kakao",
-        });
-        await supabase.from("users").upsert([
-          {
-            id:user.id,
-            email: user.email,
-            name: user.name,
-            image: user.image,
-            provider: "kakao",
-          },
-        ]);
+    async signIn({ user, account }) {
+      // 카카오 말고 다른 로그인(예: credentials)은 그냥 통과
+      if (account?.provider !== "kakao") {
+        return true;
       }
-
+    
+      // 카카오가 이메일 안 주는 경우도 있어서 방어 코드
+      if (!user?.email) {
+        console.log("카카오 유저에 email 없음:", user);
+        return true; // 일단 로그인은 통과시키고, DB는 안 건드림
+      }
+    
+      const email = user.email;
+    
+      try {
+        const { data, error } = await supabase
+          .from("users")
+          .select("*")
+          .eq("email", email);
+    
+        console.log("signIn users select:", data, error);
+    
+        // 에러 없고, 해당  아직 없을 때만 upsert
+        if (!error && data && data.length === 0) {
+          const { error: upsertError } = await supabase.from("users").upsert([
+            {
+              id:email,
+              email,
+              name: user.name,
+              image: (user as any).image ?? null,
+              provider: "kakao",
+            },
+          ]);
+    
+          if (upsertError) {
+            console.error("users upsert error:", upsertError);
+          }
+          else {
+            console.log("users upsert success");
+          }
+        }
+      } catch (e) {
+        console.error("signIn callback error:", e);
+        
+      }
+    
       return true;
     }
   },

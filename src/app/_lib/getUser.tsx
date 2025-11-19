@@ -1,10 +1,10 @@
 import { supabase } from "../api/supabase";
 
-export async function getUserInfo(userId: string) {
+export async function getUserInfo(userEmail: string) {
   const { data, error } = await supabase
     .from("users")
     .select("*")
-    .eq("id", userId);
+    .eq("email", userEmail);
 
   if (error) {
     console.error("데이터 패칭 실패", error);

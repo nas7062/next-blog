@@ -25,6 +25,7 @@ export interface IPost {
   userId: string;
   Tags?: string[];
   likeCount?: number;
+  email: string;
 }
 
 export default function WritePage() {
@@ -49,11 +50,11 @@ export default function WritePage() {
     };
     OnUpdate();
   }, [postId]);
-
+  console.log(user?.user?.id, user?.user?.email);
   const onSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
     const uid = user?.user?.id;
-    console.log(uid);
+
     if (!uid) return;
     if (!title || !getContent) {
       toast.error("제목 또는 내용을 입력 해주세요.");
@@ -65,9 +66,10 @@ export default function WritePage() {
           {
             title,
             description: getContent,
-            createdAt: "2025-01-25",
-            updatedAt: "2025-01-25",
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
             userId: uid,
+            email: user.user?.email,
             coverImgUrl:
               "https://shopping-phinf.pstatic.net/main_3776194/37761944621.20230614072126.jpg",
             Tags: tags,

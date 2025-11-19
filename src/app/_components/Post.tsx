@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { IPost } from "../(wide)/write/page";
-import { getUserInfo } from "../_lib/getUser";
+
 import { IUser } from "./PostDetail";
 import { getToggleLike } from "../_lib/getToggleLike";
 import { postToggleLike } from "../_lib/postToggleLike";
@@ -22,44 +22,44 @@ export default function Post({ post }: { post: IPost }) {
 
   const [writeUser, setWriteUser] = useState<IUser>();
   const MovePostDetail = (postId: number) => {
+    if (!writeUser) return;
     router.push(`/${writeUser?.name}/${postId}`);
   };
   const MoveUserPosts = (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
+    if (!writeUser) return;
     router.push(`/${writeUser?.name}/posts`);
   };
 
   useEffect(() => {
-    if (!post?.userId) return;
+    if (!post?.id) return;
     const getUser = async () => {
       const { user } = await getPostUser(post.id);
       setWriteUser(user);
     };
 
     getUser();
-  }, [post?.userId]);
-
-  console.log(writeUser);
+  }, [post?.id]);
 
   const ToggleLike = async () => {
-    if (!user?.user.id) return <LoginModal />;
+    if (!user?.user?.email) return <LoginModal />;
     setIsLike((v) => !v);
     if (isLike) {
       setLikeCount((prev) => prev - 1);
     } else {
       setLikeCount((prev) => prev + 1);
     }
-    await postToggleLike(user?.user?.id, post.id);
+    await postToggleLike(user?.user?.email, post.id);
   };
 
   useEffect(() => {
-    if (!user) return;
+    if (!user?.user.email) return;
     const getLike = async () => {
-      const liked = await getToggleLike(post.id, user.user.id);
+      const liked = await getToggleLike(post.id, user?.user?.email);
       setIsLike(liked);
     };
     getLike();
-  }, [post.id, user]);
+  }, [post.id, user?.user.email]);
 
   return (
     <div

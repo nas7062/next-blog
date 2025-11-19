@@ -1,14 +1,14 @@
 import { supabase } from "../api/supabase";
 
-export async function getToggleLike(postId: number, userId: string) {
-  if (!postId || !userId) return;
+export async function getToggleLike(postId: number, userEmail: string) {
+  if (!postId || !userEmail) return;
 
   const { data, error } = await supabase
     .from("users")
     .select("like")
-    .eq("id", userId);
+    .eq("email", userEmail);
 
-  if (error) return false;
+  if (error) return;
 
   return data.like?.includes(postId) ?? false;
 }

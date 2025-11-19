@@ -1,13 +1,13 @@
 import { supabase } from "../api/supabase";
 
-export async function postToggleLike(userId: string, postId: number) {
-  if (!userId || !postId) return;
+export async function postToggleLike(userEmail: string, postId: number) {
+  if (!userEmail || !postId) return;
 
   // 1. 기존 like 배열 가져오기
   const { data: user, error: selectError } = await supabase
     .from("users")
     .select("like")
-    .eq("id", userId);
+    .eq("userEmail", userEmail);
 
   if (selectError) {
     console.error("like 조회 오류", selectError);
@@ -46,7 +46,7 @@ export async function postToggleLike(userId: string, postId: number) {
   const { data, error } = await supabase
     .from("users")
     .update({ like: updatedLikes })
-    .eq("id", userId)
+    .eq("email", userEmail)
     .select();
 
   if (error) {

@@ -6,9 +6,9 @@ export async function getToggleLike(postId: number, userEmail: string) {
   const { data, error } = await supabase
     .from("users")
     .select("like")
-    .eq("email", userEmail);
+    .eq("email", userEmail)
+    .single();
 
   if (error) return;
-
-  return data.like?.includes(postId) ?? false;
+  return data.like?.includes(postId) ? true : false;
 }

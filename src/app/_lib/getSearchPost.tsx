@@ -10,6 +10,5 @@ export async function getSearchPost({ q }: { q?: string }) {
     console.error("데이터 패칭 실패", error);
     return [];
   }
-  console.log("데이터 패칭 성공");
   return data;
 }

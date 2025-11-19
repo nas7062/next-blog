@@ -51,7 +51,6 @@ export default function Post({ post }: { post: IPost }) {
     }
     try {
       const response = await postToggleLike(email, post.id);
-      console.log(response);
     } catch (error) {
       console.log(error);
     }

@@ -7,7 +7,8 @@ export async function postToggleLike(userEmail: string, postId: number) {
   const { data: user, error: selectError } = await supabase
     .from("users")
     .select("like")
-    .eq("email", userEmail);
+    .eq("email", userEmail)
+    .single();
 
   if (selectError) {
     console.error("like 조회 오류", selectError);
@@ -17,11 +18,11 @@ export async function postToggleLike(userEmail: string, postId: number) {
   //2.유저 like column 가져옴.
   const currentLikes: number[] = user.like || [];
 
-  console.log(currentLikes);
   const { data: post, error: postError } = await supabase
     .from("Post")
     .select("likeCount")
-    .eq("id", postId);
+    .eq("id", postId)
+    .single();
 
   // 3. 토글 처리
   let updatedLikes;
@@ -42,7 +43,7 @@ export async function postToggleLike(userEmail: string, postId: number) {
       .update({ likeCount: newCount })
       .eq("id", postId);
   }
-  console.log(updatedLikes);
+
   // 4.해당 유저 updatedLikes 업데이트
   const { data, error } = await supabase
     .from("users")

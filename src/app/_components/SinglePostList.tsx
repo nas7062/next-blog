@@ -1,7 +1,7 @@
-import { IPost } from "./PostList";
+import { IPost } from "../(wide)/write/page";
 import SinglePost from "./SinglePost";
 
-export default async function SinglePostList({ posts }: { posts: IPost[] }) {
+export default function SinglePostList({ posts }: { posts: IPost[] }) {
   if (!posts || posts.length === 0) {
     return <div className="text-slate-400 text-center">게시물이 없습니다.</div>;
   }

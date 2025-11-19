@@ -1,13 +1,12 @@
 "use client";
 
-import Image from "next/image";
 import nextImage from "@/public/nextImage.png";
 import dayjs from "dayjs";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import TagList from "./TagList";
-import { IPost } from "./PostList";
 import { useSession } from "next-auth/react";
+import { IPost } from "../(wide)/write/page";
 
 export default function SinglePost({ post }: { post: IPost }) {
   const [clicked, setClicked] = useState(false);
@@ -24,7 +23,7 @@ export default function SinglePost({ post }: { post: IPost }) {
       key={post.id}
     >
       <div>
-        <Image
+        <img
           src={post.coverImgUrl || nextImage}
           alt={post.title}
           width={768}

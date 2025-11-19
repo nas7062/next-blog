@@ -1,9 +1,27 @@
+"use client";
 import Image from "next/image";
 import nextImage from "@/public/nextImage.png";
 import SinglePostList from "@/src/app/_components/SinglePostList";
+import { IPost } from "@/src/app/(wide)/write/page";
+import { getMyPost } from "@/src/app/_lib/getMyPosts";
+import { useSession } from "next-auth/react";
+import { useEffect, useState } from "react";
+
 export default function PostPage() {
+  const { data: user } = useSession();
+  const [posts, setPosts] = useState<IPost[]>();
+  const email = user?.user?.email as string;
+  useEffect(() => {
+    const fetchPost = async () => {
+      const data = await getMyPost(email);
+      setPosts(data);
+    };
+    fetchPost();
+  }, [email]);
+
+  console.log(posts);
   return (
-    <div className="bg-white flex flex-col">
+    <div className="bg-primary text-primary-foreground flex flex-col">
       <div className="flex flex-col">
         <div className="flex items-center gap-4 p-20 border-b border-gray-200">
           <Image
@@ -26,6 +44,7 @@ export default function PostPage() {
         <p className="text-3xl px-4 py-2">글</p>
         <p className="text-3xl px-4 py-2">소개</p>
       </div>
+      <SinglePostList posts={posts} />
     </div>
   );
 }

@@ -94,8 +94,7 @@ export default function WritePage() {
             updatedAt: new Date().toISOString(),
             userId: uid,
             email: user.user?.email,
-            coverImgUrl:
-              "https://shopping-phinf.pstatic.net/main_3776194/37761944621.20230614072126.jpg",
+            coverImgUrl: thumbnailPreview?.url || noImage,
             Tags: tags,
           },
         ])

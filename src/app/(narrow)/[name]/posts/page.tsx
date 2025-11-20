@@ -7,6 +7,7 @@ import { IUser } from "@/src/app/_components/PostDetail";
 import { usePathname, useSearchParams } from "next/navigation";
 import { getUserById } from "@/src/app/_lib/getUserById";
 import { GithubIcon, MailIcon } from "lucide-react";
+import Tabs from "./_components/Tabs";
 
 export default function PostPage() {
   const id = usePathname().split("/")[1];
@@ -56,10 +57,7 @@ export default function PostPage() {
           <MailIcon className="w-8 h-8 cursor-pointer" />
         </div>
       </div>
-      <div className="flex justify-center items-center">
-        <p className="text-3xl px-4 py-2">글</p>
-        <p className="text-3xl px-4 py-2">소개</p>
-      </div>
+      <Tabs />
       <SinglePostList posts={posts} />
     </div>
   );

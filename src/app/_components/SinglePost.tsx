@@ -2,19 +2,19 @@
 
 import dayjs from "dayjs";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
 import TagList from "./TagList";
 import { useSession } from "next-auth/react";
 import { IPost } from "../(wide)/write/page";
 
 export default function SinglePost({ post }: { post: IPost }) {
-  const [clicked, setClicked] = useState(false);
   const router = useRouter();
+
   const { data: user } = useSession();
   const MovePostDetail = (postId: number) => {
     router.push(`/${user?.user?.name}/${postId}`);
   };
 
+  if (!post) return;
   return (
     <div
       className="flex flex-col w-3xl  gap-4 pb-4 rounded-md cursor-pointer"
@@ -35,7 +35,7 @@ export default function SinglePost({ post }: { post: IPost }) {
         <p className="whitespace-normal wrap-break-word line-clamp-5">
           {post.description}
         </p>
-        <TagList tags={["react", "nextjs", "프론트엔드"]} />
+        <TagList tags={post.Tags} />
         <div className="flex gap-4">
           <p>{dayjs(new Date()).format("YYYY년 MM월 DD일")}</p>
           <p>1개의 댓글</p>

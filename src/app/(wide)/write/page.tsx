@@ -40,19 +40,27 @@ export default function WritePage() {
   const { data: user } = useSession();
   const [thumbnailFile, setThumbnailFile] = useState<File | null>(null);
   const [getContent, setGetContent] = useState("");
-  const [post, SetPost] = useState<IPost>();
+  const [post, setPost] = useState<IPost>();
+  // 수정 시 사용
   useEffect(() => {
     if (!postId) return;
-    const OnUpdate = async () => {
-      const { data } = await supabase
+    const fetchPost = async () => {
+      const { data, error } = await supabase
         .from("Post")
         .select("*")
-        .eq("id", Number(postId));
-      SetPost(data?.[0]);
+        .eq("id", Number(postId))
+        .single(); // single()로 하나의 결과만 가져옵니다.
+      if (error) {
+        console.error("게시물 조회 오류:", error);
+      } else {
+        setPost(data); // 기존 게시물 설정
+        setTags(data.Tags || []); // 태그 설정
+        setTitle(data.title); // 제목 설정
+        setGetContent(data.description); // 내용 설정
+      }
     };
-    OnUpdate();
+    fetchPost();
   }, [postId]);
-
   const [thumbnailPreview, setThumbnailPreview] =
     useState<AboutThumbnailPreview>();
   //사진이 추가됐을 때 그 사진의 정보 상태담기
@@ -117,7 +125,29 @@ export default function WritePage() {
     if (!title || !getContent) {
       toast.error("제목 또는 내용을 입력 해주세요.");
       return;
+    }
+    if (postId) {
+      // 수정 모드일 때
+      const { error: updateError } = await supabase
+        .from("Post")
+        .update({
+          title,
+          description: getContent,
+          updatedAt: new Date().toISOString(),
+          coverImgUrl: imageUrl || post?.coverImgUrl,
+          Tags: tags,
+        })
+        .eq("id", postId);
+
+      if (updateError) {
+        toast.error("글 수정에 실패했습니다.");
+        console.error(" Supabase update error:", updateError);
+      } else {
+        toast.success("글이 수정되었습니다.");
+        router.push(`/${user.user?.name}/${postId}`);
+      }
     } else {
+      // 새 글 작성일 때
       const { data, error } = await supabase
         .from("Post")
         .insert([
@@ -133,7 +163,6 @@ export default function WritePage() {
           },
         ])
         .select();
-
       if (error) {
         toast.error("글 작성에 실패했습니다.");
         console.error(" Supabase insert error:", error);
@@ -165,7 +194,7 @@ export default function WritePage() {
           type="text"
           placeholder="제목을 입력하세요"
           className="h-20 text-4xl outline-none font-semibold"
-          value={post ? post.title : title}
+          value={title}
           onChange={(e) => setTitle(e.target.value)}
         />
         <input
@@ -176,12 +205,9 @@ export default function WritePage() {
           onChange={(e) => setTag(e.target.value)}
           onKeyDown={handleKeyPress}
         />
-        <TagList tags={post?.Tags ? post?.Tags : tags} />
+        <TagList tags={tags} />
         <div className="bg-white h-[500px]  mt-9 text-left">
-          <TuiEditor
-            content={post ? post.description : getContent}
-            contentChange={changeContent}
-          />
+          <TuiEditor content={getContent} contentChange={changeContent} />
         </div>
 
         <button

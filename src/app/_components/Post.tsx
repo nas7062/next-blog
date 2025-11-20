@@ -1,6 +1,5 @@
 "use client";
 import { Heart } from "lucide-react";
-import nextImage from "@/public/nextImage.png";
 import dayjs from "dayjs";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -42,16 +41,16 @@ export default function Post({ post }: { post: IPost }) {
 
   const ToggleLike = async () => {
     if (!email) return;
-    setIsLike((v) => !v);
-    if (isLike) {
-      setLikeCount((prev) => prev - 1);
-    } else {
-      setLikeCount((prev) => prev + 1);
-    }
+    const newLikeStatus = !isLike;
+    setIsLike(newLikeStatus);
+    setLikeCount((prev) => (newLikeStatus ? prev + 1 : prev - 1)); // Optimistically update like count
+
     try {
-      const response = await postToggleLike(email, post.id);
+      await postToggleLike(email, post.id);
     } catch (error) {
       console.log(error);
+      setIsLike(!newLikeStatus);
+      setLikeCount((prev) => (newLikeStatus ? prev - 1 : prev + 1)); // Revert like count
     }
   };
 
@@ -64,6 +63,7 @@ export default function Post({ post }: { post: IPost }) {
     getLike();
   }, [post.id, email]);
 
+  if (!writeUser || !post) return;
   return (
     <div
       className="flex flex-col max-w-[350px] shadow-xl gap-4 pb-4 rounded-md
@@ -75,7 +75,7 @@ export default function Post({ post }: { post: IPost }) {
     >
       <div>
         <img
-          src={post.coverImgUrl || nextImage}
+          src={post.coverImgUrl ? post.coverImgUrl : "/noImage.jpg"}
           alt={post.title}
           width={350}
           height={200}
@@ -95,7 +95,7 @@ export default function Post({ post }: { post: IPost }) {
       <div className="flex  items-center gap-2 px-4">
         <div className="flex items-center gap-2" onClick={MoveUserPosts}>
           <img
-            src={writeUser?.image || nextImage}
+            src={writeUser?.image ? writeUser?.image : "/nextImage.png"}
             width={50}
             height={50}
             alt="프로필 이미지"

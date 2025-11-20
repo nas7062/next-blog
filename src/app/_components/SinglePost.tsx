@@ -1,6 +1,5 @@
 "use client";
 
-import nextImage from "@/public/nextImage.png";
 import dayjs from "dayjs";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -24,7 +23,7 @@ export default function SinglePost({ post }: { post: IPost }) {
     >
       <div>
         <img
-          src={post.coverImgUrl || nextImage}
+          src={post.coverImgUrl || "/nextImage.png"}
           alt={post.title}
           width={708}
           height={400}

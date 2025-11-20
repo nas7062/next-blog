@@ -1,5 +1,4 @@
 "use client";
-import nextImage from "@/public/nextImage.png";
 import SinglePostList from "@/src/app/_components/SinglePostList";
 import { IPost } from "@/src/app/(wide)/write/page";
 import { getMyPost } from "@/src/app/_lib/getMyPosts";
@@ -37,7 +36,7 @@ export default function PostPage() {
       <div className="flex flex-col">
         <div className="flex items-center gap-4 p-20 border-b border-gray-200">
           <img
-            src={userData?.image || nextImage}
+            src={userData?.image || "/nextImage.png"}
             alt="이미지"
             className="rounded-full w-32 h-32"
           />

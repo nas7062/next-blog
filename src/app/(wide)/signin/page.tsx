@@ -4,8 +4,6 @@ import Modal from "@/src/app/_components/Modal";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { signIn, useSession } from "next-auth/react";
-import kakaoImage from "@/public/kakao_btn.png";
-import Image from "next/image";
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -82,8 +80,8 @@ export default function LoginPage() {
             로그인
           </button>
           <button className="f-full" onClick={() => signIn("kakao")}>
-            <Image
-              src={kakaoImage}
+            <img
+              src={"/kakao_btn.png"}
               alt="카카오 로그인 버튼"
               className="w-full h-14"
             />

@@ -1,6 +1,5 @@
 "use client";
 import TuiEditor from "./_components/TuiEditor";
-import noImage from "@/public/noImage.jpg";
 import React, {
   FormEventHandler,
   KeyboardEvent,
@@ -129,7 +128,7 @@ export default function WritePage() {
             updatedAt: new Date().toISOString(),
             userId: uid,
             email: user.user?.email,
-            coverImgUrl: imageUrl || noImage,
+            coverImgUrl: imageUrl || "/noImage.jpg",
             Tags: tags,
           },
         ])
@@ -195,7 +194,7 @@ export default function WritePage() {
       <div className="w-1/2 flex flex-col">
         <div className="flex items-center ">
           <img
-            src={thumbnailPreview?.url || noImage}
+            src={thumbnailPreview?.url || "/noImage.jpg"}
             alt="이미지를 업로드해주세요"
             width={100}
             height={100}

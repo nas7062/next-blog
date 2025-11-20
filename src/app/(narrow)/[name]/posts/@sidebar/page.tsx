@@ -20,9 +20,9 @@ export default function Sidebar() {
   }, [id]);
 
   useEffect(() => {
+    if (!email) return;
     const fetchTags = async () => {
       const Tags = await getTagList(email);
-      console.log(Tags);
       setTags(Tags);
     };
     fetchTags();

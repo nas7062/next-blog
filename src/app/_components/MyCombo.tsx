@@ -9,10 +9,12 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import image from "@/public/nextImage.png";
-import Image from "next/image";
+
 import Link from "next/link";
 import { signOut } from "next-auth/react";
+import { getUserInfo } from "../_lib/getUser";
+import { IUser } from "./PostDetail";
+import { User } from "next-auth";
 
 const frameworks = [
   {
@@ -29,16 +31,29 @@ const frameworks = [
   },
 ];
 
-export function MyCombo() {
+export function MyCombo({ user }: { user: User }) {
   const [open, setOpen] = React.useState(false);
-
+  const [userData, setUserData] = React.useState<IUser | null>(null);
+  const email = user?.email;
+  React.useEffect(() => {
+    if (!email) return;
+    const fetchUser = async () => {
+      try {
+        const data = await getUserInfo(email);
+        setUserData(data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchUser();
+  }, [email]);
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button variant="ghost" role="combobox" aria-expanded={open}>
-          <Image
-            src={image}
-            alt="image"
+          <img
+            src={userData?.image ? userData.image : "/noImage.jpg"}
+            alt="이미지"
             className="w-10 h-10 rounded-full cursor-pointer"
           />
         </Button>

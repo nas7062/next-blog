@@ -4,7 +4,6 @@ import { MouseEvent, useCallback, useEffect, useState } from "react";
 import { IUser } from "../../_components/PostDetail";
 import { getUserInfo } from "../../_lib/getUser";
 import { useDropzone } from "react-dropzone";
-import DEFAULT_IMAGE from "@/public/nextImage.png";
 import { supabase } from "../../api/supabase";
 import { useTheme } from "next-themes";
 import { userDelete } from "./_lib/userDelete";
@@ -121,7 +120,7 @@ export default function SettingPage() {
     fetchUser();
   }, [email]);
 
-  const imageSrc = thumbnailPreview?.url || userData?.image || DEFAULT_IMAGE;
+  const imageSrc = thumbnailPreview?.url || userData?.image || "/nextImage.png";
 
   if (!userData) return;
   return (

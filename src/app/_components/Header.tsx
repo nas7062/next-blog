@@ -57,7 +57,7 @@ export default async function Header() {
               새 글 작성
             </Link>
             <LogoutButton />
-            <MyCombo />
+            <MyCombo user={session.user} />
           </>
         )}
       </div>

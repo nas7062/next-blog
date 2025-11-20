@@ -4,24 +4,26 @@ import { IPost } from "@/src/app/(wide)/write/page";
 import { getMyPost } from "@/src/app/_lib/getMyPosts";
 import { useEffect, useState } from "react";
 import { IUser } from "@/src/app/_components/PostDetail";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { getUserById } from "@/src/app/_lib/getUserById";
 import { GithubIcon, MailIcon } from "lucide-react";
 
 export default function PostPage() {
   const id = usePathname().split("/")[1];
-
+  const searchParams = useSearchParams();
+  const tag = searchParams.get("tag") as string;
   const [userData, setUserData] = useState<IUser>();
   const [posts, setPosts] = useState<IPost[]>();
   const email = userData?.email as string;
   useEffect(() => {
     const fetchPost = async () => {
-      const data = await getMyPost(email);
+      const data = await getMyPost(email, tag);
       setPosts(data);
     };
     fetchPost();
-  }, [email]);
+  }, [email, tag]);
 
+  console.log(posts);
   useEffect(() => {
     if (!id) return;
     const fetchUser = async () => {

@@ -3,13 +3,19 @@ import { getTagList } from "../_lib/getTagList";
 import { useEffect, useState } from "react";
 import { getUserById } from "@/src/app/_lib/getUserById";
 import { IUser } from "@/src/app/_components/PostDetail";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 export default function Sidebar() {
   const id = usePathname().split("/")[1];
   const [userData, setUserData] = useState<IUser>();
   const [tags, setTags] = useState<string[]>();
   const email = userData?.email as string;
+  const router = useRouter();
+  const pathname = usePathname();
+  console.log(pathname);
+  const selectTag = (tag: string) => {
+    router.push(`${pathname}?tag=${tag}`);
+  };
   useEffect(() => {
     if (!id) return;
     const fetchUser = async () => {
@@ -46,7 +52,12 @@ export default function Sidebar() {
       <div className="flex flex-col gap-2">
         {Array.from(tagList.entries()).map(([tag, count]) => (
           <div key={tag} className="flex gap-2">
-            <span className="cursor-pointer hover:text-gray-500">{tag}</span>
+            <span
+              onClick={() => selectTag(tag)}
+              className="cursor-pointer hover:text-gray-500"
+            >
+              {tag}
+            </span>
             <span>({count})</span>
           </div>
         ))}

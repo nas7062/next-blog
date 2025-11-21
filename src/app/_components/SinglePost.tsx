@@ -5,11 +5,16 @@ import { useRouter } from "next/navigation";
 import TagList from "./TagList";
 import { useSession } from "next-auth/react";
 import { IPost } from "../(wide)/write/page";
+import { Heart } from "lucide-react";
+import { useLike } from "../_lib/getToggleLike";
 
 export default function SinglePost({ post }: { post: IPost }) {
   const router = useRouter();
 
   const { data: user } = useSession();
+  const email = user?.user?.email as string;
+  const { data } = useLike(post.id, email);
+  const liked = data?.liked ?? false;
   const MovePostDetail = (postId: number) => {
     router.push(`/${user?.user?.name}/${postId}`);
   };
@@ -36,9 +41,14 @@ export default function SinglePost({ post }: { post: IPost }) {
           {post.description}
         </p>
         <TagList tags={post.Tags} />
-        <div className="flex gap-4">
+        <div className="flex gap-4 items-center">
           <p>{dayjs(new Date()).format("YYYY년 MM월 DD일")}</p>
           <p>1개의 댓글</p>
+          {liked ? (
+            <Heart className="w-6 h-6 group-hover:fill-gray-500 fill-red-500" />
+          ) : (
+            <Heart className="w-6 h-6 group-hover:fill-red-500" />
+          )}
         </div>
       </div>
     </div>

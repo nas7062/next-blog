@@ -2,7 +2,7 @@ export default function TagList({
   tags,
   onDelete,
 }: {
-  tags: string[];
+  tags?: string[];
   onDelete: (tagname: string) => void;
 }) {
   return (

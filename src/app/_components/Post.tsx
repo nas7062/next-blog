@@ -6,16 +6,16 @@ import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { IPost } from "../(wide)/write/page";
 import { IUser } from "./PostDetail";
-import { getToggleLike, useLike } from "../_lib/getToggleLike";
 import { postToggleLike } from "../_lib/postToggleLike";
 import { getPostUser } from "../_lib/getPostUser";
+import { useLike } from "../_lib/getToggleLike";
 
 export default function Post({ post }: { post: IPost }) {
   const [likeCount, setLikeCount] = useState<number>(post.likeCount || 0);
   const router = useRouter();
   const { data: user } = useSession();
   const email = user?.user?.email as string;
-  const { data, isLoading } = useLike(post.id, email);
+  const { data } = useLike(post.id, email);
   const liked = data?.liked ?? false;
 
   const [writeUser, setWriteUser] = useState<IUser>();

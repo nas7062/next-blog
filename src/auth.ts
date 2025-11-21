@@ -4,7 +4,13 @@ import { supabase } from "./app/api/supabase";
 import Kakao from "next-auth/providers/kakao";
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
-  session: { strategy: "jwt" },
+  session: {
+    strategy: "jwt",
+    maxAge: 60 * 30, // 30분 (초 단위)
+  },
+  jwt: {
+    maxAge: 60 * 30, // 30분 (선택이지만 명시해두면 더 명확)
+  },
   pages: {
     signIn: "/signin",
   },

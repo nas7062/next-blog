@@ -20,7 +20,7 @@ export default async function Header() {
         className="text-2xl md:text-4xl font-semibold cursor-pointer"
         href="/"
       >
-        10012
+        <img src="/logo.png" alt="로고" className="w-20 fill-primary  h-20" />
       </Link>
       <nav className="absolute top-20 left-1/6">
         <ul className="flex text-xl gap-8">

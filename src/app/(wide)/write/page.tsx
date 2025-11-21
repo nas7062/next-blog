@@ -187,6 +187,10 @@ export default function WritePage() {
     setGetContent(value);
   };
 
+  const onDeleteTag = (tagname: string) => {
+    setTags((prevTags) => prevTags.filter((tag) => tag !== tagname));
+  };
+
   return (
     <main className="h-screen w-full flex gap-9 text-primary">
       <form onSubmit={onSubmit} className="text-center flex flex-1 flex-col">
@@ -205,7 +209,7 @@ export default function WritePage() {
           onChange={(e) => setTag(e.target.value)}
           onKeyDown={handleKeyPress}
         />
-        <TagList tags={tags} />
+        <TagList tags={tags} onDelete={onDeleteTag} />
         <div className="bg-white h-[500px]  mt-9 text-left">
           <TuiEditor content={getContent} contentChange={changeContent} />
         </div>

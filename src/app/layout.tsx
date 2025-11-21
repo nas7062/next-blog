@@ -5,7 +5,8 @@ import Header from "./_components/Header";
 import AuthSession from "./_components/AuthSession";
 import { Toaster } from "sonner";
 import { ThemeProvider } from "./provider/themeProvider";
-
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 const geistNanum = Nanum_Gothic({
   weight: "700",
   variable: "--font-geist-sans",
@@ -24,7 +25,7 @@ export const metadata: Metadata = {
     icon: "/favicon.ico",
   },
 };
-
+const queryClient = new QueryClient();
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -35,16 +36,19 @@ export default function RootLayout({
       <body
         className={`${geistNanum.variable} ${geistMono.variable} antialiased`}
       >
-        <ThemeProvider>
-          <AuthSession>
-            <Toaster />
-            <Header />
-            <div className="flex min-h-screen items-center justify-center font-sans ">
-              {children}
-            </div>
-            <div id="modal-root"></div>
-          </AuthSession>
-        </ThemeProvider>
+        <QueryClientProvider client={queryClient}>
+          <ThemeProvider>
+            <AuthSession>
+              <Toaster />
+              <Header />
+              <div className="flex min-h-screen items-center justify-center font-sans ">
+                {children}
+              </div>
+              <div id="modal-root"></div>
+            </AuthSession>
+          </ThemeProvider>
+          <ReactQueryDevtools initialIsOpen={false} />
+        </QueryClientProvider>
       </body>
     </html>
   );

@@ -1,4 +1,6 @@
+import { QueryClient, useMutation } from "@tanstack/react-query";
 import { supabase } from "../api/supabase";
+import { IUser } from "../_components/PostDetail";
 
 export async function postToggleLike(userEmail: string, postId: number) {
   if (!userEmail || !postId) return;
@@ -12,7 +14,7 @@ export async function postToggleLike(userEmail: string, postId: number) {
 
   if (selectError) {
     console.error("like 조회 오류", selectError);
-    return null;
+    return [];
   }
 
   //2.유저 like column 가져옴.
@@ -23,10 +25,10 @@ export async function postToggleLike(userEmail: string, postId: number) {
     .select("likeCount")
     .eq("id", postId)
     .single();
-
+  const isLike = currentLikes.includes(postId);
   // 3. 토글 처리
   let updatedLikes;
-  if (currentLikes.includes(postId)) {
+  if (isLike) {
     // 좋아요 취소
     updatedLikes = currentLikes.filter((id) => id !== postId);
     const newCount = post?.likeCount - 1 > 0 ? post?.likeCount - 1 : 0;
@@ -60,5 +62,43 @@ export async function postToggleLike(userEmail: string, postId: number) {
     console.error("like 업데이트 오류", error);
     return null;
   }
-  return data;
+  console.log(data[0], post?.likeCount, isLike);
+  return { user: data[0], likeCount: post?.likeCount, isLike };
+}
+
+export function useToggleLlike(userEmail: string, postId: number) {
+  const queryclinet = new QueryClient();
+  return useMutation({
+    mutationFn: () => postToggleLike(userEmail, postId),
+    onMutate: async () => {
+      await queryclinet.cancelQueries(["like", postId, userEmail]);
+      const prevData = queryclinet.getQueryData(["like", postId, userEmail]);
+
+      queryclinet.setQueryData(
+        ["like", postId, userEmail],
+        (user: IUser, likeCount: number, isLike: boolean) => {
+          let likeArray: number[] = user.like;
+          if (isLike) {
+            likeArray = [...likeArray, postId];
+            likeCount -= 1;
+            isLike = !isLike;
+          } else {
+            likeArray.filter((item) => item !== postId);
+            likeCount += 1;
+            isLike = !isLike;
+          }
+        }
+      );
+      return { prevData };
+    },
+    onError: (_err, _variables, context) => {
+      // 실패 시 롤백
+      if (context?.prevData) {
+        queryclinet.setQueryData(["like", postId, userEmail], context.prevData);
+      }
+    },
+    onSettled: () => {
+      queryclinet.invalidateQueries(["like", postId, userEmail]);
+    },
+  });
 }

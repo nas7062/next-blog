@@ -6,9 +6,9 @@ import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { IPost } from "../(wide)/write/page";
 import { IUser } from "./PostDetail";
-import { postToggleLike } from "../_lib/postToggleLike";
 import { getPostUser } from "../_lib/getPostUser";
 import { useLike } from "../hook/useLike";
+import { useToggleLlike } from "../_lib/postToggleLike";
 
 export default function Post({ post }: { post: IPost }) {
   const [likeCount, setLikeCount] = useState<number>(post.likeCount || 0);
@@ -17,7 +17,7 @@ export default function Post({ post }: { post: IPost }) {
   const email = user?.user?.email as string;
   const { data } = useLike(post.id, email);
   const liked = data?.liked ?? false;
-
+  const toggleLike = useToggleLlike(email, post.id);
   const [writeUser, setWriteUser] = useState<IUser>();
   const MovePostDetail = (postId: number) => {
     if (!writeUser) return;
@@ -41,15 +41,15 @@ export default function Post({ post }: { post: IPost }) {
 
   // const ToggleLike = async () => {
   //   if (!email) return;
-  //   const newLikeStatus = !isLike;
-  //   setIsLike(newLikeStatus);
+  //   const newLikeStatus = !liked;
+  //   //setIsLike(newLikeStatus);
   //   setLikeCount((prev) => (newLikeStatus ? prev + 1 : prev - 1)); // Optimistically update like count
 
   //   try {
   //     await postToggleLike(email, post.id);
   //   } catch (error) {
   //     console.log(error);
-  //     setIsLike(!newLikeStatus);
+  //     //setIsLike(!newLikeStatus);
   //     setLikeCount((prev) => (newLikeStatus ? prev - 1 : prev + 1)); // Revert like count
   //   }
   // };
@@ -99,7 +99,7 @@ export default function Post({ post }: { post: IPost }) {
           <button
             onClick={(e) => {
               e.stopPropagation();
-              //ToggleLike();
+              toggleLike.mutate();
             }}
             className="cursor-pointer"
           >

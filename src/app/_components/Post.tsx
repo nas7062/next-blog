@@ -6,15 +6,17 @@ import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { IPost } from "../(wide)/write/page";
 import { IUser } from "./PostDetail";
-import { getToggleLike } from "../_lib/getToggleLike";
+import { getToggleLike, useLike } from "../_lib/getToggleLike";
 import { postToggleLike } from "../_lib/postToggleLike";
 import { getPostUser } from "../_lib/getPostUser";
 
 export default function Post({ post }: { post: IPost }) {
-  const [isLike, setIsLike] = useState<boolean>(false);
   const [likeCount, setLikeCount] = useState<number>(post.likeCount || 0);
   const router = useRouter();
   const { data: user } = useSession();
+  const email = user?.user?.email as string;
+  const { data, isLoading } = useLike(post.id, email);
+  const liked = data?.liked ?? false;
 
   const [writeUser, setWriteUser] = useState<IUser>();
   const MovePostDetail = (postId: number) => {
@@ -37,31 +39,20 @@ export default function Post({ post }: { post: IPost }) {
     getUser();
   }, [post?.id]);
 
-  const email = user?.user?.email as string;
+  // const ToggleLike = async () => {
+  //   if (!email) return;
+  //   const newLikeStatus = !isLike;
+  //   setIsLike(newLikeStatus);
+  //   setLikeCount((prev) => (newLikeStatus ? prev + 1 : prev - 1)); // Optimistically update like count
 
-  const ToggleLike = async () => {
-    if (!email) return;
-    const newLikeStatus = !isLike;
-    setIsLike(newLikeStatus);
-    setLikeCount((prev) => (newLikeStatus ? prev + 1 : prev - 1)); // Optimistically update like count
-
-    try {
-      await postToggleLike(email, post.id);
-    } catch (error) {
-      console.log(error);
-      setIsLike(!newLikeStatus);
-      setLikeCount((prev) => (newLikeStatus ? prev - 1 : prev + 1)); // Revert like count
-    }
-  };
-
-  useEffect(() => {
-    if (!email || !post.id) return;
-    const getLike = async () => {
-      const liked = await getToggleLike(post.id, email);
-      setIsLike(liked);
-    };
-    getLike();
-  }, [post.id, email]);
+  //   try {
+  //     await postToggleLike(email, post.id);
+  //   } catch (error) {
+  //     console.log(error);
+  //     setIsLike(!newLikeStatus);
+  //     setLikeCount((prev) => (newLikeStatus ? prev - 1 : prev + 1)); // Revert like count
+  //   }
+  // };
 
   if (!writeUser || !post) return;
   return (
@@ -108,19 +99,19 @@ export default function Post({ post }: { post: IPost }) {
           <button
             onClick={(e) => {
               e.stopPropagation();
-              ToggleLike();
+              //ToggleLike();
             }}
             className="cursor-pointer"
           >
             <Heart
               size={22}
               className={
-                isLike
+                liked
                   ? "text-rose-500 fill-rose-500"
                   : "text-gray-500 fill-transparent"
               }
-              fill={isLike ? "currentColor" : "none"}
-              strokeWidth={isLike ? 1.75 : 2}
+              fill={liked ? "currentColor" : "none"}
+              strokeWidth={liked ? 1.75 : 2}
             />
           </button>
           <p>{likeCount}</p>

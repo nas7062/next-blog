@@ -6,7 +6,7 @@ import TagList from "./TagList";
 import { useSession } from "next-auth/react";
 import { IPost } from "../(wide)/write/page";
 import { Heart } from "lucide-react";
-import { useLike } from "../_lib/getToggleLike";
+import { useLike } from "../hook/useLike";
 
 export default function SinglePost({ post }: { post: IPost }) {
   const router = useRouter();

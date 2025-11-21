@@ -1,7 +1,6 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { useLike } from "@/src/app/_lib/getToggleLike";
+import { useLike } from "@/src/app/hook/useLike";
 import { Heart, Share2 } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";

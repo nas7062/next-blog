@@ -5,7 +5,6 @@ import Header from "./_components/Header";
 import AuthSession from "./_components/AuthSession";
 import { Toaster } from "sonner";
 import { ThemeProvider } from "./provider/themeProvider";
-import { QueryClient } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import ReactQueryProvider from "./provider/reactqueryProvider";
 const geistNanum = Nanum_Gothic({
@@ -48,7 +47,6 @@ export default function RootLayout({
               <div id="modal-root"></div>
             </AuthSession>
           </ThemeProvider>
-          <ReactQueryDevtools initialIsOpen={false} />
         </ReactQueryProvider>
       </body>
     </html>

@@ -8,7 +8,7 @@ import { IPost } from "../(wide)/write/page";
 import { IUser } from "./PostDetail";
 import { postToggleLike } from "../_lib/postToggleLike";
 import { getPostUser } from "../_lib/getPostUser";
-import { useLike } from "../_lib/getToggleLike";
+import { useLike } from "../hook/useLike";
 
 export default function Post({ post }: { post: IPost }) {
   const [likeCount, setLikeCount] = useState<number>(post.likeCount || 0);

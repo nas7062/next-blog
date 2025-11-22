@@ -7,14 +7,34 @@ import { useSession } from "next-auth/react";
 import { IPost } from "../(wide)/write/page";
 import { Heart } from "lucide-react";
 import { useLike } from "../hook/useLike";
+import { useState } from "react";
+import { useToggleLike } from "../_lib/postToggleLike";
 
 export default function SinglePost({ post }: { post: IPost }) {
   const router = useRouter();
-
+  const [likeCount, setLikeCount] = useState<number>(post.likeCount || 0);
   const { data: user } = useSession();
   const email = user?.user?.email as string;
   const { data } = useLike(post.id, email);
   const liked = data?.liked ?? false;
+  const toggleLike = useToggleLike(email, post.id);
+  const handleToggleLike = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    if (!email) return;
+
+    const willLike = !liked;
+
+    toggleLike.mutate(undefined, {
+      onSuccess: (data: any) => {
+        setLikeCount(data.likeCount);
+      },
+      onError: () => {
+        // 서버 실패 시 likeCount 롤백
+        setLikeCount((prev) => prev - (willLike ? 1 : -1));
+      },
+    });
+  };
+
   const MovePostDetail = (postId: number) => {
     router.push(`/${user?.user?.name}/${postId}`);
   };
@@ -44,11 +64,13 @@ export default function SinglePost({ post }: { post: IPost }) {
         <div className="flex gap-4 items-center">
           <p>{dayjs(new Date()).format("YYYY년 MM월 DD일")}</p>
           <p>1개의 댓글</p>
-          {liked ? (
-            <Heart className="w-6 h-6 group-hover:fill-gray-500 fill-red-500" />
-          ) : (
-            <Heart className="w-6 h-6 group-hover:fill-red-500" />
-          )}
+          <button onClick={handleToggleLike} className="cursor-pointer">
+            {liked ? (
+              <Heart className="w-6 h-6 group-hover:fill-gray-500 fill-red-500" />
+            ) : (
+              <Heart className="w-6 h-6 group-hover:fill-red-500" />
+            )}
+          </button>
         </div>
       </div>
     </div>

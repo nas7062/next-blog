@@ -46,7 +46,7 @@ export default function Post({ post }: { post: IPost }) {
     const willLike = !liked;
 
     toggleLike.mutate(undefined, {
-      onSuccess: (data) => {
+      onSuccess: (data: any) => {
         setLikeCount(data.likeCount);
       },
       onError: () => {

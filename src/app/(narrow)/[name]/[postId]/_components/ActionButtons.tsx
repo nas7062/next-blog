@@ -1,5 +1,6 @@
 "use client";
 
+import { useToggleLike } from "@/src/app/_lib/postToggleLike";
 import { useLike } from "@/src/app/hook/useLike";
 import { Heart, Share2 } from "lucide-react";
 import { useSession } from "next-auth/react";
@@ -11,7 +12,25 @@ export default function ActionButtons() {
   const { data: session } = useSession();
   const email = session?.user?.email as string;
   const { data, isLoading } = useLike(postId, email);
+  const toggleLike = useToggleLike(email, postId);
   const liked = data?.liked ?? false;
+
+  // const handleToggleLike = (e: React.MouseEvent<HTMLButtonElement>) => {
+  //   e.stopPropagation();
+  //   if (!email) return;
+
+  //   const willLike = !liked;
+
+  //   toggleLike.mutate(undefined, {
+  //     onSuccess: (data) => {
+  //       setLikeCount(data.likeCount);
+  //     },
+  //     onError: () => {
+  //       // 서버 실패 시 likeCount 롤백
+  //       setLikeCount((prev) => prev - (willLike ? 1 : -1));
+  //     },
+  //   });
+  // };
 
   return (
     <div className="flex flex-col h-44 w-20 rounded-4xl justify-between items-center py-2 text-primary bg-green-400 border border-green-400">

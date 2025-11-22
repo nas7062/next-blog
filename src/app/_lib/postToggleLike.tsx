@@ -1,4 +1,8 @@
-import { QueryClient, useMutation } from "@tanstack/react-query";
+import {
+  QueryClient,
+  useMutation,
+  useQueryClient,
+} from "@tanstack/react-query";
 import { supabase } from "../api/supabase";
 import { IUser } from "../_components/PostDetail";
 
@@ -19,86 +23,92 @@ export async function postToggleLike(userEmail: string, postId: number) {
 
   //2.유저 like column 가져옴.
   const currentLikes: number[] = user.like || [];
+  const isLike = currentLikes.includes(postId);
 
+  // post의 likeCount 가져오기
   const { data: post, error: postError } = await supabase
     .from("Post")
     .select("likeCount")
     .eq("id", postId)
     .single();
-  const isLike = currentLikes.includes(postId);
-  // 3. 토글 처리
-  let updatedLikes;
-  if (isLike) {
-    // 좋아요 취소
-    updatedLikes = currentLikes.filter((id) => id !== postId);
-    const newCount = post?.likeCount - 1 > 0 ? post?.likeCount - 1 : 0;
-    await supabase
-      .from("Post")
-      .update({ likeCount: newCount })
-      .eq("id", postId);
-  } else {
-    // 좋아요 추가
-    updatedLikes = [...currentLikes, postId];
-    const newCount = (post?.likeCount || 0) + 1;
-    await supabase
-      .from("Post")
-      .update({ likeCount: newCount })
-      .eq("id", postId);
+
+  const prevCount = (post as any)?.likeCount || 0;
+  const newCount = isLike ? Math.max(prevCount - 1, 0) : prevCount + 1;
+
+  // 3. Post 테이블 likeCount 업데이트
+  const { error: updatePostError } = await supabase
+    .from("Post")
+    .update({ likeCount: newCount })
+    .eq("id", postId);
+
+  if (updatePostError) {
+    console.error("post 업데이트 오류", updatePostError);
+    throw updatePostError;
   }
 
-  // 4.해당 유저 updatedLikes 업데이트
-  const { data, error } = await supabase
+  // 4. users 테이블 like 배열 업데이트
+  const updatedLikes = isLike
+    ? currentLikes.filter((id) => id !== postId)
+    : [...currentLikes, postId];
+
+  const { error: updateUserError } = await supabase
     .from("users")
     .update({ like: updatedLikes })
-    .eq("email", userEmail)
-    .select();
+    .eq("email", userEmail);
 
-  if (postError) {
-    console.error("post fetch 오류", error);
-    return null;
+  if (updateUserError) {
+    console.error("like 업데이트 오류", updateUserError);
+    throw updateUserError;
   }
 
-  if (error) {
-    console.error("like 업데이트 오류", error);
-    return null;
-  }
-  console.log(data[0], post?.likeCount, isLike);
-  return { user: data[0], likeCount: post?.likeCount, isLike };
+  return {
+    likeCount: newCount,
+  };
 }
 
-export function useToggleLlike(userEmail: string, postId: number) {
-  const queryclinet = new QueryClient();
-  return useMutation({
-    mutationFn: () => postToggleLike(userEmail, postId),
-    onMutate: async () => {
-      await queryclinet.cancelQueries(["like", postId, userEmail]);
-      const prevData = queryclinet.getQueryData(["like", postId, userEmail]);
+export function useToggleLike(userEmail: string, postId: number) {
+  const queryClient = useQueryClient();
 
-      queryclinet.setQueryData(
+  return useMutation({
+    mutationFn: () => {
+      if (!userEmail) throw new Error("로그인이 필요합니다.");
+      return postToggleLike(userEmail, postId);
+    },
+    onMutate: async () => {
+      // 좋아요 상태 query 취소
+      await queryClient.cancelQueries({
+        queryKey: ["like", postId, userEmail],
+      });
+
+      // 이전 상태 저장
+      const prevLiked = queryClient.getQueryData<boolean>([
+        "like",
+        postId,
+        userEmail,
+      ]);
+
+      // 낙관적 업데이트: liked 토글
+      queryClient.setQueryData<boolean | undefined>(
         ["like", postId, userEmail],
-        (user: IUser, likeCount: number, isLike: boolean) => {
-          let likeArray: number[] = user.like;
-          if (isLike) {
-            likeArray = [...likeArray, postId];
-            likeCount -= 1;
-            isLike = !isLike;
-          } else {
-            likeArray.filter((item) => item !== postId);
-            likeCount += 1;
-            isLike = !isLike;
-          }
-        }
+        (old) => !old
       );
-      return { prevData };
+
+      return { prevLiked };
     },
     onError: (_err, _variables, context) => {
       // 실패 시 롤백
-      if (context?.prevData) {
-        queryclinet.setQueryData(["like", postId, userEmail], context.prevData);
+      if (context?.prevLiked !== undefined) {
+        queryClient.setQueryData(
+          ["like", postId, userEmail],
+          context.prevLiked
+        );
       }
     },
     onSettled: () => {
-      queryclinet.invalidateQueries(["like", postId, userEmail]);
+      // 최종적으로 서버와 동기화
+      queryClient.invalidateQueries({
+        queryKey: ["like", postId, userEmail],
+      });
     },
   });
 }

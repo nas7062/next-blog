@@ -8,7 +8,7 @@ import { IPost } from "../(wide)/write/page";
 import { IUser } from "./PostDetail";
 import { getPostUser } from "../_lib/getPostUser";
 import { useLike } from "../hook/useLike";
-import { useToggleLlike } from "../_lib/postToggleLike";
+import { useToggleLike } from "../_lib/postToggleLike";
 
 export default function Post({ post }: { post: IPost }) {
   const [likeCount, setLikeCount] = useState<number>(post.likeCount || 0);
@@ -17,7 +17,7 @@ export default function Post({ post }: { post: IPost }) {
   const email = user?.user?.email as string;
   const { data } = useLike(post.id, email);
   const liked = data?.liked ?? false;
-  const toggleLike = useToggleLlike(email, post.id);
+  const toggleLike = useToggleLike(email, post.id);
   const [writeUser, setWriteUser] = useState<IUser>();
   const MovePostDetail = (postId: number) => {
     if (!writeUser) return;
@@ -39,20 +39,22 @@ export default function Post({ post }: { post: IPost }) {
     getUser();
   }, [post?.id]);
 
-  // const ToggleLike = async () => {
-  //   if (!email) return;
-  //   const newLikeStatus = !liked;
-  //   //setIsLike(newLikeStatus);
-  //   setLikeCount((prev) => (newLikeStatus ? prev + 1 : prev - 1)); // Optimistically update like count
+  const handleToggleLike = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    if (!email) return;
 
-  //   try {
-  //     await postToggleLike(email, post.id);
-  //   } catch (error) {
-  //     console.log(error);
-  //     //setIsLike(!newLikeStatus);
-  //     setLikeCount((prev) => (newLikeStatus ? prev - 1 : prev + 1)); // Revert like count
-  //   }
-  // };
+    const willLike = !liked;
+
+    toggleLike.mutate(undefined, {
+      onSuccess: (data) => {
+        setLikeCount(data.likeCount);
+      },
+      onError: () => {
+        // 서버 실패 시 likeCount 롤백
+        setLikeCount((prev) => prev - (willLike ? 1 : -1));
+      },
+    });
+  };
 
   if (!writeUser || !post) return;
   return (
@@ -96,13 +98,7 @@ export default function Post({ post }: { post: IPost }) {
         </div>
 
         <div className="ml-auto flex gap-1">
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              toggleLike.mutate();
-            }}
-            className="cursor-pointer"
-          >
+          <button onClick={handleToggleLike} className="cursor-pointer">
             <Heart
               size={22}
               className={

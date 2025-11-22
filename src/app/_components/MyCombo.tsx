@@ -16,25 +16,26 @@ import { getUserInfo } from "../_lib/getUser";
 import { IUser } from "./PostDetail";
 import { User } from "next-auth";
 
-const frameworks = [
-  {
-    href: "/posts",
-    label: "나의 글",
-  },
-  {
-    href: "/setting",
-    label: "설정",
-  },
-  {
-    href: "/write",
-    label: "새 글 작성",
-  },
-];
-
 export function MyCombo({ user }: { user: User }) {
   const [open, setOpen] = React.useState(false);
   const [userData, setUserData] = React.useState<IUser | null>(null);
   const email = user?.email;
+  const id = userData?.id;
+
+  const frameworks = [
+    {
+      href: `/${id}/posts`,
+      label: "나의 글",
+    },
+    {
+      href: "/setting",
+      label: "설정",
+    },
+    {
+      href: "/write",
+      label: "새 글 작성",
+    },
+  ];
   React.useEffect(() => {
     if (!email) return;
     const fetchUser = async () => {

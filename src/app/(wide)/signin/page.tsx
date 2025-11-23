@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import Modal from "@/src/app/_components/Modal";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { signIn, useSession } from "next-auth/react";
 export default function LoginPage() {
@@ -11,9 +11,11 @@ export default function LoginPage() {
   const router = useRouter();
   const { data: session } = useSession();
 
-  if (session?.user) {
-    router.replace("/");
-  }
+  useEffect(() => {
+    if (session?.user) {
+      router.replace("/");
+    }
+  }, [session, router]);
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -27,8 +29,7 @@ export default function LoginPage() {
     if (res?.status !== 200) {
       setMessage("아이디 또는 비밀번호가 올바르지 않습니다.");
       return;
-    }
-    router.replace("/");
+    } else router.replace("/");
   };
   return (
     <Modal>
@@ -79,7 +80,10 @@ export default function LoginPage() {
           >
             로그인
           </button>
-          <button className="f-full" onClick={() => signIn("kakao")}>
+          <button
+            className="f-full"
+            onClick={() => signIn("kakao", { callbackUrl: "/" })}
+          >
             <img
               src={"/kakao_btn.png"}
               alt="카카오 로그인 버튼"

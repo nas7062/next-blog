@@ -7,7 +7,7 @@ import { MyCombo } from "./MyCombo";
 const NAV = {
   "": { label: "홈" },
   feed: { label: "피드" },
-  latest: { label: "최신" },
+  news: { label: "뉴스" },
   chart: { label: "차트" },
 } as const;
 

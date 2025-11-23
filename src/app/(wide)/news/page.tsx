@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 // app/it/itworld/page.tsx
 type ItPost = {
   title: string;
@@ -29,28 +31,28 @@ export default async function ItNewsPage() {
   const posts = await getItNewsPosts();
 
   return (
-    <main className="max-w-3xl mx-auto py-10">
-      <h1 className="text-2xl font-bold mb-6">ITWorld 최신 글</h1>
+    <main className=" mx-auto py-10 text-primary flex flex-col gap-10 ">
+      <h1 className="text-2xl font-bold mb-6">IT 최신 뉴스</h1>
 
-      <ul className="space-y-4">
+      <ul className=" grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {posts.map((p, idx) => (
           <li
             key={`${p.link}-${p.title}-${idx}`}
-            className="border rounded-lg p-4 hover:shadow-sm transition"
+            className=" rounded-lg p-4 shadow-lg hover:shadow-xl transition hover:-translate-y-2 duration-300 "
           >
-            <a
+            <Link
               href={p.link}
               target="_blank"
               rel="noopener noreferrer"
               className="text-lg font-semibold hover:underline"
             >
               {p.title}
-            </a>
-            <div className="text-sm text-gray-500 mt-1">
+            </Link>
+            <div className="text-sm text-gray-400 mt-1">
               {new Date(p.date).toLocaleString()} · {p.source}
             </div>
             {p.summary && (
-              <p className="mt-2 text-sm text-gray-700 line-clamp-3">
+              <p className="mt-2 text-sm text-gray-500 line-clamp-3">
                 {p.summary}
               </p>
             )}

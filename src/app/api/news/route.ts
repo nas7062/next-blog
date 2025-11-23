@@ -1,8 +1,7 @@
-// app/api/news/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import Parser from "rss-parser";
 
-export const runtime = "nodejs"; // ✅ rss-parser는 Node 런타임에서 돌려야 안전
+export const runtime = "nodejs"; 
 
 const parser = new Parser();
 
@@ -51,7 +50,6 @@ export async function GET(req: NextRequest) {
         });
       } catch (e) {
         console.error("RSS fetch/parse error:", url, e);
-        // 여기서 그냥 스킵하고 다른 피드 계속 진행
       }
     }
 

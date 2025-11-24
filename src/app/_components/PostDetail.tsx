@@ -59,9 +59,6 @@ export default function PostDetail({
     getUser();
   }, [post?.email]);
 
-  const getTimeElapsed = (updatedTime: Date) => {
-    return dayjs(updatedTime).fromNow();
-  };
   const isUpdate = post?.email === session?.user?.email;
   return (
     <div className="flex flex-col">
@@ -70,7 +67,7 @@ export default function PostDetail({
         <div className="flex justify-between">
           <div className="flex gap-2">
             <p className="font-semibold">{user?.name || "글쓴이"}</p>
-            <p>{getTimeElapsed(new Date())}</p>
+            <p>{dayjs(post?.updatedAt).format("YYYY년 MM월 DD일")}</p>
           </div>
           {isUpdate ? (
             <div className="flex gap-2">

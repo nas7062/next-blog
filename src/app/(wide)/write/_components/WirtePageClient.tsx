@@ -102,9 +102,7 @@ export default function WritePageClient() {
 
     // 1. 썸네일 파일이 있을 때만 업로드
     if (thumbnailFile) {
-      const fileKey = postId
-        ? `Post-${postId}-${Date.now()}`
-        : `Post-${uid}-${Date.now()}`;
+      const fileKey = postId ? `Post-${postId}` : `Post-${uid}`;
 
       const { error: uploadError } = await supabase.storage
         .from("Post")

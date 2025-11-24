@@ -1,8 +1,10 @@
 import { createClient } from "@supabase/supabase-js";
 import { Database } from "../type/supabase";
 
-const supabaseUrl = process.env.SUPABASE_URL!;
-const supabaseAnonKey = process.env.SUPABASE_ANON_KEY!;
+const supabaseUrl =
+  process.env.SUPABASE_URL! || process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseAnonKey =
+  process.env.SUPABASE_ANON_KEY! || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 
 if (!supabaseUrl) {
   throw new Error("supabaseUrl is required.");
@@ -10,4 +12,5 @@ if (!supabaseUrl) {
 if (!supabaseAnonKey) {
   throw new Error("supabaseAnonKey is required.");
 }
+
 export const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey); // 클라이언트 생성

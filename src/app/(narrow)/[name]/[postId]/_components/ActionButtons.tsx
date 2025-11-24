@@ -75,12 +75,12 @@ export default function ActionButtons() {
   const shareKakao = () => {
     if (typeof window === "undefined") return;
 
-    const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+    //const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 
-    if (!isMobile) {
-      alert("카카오톡 공유는 모바일(카카오톡 설치 환경)에서만 지원됩니다.");
-      return;
-    }
+    //if (!isMobile) {
+    //  alert("카카오톡 공유는 모바일(카카오톡 설치 환경)에서만 지원됩니다.");
+    //  return;
+    //}
 
     const { Kakao } = window;
 

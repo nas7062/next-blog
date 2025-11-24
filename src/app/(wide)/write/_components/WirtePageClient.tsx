@@ -89,46 +89,45 @@ export default function WritePageClient() {
 
   const onSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
+
     const uid = user?.user?.id;
-
-    let imageUrl = post?.coverImgUrl;
-
-    if (thumbnailFile) {
-      const { data, error } = await supabase.storage
-        .from("Post")
-        .upload(`Post-${post?.id}`, thumbnailFile, {
-          upsert: true,
-        });
-      if (error) {
-        console.log("이미지 업로드 실패:", error);
-        return;
-      }
-
-      const { data: urlData } = supabase.storage
-        .from("Post")
-        .getPublicUrl(`Post-${post?.id}`);
-
-      imageUrl = urlData.publicUrl;
-    }
-
-    const { error: updateErrorCover } = await supabase
-      .from("Post")
-      .update({
-        coverImgUrl: imageUrl,
-      })
-      .eq("email", email);
-
-    if (updateErrorCover) {
-      console.log("업데이트 실패:", updateErrorCover);
-      return;
-    }
-
     if (!uid) return;
+
     if (!title || !getContent) {
       toast.error("제목 또는 내용을 입력 해주세요.");
       return;
     }
 
+    let imageUrl = post?.coverImgUrl || "/noImage.jpg";
+
+    // 1. 썸네일 파일이 있을 때만 업로드
+    if (thumbnailFile) {
+      const fileKey = postId
+        ? `Post-${postId}-${Date.now()}`
+        : `Post-${uid}-${Date.now()}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from("Post")
+        .upload(fileKey, thumbnailFile, {
+          upsert: true,
+        });
+
+      if (uploadError) {
+        console.log("이미지 업로드 실패:", uploadError);
+        toast.error("이미지 업로드에 실패했습니다.");
+        return;
+      }
+
+      const { data: urlData } = supabase.storage
+        .from("Post")
+        .getPublicUrl(fileKey);
+
+      const versionedUrl = `${urlData.publicUrl}?v=${Date.now()}`;
+
+      imageUrl = versionedUrl;
+    }
+
+    // 2. 수정 모드
     if (postId) {
       const { error: updateError } = await supabase
         .from("Post")
@@ -136,40 +135,44 @@ export default function WritePageClient() {
           title,
           description: getContent,
           updatedAt: new Date().toISOString(),
-          coverImgUrl: imageUrl || post?.coverImgUrl,
+          coverImgUrl: imageUrl,
           Tags: tags,
         })
         .eq("id", Number(postId));
 
       if (updateError) {
         toast.error("글 수정에 실패했습니다.");
-        console.error(" Supabase update error:", updateError);
+        console.error("Supabase update error:", updateError);
       } else {
         toast.success("글이 수정되었습니다.");
         router.push(`/${user?.user?.name}/${postId}`);
       }
-    } else {
-      const { data, error } = await supabase
-        .from("Post")
-        .insert([
-          {
-            title,
-            description: getContent,
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString(),
-            userId: uid,
-            email: user?.user?.email,
-            coverImgUrl: imageUrl || "/noImage.jpg",
-            Tags: tags,
-          },
-        ])
-        .select();
-      if (error) {
-        toast.error("글 작성에 실패했습니다.");
-        console.error(" Supabase insert error:", error);
-      } else if (data && data[0]) {
-        router.push(`/${user?.user?.name}/${data[0].id}`);
-      }
+
+      return;
+    }
+
+    // 3. 새 글 작성 모드
+    const { data, error } = await supabase
+      .from("Post")
+      .insert([
+        {
+          title,
+          description: getContent,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+          userId: uid,
+          email: user?.user?.email,
+          coverImgUrl: imageUrl,
+          Tags: tags,
+        },
+      ])
+      .select();
+
+    if (error) {
+      toast.error("글 작성에 실패했습니다.");
+      console.error("Supabase insert error:", error);
+    } else if (data && data[0]) {
+      router.push(`/${user?.user?.name}/${data[0].id}`);
     }
   };
 

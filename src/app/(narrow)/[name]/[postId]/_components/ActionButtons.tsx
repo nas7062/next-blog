@@ -72,51 +72,7 @@ export default function ActionButtons() {
       toast.success("클립보드에 복사되었습니다");
     }
   };
-  const shareKakao = () => {
-    if (typeof window === "undefined") return;
 
-    //const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-
-    //if (!isMobile) {
-    //  alert("카카오톡 공유는 모바일(카카오톡 설치 환경)에서만 지원됩니다.");
-    //  return;
-    //}
-
-    const { Kakao } = window;
-
-    if (!Kakao) {
-      alert("카카오 SDK가 아직 로드되지 않았습니다.");
-      return;
-    }
-
-    if (!Kakao.isInitialized()) {
-      Kakao.init(process.env.NEXT_PUBLIC_KAKAO_JS_KEY as string);
-    }
-
-    const url = window.location.href;
-
-    Kakao.Share.sendDefault({
-      objectType: "feed",
-      content: {
-        title: post?.title ?? "게시글 제목",
-        description: post?.description ?? "게시글 내용",
-        imageUrl: post?.coverImgUrl,
-        link: {
-          mobileWebUrl: url,
-          webUrl: url,
-        },
-      },
-      buttons: [
-        {
-          title: "게시글 보러가기",
-          link: {
-            mobileWebUrl: url,
-            webUrl: url,
-          },
-        },
-      ],
-    });
-  };
   return (
     <div className="flex flex-col h-44 w-20 rounded-4xl justify-between items-center py-2 text-primary bg-green-400 border border-green-400 overflow-x-hidden">
       {/* 좋아요 버튼 */}
@@ -161,7 +117,7 @@ export default function ActionButtons() {
       >
         <Waypoints
           className="border border-primary hover:border-gray-400 rounded-full w-10 h-10 p-1.5 cursor-pointer"
-          onClick={shareKakao}
+          onClick={() => alert("개발중 입니다")}
         />
         <Link
           className="border border-primary hover:border-gray-400 rounded-full w-10 h-10 p-1.5 cursor-pointer"

@@ -6,7 +6,6 @@ import AuthSession from "./_components/AuthSession";
 import { Toaster } from "sonner";
 import { ThemeProvider } from "./provider/themeProvider";
 import ReactQueryProvider from "./provider/reactqueryProvider";
-import KakaoInitializer from "./hook/useKakaoInit";
 
 const geistNanum = Nanum_Gothic({
   weight: "700",
@@ -37,7 +36,6 @@ export default function RootLayout({
       <body
         className={`${geistNanum.variable} ${geistMono.variable} antialiased`}
       >
-        <KakaoInitializer />
         <ReactQueryProvider>
           <ThemeProvider>
             <AuthSession>

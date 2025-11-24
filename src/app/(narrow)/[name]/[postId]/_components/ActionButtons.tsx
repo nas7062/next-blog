@@ -3,12 +3,13 @@
 import LoginModal from "@/src/app/_components/LoginModal";
 import { useToggleLike } from "@/src/app/_lib/postToggleLike";
 import { useLike } from "@/src/app/hook/useLike";
-import { Heart, KayakIcon, Link, Share2 } from "lucide-react";
+import { Heart, KayakIcon, Link, Share2, Waypoints } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { getPostById } from "../_lib/getPostById";
 import { IPost } from "@/src/app/(wide)/write/_components/WirtePageClient";
+import { toast } from "sonner";
 
 export default function ActionButtons() {
   const pathname = usePathname();
@@ -52,6 +53,26 @@ export default function ActionButtons() {
   const onShared = () => {
     setIsShare((prev) => !prev);
   };
+  const copyURL = async () => {
+    const currentUrl = decodeURI(window.location.href);
+    try {
+      await navigator.clipboard.writeText(currentUrl);
+      setIsShare(false);
+      toast.success("클립보드에 복사되었습니다");
+    } catch (e) {
+      const t = document.createElement("textarea");
+      console.error(e);
+      document.body.appendChild(t);
+      t.value = currentUrl;
+      t.select();
+      document.execCommand("copy");
+      document.body.removeChild(t);
+
+      setIsShare(false);
+      toast.success("클립보드에 복사되었습니다");
+    }
+  };
+
   return (
     <div className="flex flex-col h-44 w-20 rounded-4xl justify-between items-center py-2 text-primary bg-green-400 border border-green-400 overflow-x-hidden">
       {/* 좋아요 버튼 */}
@@ -94,8 +115,11 @@ export default function ActionButtons() {
         }
       `}
       >
-        <KayakIcon className="border border-primary hover:border-gray-400 rounded-full w-10 h-10 p-1.5 cursor-pointer" />
-        <Link className="border border-primary hover:border-gray-400 rounded-full w-10 h-10 p-1.5 cursor-pointer" />
+        <Waypoints className="border border-primary hover:border-gray-400 rounded-full w-10 h-10 p-1.5 cursor-pointer" />
+        <Link
+          className="border border-primary hover:border-gray-400 rounded-full w-10 h-10 p-1.5 cursor-pointer"
+          onClick={copyURL}
+        />
       </div>
 
       {isLoginModalOpen && (

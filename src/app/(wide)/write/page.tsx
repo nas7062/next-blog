@@ -24,10 +24,10 @@ export interface IPost {
   searchIndex?: string | null;
   title: string;
   updatedAt: string;
-  userId: string;
-  Tags?: string[];
+  userId: string | null;
+  Tags?: string[] | null;
   likeCount?: number;
-  email: string;
+  email?: string | null;
 }
 
 export default function WritePage() {
@@ -92,7 +92,7 @@ export default function WritePage() {
     if (thumbnailFile) {
       const { data, error } = await supabase.storage
         .from("Post")
-        .upload(`Post-${post.id}`, thumbnailFile, {
+        .upload(`Post-${post?.id}`, thumbnailFile, {
           upsert: true,
         });
       if (error) {
@@ -137,7 +137,7 @@ export default function WritePage() {
           coverImgUrl: imageUrl || post?.coverImgUrl,
           Tags: tags,
         })
-        .eq("id", postId);
+        .eq("id", Number(postId));
 
       if (updateError) {
         toast.error("글 수정에 실패했습니다.");

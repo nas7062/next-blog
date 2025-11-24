@@ -2,7 +2,7 @@ import SearchInput from "./_components/SearchInput";
 import SinglePostList from "../../_components/SinglePostList";
 
 import { getSearchPost } from "../../_lib/getSearchPost";
-import { IPost } from "../../_components/PostList";
+import { IPost } from "../write/page";
 
 export default async function SearchPage({
   searchParams,
@@ -10,7 +10,7 @@ export default async function SearchPage({
   searchParams: Promise<{ q?: string | string[] }>;
 }) {
   const { q: raw } = await searchParams;
-  const q = Array.isArray(raw) ? raw[0] : (raw ?? "");
+  const q = Array.isArray(raw) ? raw[0] : raw ?? "";
   const posts: IPost[] = await getSearchPost({ q });
 
   return (

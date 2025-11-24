@@ -60,7 +60,7 @@ export default function SinglePost({ post }: { post: IPost }) {
         <p className="whitespace-normal wrap-break-word line-clamp-5">
           {post.description}
         </p>
-        <TagList tags={post.Tags} />
+        <TagList tags={post.Tags || []} onDelete={() => {}} />
         <div className="flex gap-4 items-center">
           <p>{dayjs(new Date()).format("YYYY년 MM월 DD일")}</p>
           <p>1개의 댓글</p>
@@ -71,6 +71,7 @@ export default function SinglePost({ post }: { post: IPost }) {
               <Heart className="w-6 h-6 group-hover:fill-red-500" />
             )}
           </button>
+          <span>{likeCount}</span>
         </div>
       </div>
     </div>

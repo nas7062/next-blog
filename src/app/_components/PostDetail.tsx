@@ -15,13 +15,19 @@ dayjs.locale("ko");
 
 export interface IUser {
   id: string;
-  email: string;
-  name: string;
-  image?: string;
-  provider?: string;
-  created_at: string;
-  like?: number[];
-  descript?: strring;
+  email: string | null;
+
+  // DB가 name을 nullable로 두었다면:
+  name: string | null;
+
+  // image/provider가 null이 올 수 있으면:
+  image: string | null;
+  provider: string | null;
+
+  created_at: string | null;
+
+  like?: number[] | null;
+  descript?: string | null;
 }
 
 export default function PostDetail({
@@ -34,7 +40,7 @@ export default function PostDetail({
   const router = useRouter();
   const pathname = usePathname();
   const [post, setPost] = useState<IPost>();
-  const [user, setUser] = useState<IUser>();
+  const [user, setUser] = useState<IUser | null>(null);
   useEffect(() => {
     if (!postId) return;
     const getPostId = async () => {
@@ -48,9 +54,10 @@ export default function PostDetail({
   }, [postId, pathname, router]);
 
   useEffect(() => {
-    if (!post?.userId) return;
+    const email = post?.email;
+    if (!email) return;
     const getUser = async () => {
-      const data = await getUserInfo(post.email);
+      const data = await getUserInfo(email);
       setUser(data);
     };
     getUser();

@@ -1,20 +1,28 @@
+import { IUser } from "../_components/PostDetail";
 import { supabase } from "../api/supabase";
-
-export async function getPostUser(postId: number) {
+type PostUserResult = { user: IUser };
+export async function getPostUser(
+  postId: number
+): Promise<PostUserResult | null> {
   const { data, error } = await supabase
     .from("Post")
     .select("email")
     .eq("id", postId);
 
+  if (!data?.email) {
+    console.warn("해당 Post에서 이메일을 찾을 수 없습니다.");
+    return null;
+  }
   const { data: user, error: userError } = await supabase
     .from("users")
     .select("*")
-    .eq("email", data?.[0].email);
-  if (!user?.[0]) return [];
-  if (error) {
+    .eq("email", data?.[0]?.email)
+    .maybeSingle<IUser>();
+  if (!user) return null;
+  if (userError) {
     console.error("데이터 패칭 실패", error);
     return null;
   }
 
-  return { user: user?.[0] };
+  return { user: user };
 }

@@ -4,15 +4,16 @@ import { useEffect, useState } from "react";
 import { getUserById } from "@/src/app/_lib/getUserById";
 import { IUser } from "@/src/app/_components/PostDetail";
 import { usePathname, useRouter } from "next/navigation";
+type TagRow = { Tags: string[] | null };
 
 export default function Sidebar() {
   const id = usePathname().split("/")[1];
-  const [userData, setUserData] = useState<IUser>();
-  const [tags, setTags] = useState<string[]>();
+  const [userData, setUserData] = useState<IUser | null>(null);
+  const [tags, setTags] = useState<TagRow[] | null>(null);
   const email = userData?.email as string;
   const router = useRouter();
   const pathname = usePathname();
-  console.log(pathname);
+
   const selectTag = (tag: string) => {
     router.push(`${pathname}?tag=${tag}`);
   };

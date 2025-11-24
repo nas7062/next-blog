@@ -18,7 +18,7 @@ export default function Post({ post }: { post: IPost }) {
   const { data } = useLike(post.id, email);
   const liked = data?.liked ?? false;
   const toggleLike = useToggleLike(email, post.id);
-  const [writeUser, setWriteUser] = useState<IUser>();
+  const [writeUser, setWriteUser] = useState<IUser | null>(null);
   const MovePostDetail = (postId: number) => {
     if (!writeUser) return;
     router.push(`/${writeUser?.name}/${postId}`);
@@ -31,12 +31,20 @@ export default function Post({ post }: { post: IPost }) {
 
   useEffect(() => {
     if (!post?.id) return;
-    const getUser = async () => {
-      const { user } = await getPostUser(post.id);
+
+    const fetchUser = async () => {
+      const result = await getPostUser(post.id);
+
+      if (!result) {
+        setWriteUser(null);
+        return;
+      }
+
+      const { user } = result;
       setWriteUser(user);
     };
 
-    getUser();
+    fetchUser();
   }, [post?.id]);
 
   const handleToggleLike = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -72,7 +80,7 @@ export default function Post({ post }: { post: IPost }) {
           alt={post.title}
           width={350}
           height={350}
-          className="rounded-md"
+          className="rounded-md max-h-80"
         />
       </div>
       <div className="max-w-[330px] px-4 flex flex-col justify-around h-32">

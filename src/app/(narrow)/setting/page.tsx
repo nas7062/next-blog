@@ -15,9 +15,9 @@ export interface AboutThumbnailPreview {
 
 export default function SettingPage() {
   const { data: user } = useSession();
-  const [userData, setUserData] = useState<IUser>();
-  const [name, setName] = useState(userData?.name);
-  const [descript, setdescript] = useState(userData?.descript);
+  const [userData, setUserData] = useState<IUser | null>(null);
+  const [name, setName] = useState(userData?.name || "");
+  const [descript, setdescript] = useState(userData?.descript || "");
   const [mode, setMode] = useState<"Update" | "Default">("Default");
   const [thumbnailFile, setThumbnailFile] = useState<File | null>(null);
   const { setTheme } = useTheme();
@@ -48,7 +48,7 @@ export default function SettingPage() {
     },
   });
 
-  const email = user?.user?.email;
+  const email = user?.user?.email as string;
 
   const updateInfo = async () => {
     if (!email) return;
@@ -161,7 +161,7 @@ export default function SettingPage() {
               <input
                 type="text"
                 className="border border-gray-300 focus:border-gray-800 rounded-md h-10 px-2"
-                defaultValue={userData?.name ? userData.name : name}
+                defaultValue={userData?.name ? userData?.name : name}
                 value={name}
                 onChange={(e) => setName(e.target.value)}
               />

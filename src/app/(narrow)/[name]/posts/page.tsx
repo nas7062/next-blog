@@ -13,8 +13,8 @@ export default function PostPage() {
   const id = usePathname().split("/")[1];
   const searchParams = useSearchParams();
   const tag = searchParams.get("tag") as string;
-  const [userData, setUserData] = useState<IUser>();
-  const [posts, setPosts] = useState<IPost[]>();
+  const [userData, setUserData] = useState<IUser | null>(null);
+  const [posts, setPosts] = useState<IPost[] | []>([]);
   const email = userData?.email as string;
   useEffect(() => {
     const fetchPost = async () => {
@@ -24,7 +24,6 @@ export default function PostPage() {
     fetchPost();
   }, [email, tag]);
 
-  console.log(posts);
   useEffect(() => {
     if (!id) return;
     const fetchUser = async () => {

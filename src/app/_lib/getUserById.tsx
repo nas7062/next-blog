@@ -1,14 +1,18 @@
+import { IUser } from "../_components/PostDetail";
 import { supabase } from "../api/supabase";
 
-export async function getUserById(userId: string) {
+export async function getUserById(id: string): Promise<IUser | null> {
   const { data, error } = await supabase
     .from("users")
     .select("*")
-    .eq("id", userId);
+    .eq("id", id)
+    .maybeSingle<IUser>();
 
   if (error) {
-    console.error("데이터 패칭 실패", error);
+    console.error("유저 조회 실패", error);
     return null;
   }
-  return data[0];
+
+  // data: IUser | null
+  return data ?? null;
 }

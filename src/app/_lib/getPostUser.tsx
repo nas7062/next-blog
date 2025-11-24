@@ -7,7 +7,8 @@ export async function getPostUser(
   const { data, error } = await supabase
     .from("Post")
     .select("email")
-    .eq("id", postId);
+    .eq("id", postId)
+    .maybeSingle<{ email: string }>();
 
   if (!data?.email) {
     console.warn("해당 Post에서 이메일을 찾을 수 없습니다.");
@@ -16,7 +17,7 @@ export async function getPostUser(
   const { data: user, error: userError } = await supabase
     .from("users")
     .select("*")
-    .eq("email", data?.[0]?.email)
+    .eq("email", data.email)
     .maybeSingle<IUser>();
   if (!user) return null;
   if (userError) {

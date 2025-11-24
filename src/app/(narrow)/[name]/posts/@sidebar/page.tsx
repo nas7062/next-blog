@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { getUserById } from "@/src/app/_lib/getUserById";
 import { IUser } from "@/src/app/_components/PostDetail";
 import { usePathname, useRouter } from "next/navigation";
-type TagRow = { Tags: string[] | null };
+export type TagRow = { tags: string[] | null };
 
 export default function Sidebar() {
   const id = usePathname().split("/")[1];
@@ -38,7 +38,7 @@ export default function Sidebar() {
   const tagList = new Map<string, number>();
   if (!tags) return;
   tags.forEach((row) => {
-    const tagrow = row.Tags ?? [];
+    const tagrow = row.tags ?? [];
     tagrow.forEach((tag: string) => {
       const prev = tagList.get(tag) ?? 0;
       tagList.set(tag, prev + 1);

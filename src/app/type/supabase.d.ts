@@ -12,31 +12,6 @@ export type Database = {
   __InternalSupabase: {
     PostgrestVersion: "13.0.5"
   }
-  graphql_public: {
-    Tables: {
-      [_ in never]: never
-    }
-    Views: {
-      [_ in never]: never
-    }
-    Functions: {
-      graphql: {
-        Args: {
-          extensions?: Json
-          operationName?: string
-          query?: string
-          variables?: Json
-        }
-        Returns: Json
-      }
-    }
-    Enums: {
-      [_ in never]: never
-    }
-    CompositeTypes: {
-      [_ in never]: never
-    }
-  }
   public: {
     Tables: {
       _prisma_migrations: {
@@ -77,41 +52,42 @@ export type Database = {
           coverImgUrl: string
           createdAt: string
           description: string
+          email: string | null
           id: number
+          likeCount: number | null
           searchIndex: string | null
+          Tags: string[] | null
           title: string
           updatedAt: string
-          userId: number
+          userId: string | null
         }
         Insert: {
           coverImgUrl: string
           createdAt?: string
           description: string
+          email?: string | null
           id?: number
+          likeCount?: number | null
           searchIndex?: string | null
+          Tags?: string[] | null
           title: string
           updatedAt: string
-          userId: number
+          userId?: string | null
         }
         Update: {
           coverImgUrl?: string
           createdAt?: string
           description?: string
+          email?: string | null
           id?: number
+          likeCount?: number | null
           searchIndex?: string | null
+          Tags?: string[] | null
           title?: string
           updatedAt?: string
-          userId?: number
+          userId?: string | null
         }
-        Relationships: [
-          {
-            foreignKeyName: "Post_userId_fkey"
-            columns: ["userId"]
-            isOneToOne: false
-            referencedRelation: "User"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       Repple: {
         Row: {
@@ -145,18 +121,36 @@ export type Database = {
           },
         ]
       }
-      User: {
+      users: {
         Row: {
-          id: number
-          name: string
+          created_at: string | null
+          descript: string | null
+          email: string
+          id: string
+          image: string | null
+          like: number[] | null
+          name: string | null
+          provider: string | null
         }
         Insert: {
-          id?: number
-          name: string
+          created_at?: string | null
+          descript?: string | null
+          email: string
+          id: string
+          image?: string | null
+          like?: number[] | null
+          name?: string | null
+          provider?: string | null
         }
         Update: {
-          id?: number
-          name?: string
+          created_at?: string | null
+          descript?: string | null
+          email?: string
+          id?: string
+          image?: string | null
+          like?: number[] | null
+          name?: string | null
+          provider?: string | null
         }
         Relationships: []
       }
@@ -294,9 +288,6 @@ export type CompositeTypes<
     : never
 
 export const Constants = {
-  graphql_public: {
-    Enums: {},
-  },
   public: {
     Enums: {},
   },

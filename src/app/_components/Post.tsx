@@ -15,7 +15,6 @@ import LoginModal from "./LoginModal";
 export default function Post({ post }: { post: IPost }) {
   const [likeCount, setLikeCount] = useState<number>(post.likeCount || 0);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
-
   const router = useRouter();
   const { data: user } = useSession();
   const email = user?.user?.email as string;
@@ -76,7 +75,7 @@ export default function Post({ post }: { post: IPost }) {
       className="flex flex-col max-w-[350px] shadow-xl gap-4 pb-4 rounded-md
                 transition-transform duration-350
                 hover:-translate-y-2 hover:shadow-2xl
-                cursor-pointer"
+                cursor-pointer relative"
       key={post.id}
     >
       <div
@@ -92,7 +91,12 @@ export default function Post({ post }: { post: IPost }) {
           className="rounded-md max-h-80"
         />
       </div>
-      <div className="max-w-[330px] px-4 flex flex-col justify-around h-32">
+      <div
+        className="max-w-[330px] px-4 flex flex-col justify-around h-32"
+        onClick={() => {
+          MovePostDetail(post.id);
+        }}
+      >
         <p className="text-lg text-primary font-semibold">{post.title}</p>
         <p className="whitespace-normal wrap-break-word line-clamp-5">
           {post.description}

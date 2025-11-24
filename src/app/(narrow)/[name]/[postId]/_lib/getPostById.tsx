@@ -1,6 +1,6 @@
 import { getSupabaseClient } from "@/src/app/api/supabase";
 
-export async function getPostById(postId: string) {
+export async function getPostById(postId: number) {
   const supabase = getSupabaseClient();
   const { data, error } = await supabase
     .from("Post")

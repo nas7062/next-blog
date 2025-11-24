@@ -85,8 +85,6 @@ export default function WritePageClient() {
     },
   });
 
-  const email = user?.user?.email as string;
-
   const onSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
 

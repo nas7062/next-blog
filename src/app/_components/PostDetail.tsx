@@ -9,6 +9,7 @@ import { getPostById } from "../(narrow)/[name]/[postId]/_lib/getPostById";
 import Viewer from "../(wide)/write/_components/View";
 import { getUserInfo } from "../_lib/getUser";
 import { IPost } from "../(wide)/write/_components/WirtePageClient";
+import { useSession } from "next-auth/react";
 
 dayjs.extend(relativeTime);
 dayjs.locale("ko");
@@ -16,16 +17,10 @@ dayjs.locale("ko");
 export interface IUser {
   id: string;
   email: string | null;
-
-  // DB가 name을 nullable로 두었다면:
   name: string | null;
-
-  // image/provider가 null이 올 수 있으면:
   image: string | null;
   provider: string | null;
-
   created_at: string | null;
-
   like?: number[] | null;
   descript?: string | null;
 }
@@ -41,6 +36,7 @@ export default function PostDetail({
   const pathname = usePathname();
   const [post, setPost] = useState<IPost>();
   const [user, setUser] = useState<IUser | null>(null);
+  const { data: session } = useSession();
   useEffect(() => {
     if (!postId) return;
     const getPostId = async () => {
@@ -66,7 +62,7 @@ export default function PostDetail({
   const getTimeElapsed = (updatedTime: Date) => {
     return dayjs(updatedTime).fromNow();
   };
-
+  const isUpdate = post?.email === session?.user?.email;
   return (
     <div className="flex flex-col">
       <div className="flex flex-col gap-4">
@@ -76,20 +72,26 @@ export default function PostDetail({
             <p className="font-semibold">{user?.name || "글쓴이"}</p>
             <p>{getTimeElapsed(new Date())}</p>
           </div>
-          <div className="flex gap-2">
-            <p
-              className="cursor-pointer text-gray-500 hover:text-gray-800"
-              onClick={() => router.push(`/write?id=${postId}`)}
-            >
-              수정
-            </p>
-            <p
-              className="cursor-pointer text-gray-500 hover:text-gray-800"
-              onClick={() => router.push(`/${name}/${postId}/delete`)}
-            >
-              삭제
-            </p>
-          </div>
+          {isUpdate ? (
+            <div className="flex gap-2">
+              <p
+                className="cursor-pointer text-gray-500 hover:text-gray-800"
+                onClick={() => router.push(`/write?id=${postId}`)}
+              >
+                수정
+              </p>
+              <p
+                className="cursor-pointer text-gray-500 hover:text-gray-800"
+                onClick={() => router.push(`/${name}/${postId}/delete`)}
+              >
+                삭제
+              </p>
+            </div>
+          ) : (
+            <button className="text-green-400 border border-green-400 bg-primary rounded-xl px-4 py-1 cursor-pointer hover:bg-green-500 hover:text-white transition-colors duration-300">
+              팔로우
+            </button>
+          )}
         </div>
         <div
           className="wmde-markdown wmde-markdown-color

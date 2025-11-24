@@ -1,6 +1,7 @@
-import { supabase } from "@/src/app/api/supabase";
+import { getSupabaseClient } from "@/src/app/api/supabase";
 
 export async function userDelete(userEmail: string) {
+  const supabase = getSupabaseClient();
   const { data, error } = await supabase
     .from("users")
     .delete()

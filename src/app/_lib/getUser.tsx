@@ -1,6 +1,7 @@
-import { supabase } from "../api/supabase";
+import { getSupabaseClient } from "../api/supabase";
 
 export async function getUserInfo(userEmail: string) {
+  const supabase = getSupabaseClient();
   const { data, error } = await supabase
     .from("users")
     .select("*")

@@ -1,9 +1,9 @@
 import { NextResponse } from "next/server";
-import { supabase } from "../../supabase";
+import { getSupabaseClient } from "../../supabase";
 
 export async function POST(req: Request) {
   const { email, password, name } = await req.json();
-
+  const supabase = getSupabaseClient();
   if (!email || !password) {
     return NextResponse.json({ error: "invalid" }, { status: 400 });
   }

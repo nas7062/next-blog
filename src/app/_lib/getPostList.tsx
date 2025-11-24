@@ -1,6 +1,7 @@
-import { supabase } from "../api/supabase";
+import { getSupabaseClient } from "../api/supabase";
 
 export async function getPostList() {
+  const supabase = getSupabaseClient();
   const { data, error } = await supabase.from("Post").select("*");
   if (error) {
     console.error("데이터 패칭 실패", error);

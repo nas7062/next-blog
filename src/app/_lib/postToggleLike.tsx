@@ -1,14 +1,12 @@
 import {
-  QueryClient,
   useMutation,
   useQueryClient,
 } from "@tanstack/react-query";
-import { supabase } from "../api/supabase";
-import { IUser } from "../_components/PostDetail";
+import { getSupabaseClient } from "../api/supabase";
 
 export async function postToggleLike(userEmail: string, postId: number) {
   if (!userEmail || !postId) return;
-
+  const supabase = getSupabaseClient();
   // 1. 기존 like 배열 가져오기
   const { data: user, error: selectError } = await supabase
     .from("users")

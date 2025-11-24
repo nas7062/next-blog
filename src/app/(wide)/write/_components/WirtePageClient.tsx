@@ -14,11 +14,11 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useSession } from "next-auth/react";
 
 import { useDropzone } from "react-dropzone";
-import { supabase } from "@/src/app/api/supabase";
 import { AboutThumbnailPreview } from "@/src/app/(narrow)/setting/page";
 import TuiEditor from "./TuiEditor";
 import TagList from "@/src/app/_components/TagList";
 import Viewer from "./View";
+import { getSupabaseClient } from "@/src/app/api/supabase";
 
 export interface IPost {
   coverImgUrl: string;
@@ -47,7 +47,7 @@ export default function WritePageClient() {
   const [thumbnailFile, setThumbnailFile] = useState<File | null>(null);
   const [getContent, setGetContent] = useState("");
   const [post, setPost] = useState<IPost>();
-
+  const supabase = getSupabaseClient();
   useEffect(() => {
     if (!postId) return;
     const fetchPost = async () => {

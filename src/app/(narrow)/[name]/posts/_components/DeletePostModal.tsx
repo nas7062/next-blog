@@ -1,14 +1,14 @@
 "use client";
 
 import Modal from "@/src/app/_components/Modal";
-import { supabase } from "@/src/app/api/supabase";
+import { getSupabaseClient } from "@/src/app/api/supabase";
 import { usePathname, useRouter } from "next/navigation";
 import { toast } from "sonner";
 export default function DeletePostModal() {
   const pathname = usePathname();
   const router = useRouter();
   const postId = pathname.split("/")[2];
-
+  const supabase = getSupabaseClient();
   const onDelete = async () => {
     const respose = await supabase
       .from("Post")

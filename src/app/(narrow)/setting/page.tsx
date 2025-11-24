@@ -4,7 +4,7 @@ import { MouseEvent, useCallback, useEffect, useState } from "react";
 import { IUser } from "../../_components/PostDetail";
 import { getUserInfo } from "../../_lib/getUser";
 import { useDropzone } from "react-dropzone";
-import { supabase } from "../../api/supabase";
+import { getSupabaseClient } from "../../api/supabase";
 import { useTheme } from "next-themes";
 import { userDelete } from "./_lib/userDelete";
 export interface AboutThumbnailPreview {
@@ -52,7 +52,7 @@ export default function SettingPage() {
 
   const updateInfo = async () => {
     if (!email) return;
-
+    const supabase = getSupabaseClient();
     let imageUrl = userData?.image; // 기존 이미지 URL
 
     // 1) 이미지 새로 업로드한 경우

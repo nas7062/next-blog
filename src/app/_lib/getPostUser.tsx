@@ -1,9 +1,10 @@
 import { IUser } from "../_components/PostDetail";
-import { supabase } from "../api/supabase";
+import { getSupabaseClient } from "../api/supabase";
 type PostUserResult = { user: IUser };
 export async function getPostUser(
   postId: number
 ): Promise<PostUserResult | null> {
+  const supabase = getSupabaseClient();
   const { data, error } = await supabase
     .from("Post")
     .select("email")

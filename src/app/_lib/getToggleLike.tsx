@@ -1,11 +1,11 @@
-import { supabase } from "../api/supabase";
+import { getSupabaseClient } from "../api/supabase";
 
 export async function getToggleLike(postId: number, userEmail: string | null) {
   // postId나 userEmail이 없으면 false 반환 undefined나 null 반환 안되게
   if (!postId || !userEmail) {
     return { liked: false };
   }
-
+  const supabase = getSupabaseClient();
   const { data, error } = await supabase
     .from("users")
     .select("like")

@@ -1,7 +1,8 @@
-import { supabase } from "@/src/app/api/supabase";
+import { getSupabaseClient } from "@/src/app/api/supabase";
 import { TagRow } from "../@sidebar/page";
 
 export async function getTagList(email: string): Promise<TagRow[]> {
+  const supabase = getSupabaseClient();
   const { data, error } = await supabase
     .from("Post")
     .select("tags")

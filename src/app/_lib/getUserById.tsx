@@ -1,7 +1,8 @@
 import { IUser } from "../_components/PostDetail";
-import { supabase } from "../api/supabase";
+import { getSupabaseClient } from "../api/supabase";
 
 export async function getUserById(id: string): Promise<IUser | null> {
+  const supabase = getSupabaseClient();
   const { data, error } = await supabase
     .from("users")
     .select("*")

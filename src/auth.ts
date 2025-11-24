@@ -1,8 +1,9 @@
 import NextAuth, { Session } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
-import { supabase } from "./app/api/supabase";
+
 import Kakao from "next-auth/providers/kakao";
 import type { JWT } from "next-auth/jwt";
+import { getSupabaseClient } from "./app/api/supabase";
 export const { handlers, auth, signIn, signOut } = NextAuth({
   session: {
     strategy: "jwt",
@@ -29,6 +30,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         try {
           const email = creds?.email as string;
           const password = creds?.password as string;
+          const supabase = getSupabaseClient();
           if (!email || !password) return null;
 
           const { data, error } = await supabase.auth.signInWithPassword({
@@ -94,7 +96,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       }
 
       const email = user.email;
-
+      const supabase = getSupabaseClient();
       try {
         const { data, error } = await supabase
           .from("users")

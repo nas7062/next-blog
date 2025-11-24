@@ -1,0 +1,249 @@
+"use client";
+
+import React, {
+  FormEventHandler,
+  KeyboardEvent,
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
+
+import { toast } from "sonner";
+
+import { useRouter, useSearchParams } from "next/navigation";
+import { useSession } from "next-auth/react";
+
+import { useDropzone } from "react-dropzone";
+import { supabase } from "@/src/app/api/supabase";
+import { AboutThumbnailPreview } from "@/src/app/(narrow)/setting/page";
+import TuiEditor from "./TuiEditor";
+import TagList from "@/src/app/_components/TagList";
+import Viewer from "./View";
+
+export interface IPost {
+  coverImgUrl: string;
+  createdAt: string;
+  description: string;
+  id: number;
+  searchIndex?: string | null;
+  title: string;
+  updatedAt: string;
+  userId: string | null;
+  Tags?: string[] | null;
+  likeCount?: number | null;
+  email?: string | null;
+}
+
+export default function WritePageClient() {
+  const [tags, setTags] = useState<string[]>([]);
+  const [title, setTitle] = useState("");
+  const [tag, setTag] = useState("");
+
+  const searchParmas = useSearchParams();
+  const postId = searchParmas.get("id");
+
+  const router = useRouter();
+  const { data: user } = useSession();
+  const [thumbnailFile, setThumbnailFile] = useState<File | null>(null);
+  const [getContent, setGetContent] = useState("");
+  const [post, setPost] = useState<IPost>();
+
+  useEffect(() => {
+    if (!postId) return;
+    const fetchPost = async () => {
+      const { data, error } = await supabase
+        .from("Post")
+        .select("*")
+        .eq("id", Number(postId))
+        .single();
+      if (error) {
+        console.error("게시물 조회 오류:", error);
+      } else if (data) {
+        setPost(data);
+        setTags(data.Tags || []);
+        setTitle(data.title);
+        setGetContent(data.description);
+      }
+    };
+    fetchPost();
+  }, [postId]);
+
+  const [thumbnailPreview, setThumbnailPreview] =
+    useState<AboutThumbnailPreview>();
+
+  const onDropThumbnail = useCallback((acceptedFiles: File[]) => {
+    const file = acceptedFiles[0];
+    setThumbnailFile(file);
+    const fileURL = URL.createObjectURL(file);
+    setThumbnailPreview({ url: fileURL, name: file.name, size: file.size });
+  }, []);
+
+  const { getRootProps, getInputProps } = useDropzone({
+    onDrop: onDropThumbnail,
+    accept: {
+      "image/*": [".jpeg", ".jpg", ".png"],
+    },
+  });
+
+  const email = user?.user?.email as string;
+
+  const onSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
+    e.preventDefault();
+    const uid = user?.user?.id;
+
+    let imageUrl = post?.coverImgUrl;
+
+    if (thumbnailFile) {
+      const { data, error } = await supabase.storage
+        .from("Post")
+        .upload(`Post-${post?.id}`, thumbnailFile, {
+          upsert: true,
+        });
+      if (error) {
+        console.log("이미지 업로드 실패:", error);
+        return;
+      }
+
+      const { data: urlData } = supabase.storage
+        .from("Post")
+        .getPublicUrl(`Post-${post?.id}`);
+
+      imageUrl = urlData.publicUrl;
+    }
+
+    const { error: updateErrorCover } = await supabase
+      .from("Post")
+      .update({
+        coverImgUrl: imageUrl,
+      })
+      .eq("email", email);
+
+    if (updateErrorCover) {
+      console.log("업데이트 실패:", updateErrorCover);
+      return;
+    }
+
+    if (!uid) return;
+    if (!title || !getContent) {
+      toast.error("제목 또는 내용을 입력 해주세요.");
+      return;
+    }
+
+    if (postId) {
+      const { error: updateError } = await supabase
+        .from("Post")
+        .update({
+          title,
+          description: getContent,
+          updatedAt: new Date().toISOString(),
+          coverImgUrl: imageUrl || post?.coverImgUrl,
+          Tags: tags,
+        })
+        .eq("id", Number(postId));
+
+      if (updateError) {
+        toast.error("글 수정에 실패했습니다.");
+        console.error(" Supabase update error:", updateError);
+      } else {
+        toast.success("글이 수정되었습니다.");
+        router.push(`/${user?.user?.name}/${postId}`);
+      }
+    } else {
+      const { data, error } = await supabase
+        .from("Post")
+        .insert([
+          {
+            title,
+            description: getContent,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+            userId: uid,
+            email: user?.user?.email,
+            coverImgUrl: imageUrl || "/noImage.jpg",
+            Tags: tags,
+          },
+        ])
+        .select();
+      if (error) {
+        toast.error("글 작성에 실패했습니다.");
+        console.error(" Supabase insert error:", error);
+      } else if (data && data[0]) {
+        router.push(`/${user?.user?.name}/${data[0].id}`);
+      }
+    }
+  };
+
+  const handleTagsPlus = () => {
+    if (!tag.trim()) return;
+    setTags((prev) => [...prev, tag.trim()]);
+    setTag("");
+  };
+
+  const handleKeyPress = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      handleTagsPlus();
+      e.preventDefault();
+    }
+  };
+
+  const changeContent = (value: string) => {
+    setGetContent(value);
+  };
+
+  const onDeleteTag = (tagname: string) => {
+    setTags((prevTags) => prevTags.filter((t) => t !== tagname));
+  };
+
+  return (
+    <main className="h-screen w-full flex gap-9 text-primary">
+      <form onSubmit={onSubmit} className="text-center flex flex-1 flex-col">
+        <input
+          type="text"
+          placeholder="제목을 입력하세요"
+          className="h-20 text-4xl outline-none font-semibold"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+        />
+        <input
+          type="text"
+          placeholder="태그를 입력하세요"
+          className="h-14 text-xl outline-none font-semibold"
+          value={tag}
+          onChange={(e) => setTag(e.target.value)}
+          onKeyDown={handleKeyPress}
+        />
+        <TagList tags={tags} onDelete={onDeleteTag} />
+        <div className="bg-white h-[500px] mt-9 text-left">
+          <TuiEditor content={getContent} contentChange={changeContent} />
+        </div>
+
+        <button
+          type="submit"
+          className="text-base py-2 px-5 bg-green-500 text-white hover:bg-green-400 cursor-pointer transition-colors duration-300 rounded-full mt-9"
+        >
+          글 작성하기
+        </button>
+      </form>
+      <div className="w-1/2 flex flex-col">
+        <div className="flex items-center ">
+          <img
+            src={thumbnailPreview?.url || "/noImage.jpg"}
+            alt="이미지를 업로드해주세요"
+            width={100}
+            height={100}
+          />
+          <div
+            {...getRootProps()}
+            className="ml-auto w-32 h-10 px-4 py-2 text-sm bg-green-400 text-white hover:bg-green-500 rounded-lg cursor-pointer"
+          >
+            썸네일 업로드 <input {...getInputProps()} />
+          </div>
+        </div>
+
+        <div className="h-screen flex-1 mt-9 text-left border border-[#ddd]">
+          <Viewer content={getContent} />
+        </div>
+      </div>
+    </main>
+  );
+}

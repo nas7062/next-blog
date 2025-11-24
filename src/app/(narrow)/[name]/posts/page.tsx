@@ -1,6 +1,6 @@
 "use client";
 import SinglePostList from "@/src/app/_components/SinglePostList";
-import { IPost } from "@/src/app/(wide)/write/page";
+
 import { getMyPost } from "@/src/app/_lib/getMyPosts";
 import { useEffect, useState } from "react";
 import { IUser } from "@/src/app/_components/PostDetail";
@@ -8,6 +8,7 @@ import { usePathname, useSearchParams } from "next/navigation";
 import { getUserById } from "@/src/app/_lib/getUserById";
 import { GithubIcon, MailIcon } from "lucide-react";
 import Tabs from "./_components/Tabs";
+import { IPost } from "@/src/app/(wide)/write/_components/WirtePageClient";
 
 export default function PostPage() {
   const id = usePathname().split("/")[1];

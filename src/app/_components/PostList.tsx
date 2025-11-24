@@ -1,4 +1,4 @@
-import { IPost } from "../(wide)/write/page";
+import { IPost } from "../(wide)/write/_components/WirtePageClient";
 import { getPostList } from "../_lib/getPostList";
 import Post from "./Post";
 

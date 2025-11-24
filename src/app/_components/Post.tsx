@@ -4,11 +4,12 @@ import dayjs from "dayjs";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
-import { IPost } from "../(wide)/write/page";
+
 import { IUser } from "./PostDetail";
 import { getPostUser } from "../_lib/getPostUser";
 import { useLike } from "../hook/useLike";
 import { useToggleLike } from "../_lib/postToggleLike";
+import { IPost } from "../(wide)/write/_components/WirtePageClient";
 
 export default function Post({ post }: { post: IPost }) {
   const [likeCount, setLikeCount] = useState<number>(post.likeCount || 0);

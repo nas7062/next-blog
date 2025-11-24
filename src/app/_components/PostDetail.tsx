@@ -8,7 +8,7 @@ import "dayjs/locale/ko";
 import { getPostById } from "../(narrow)/[name]/[postId]/_lib/getPostById";
 import Viewer from "../(wide)/write/_components/View";
 import { getUserInfo } from "../_lib/getUser";
-import { IPost } from "../(wide)/write/page";
+import { IPost } from "../(wide)/write/_components/WirtePageClient";
 
 dayjs.extend(relativeTime);
 dayjs.locale("ko");

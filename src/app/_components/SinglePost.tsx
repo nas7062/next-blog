@@ -4,11 +4,11 @@ import dayjs from "dayjs";
 import { useRouter } from "next/navigation";
 import TagList from "./TagList";
 import { useSession } from "next-auth/react";
-import { IPost } from "../(wide)/write/page";
 import { Heart } from "lucide-react";
 import { useLike } from "../hook/useLike";
 import { useState } from "react";
 import { useToggleLike } from "../_lib/postToggleLike";
+import { IPost } from "../(wide)/write/_components/WirtePageClient";
 
 export default function SinglePost({ post }: { post: IPost }) {
   const router = useRouter();

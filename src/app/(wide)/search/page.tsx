@@ -2,7 +2,7 @@ import SearchInput from "./_components/SearchInput";
 import SinglePostList from "../../_components/SinglePostList";
 
 import { getSearchPost } from "../../_lib/getSearchPost";
-import { IPost } from "../write/page";
+import { IPost } from "../write/_components/WirtePageClient";
 
 export default async function SearchPage({
   searchParams,

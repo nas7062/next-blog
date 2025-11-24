@@ -26,7 +26,7 @@ export interface IPost {
   updatedAt: string;
   userId: string | null;
   Tags?: string[] | null;
-  likeCount?: number;
+  likeCount?: number | null;
   email?: string | null;
 }
 

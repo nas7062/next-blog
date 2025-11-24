@@ -4,7 +4,12 @@ import { ReactNode, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { useRouter } from "next/navigation";
 
-export default function Modal({ children }: { children: ReactNode }) {
+type ModalProps = {
+  children: ReactNode;
+  onClose: () => void;
+};
+
+export default function Modal({ children, onClose }: ModalProps) {
   const router = useRouter();
   const dialogRef = useRef<HTMLDialogElement>(null);
   const [mounted, setMounted] = useState(false);
@@ -36,7 +41,11 @@ export default function Modal({ children }: { children: ReactNode }) {
   }, [mounted, container]);
 
   const safeClose = () => {
-    router.back();
+    if (onClose) {
+      onClose();
+    } else {
+      router.back();
+    }
   };
 
   if (!mounted || !container) return null;

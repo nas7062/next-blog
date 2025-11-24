@@ -2,7 +2,7 @@
 import { Heart } from "lucide-react";
 import dayjs from "dayjs";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 
 import { IUser } from "./PostDetail";
@@ -10,9 +10,12 @@ import { getPostUser } from "../_lib/getPostUser";
 import { useLike } from "../hook/useLike";
 import { useToggleLike } from "../_lib/postToggleLike";
 import { IPost } from "../(wide)/write/_components/WirtePageClient";
+import LoginModal from "./LoginModal";
 
 export default function Post({ post }: { post: IPost }) {
   const [likeCount, setLikeCount] = useState<number>(post.likeCount || 0);
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+
   const router = useRouter();
   const { data: user } = useSession();
   const email = user?.user?.email as string;
@@ -48,9 +51,11 @@ export default function Post({ post }: { post: IPost }) {
     fetchUser();
   }, [post?.id]);
 
-  const handleToggleLike = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.stopPropagation();
-    if (!email) return;
+  const handleToggleLike = () => {
+    if (!email) {
+      setIsLoginModalOpen(true);
+      return;
+    }
 
     const willLike = !liked;
 
@@ -72,10 +77,13 @@ export default function Post({ post }: { post: IPost }) {
                 transition-transform duration-350
                 hover:-translate-y-2 hover:shadow-2xl
                 cursor-pointer"
-      onClick={() => MovePostDetail(post.id)}
       key={post.id}
     >
-      <div>
+      <div
+        onClick={() => {
+          MovePostDetail(post.id);
+        }}
+      >
         <img
           src={post.coverImgUrl ? post.coverImgUrl : "/noImage.jpg"}
           alt={post.title}
@@ -107,7 +115,15 @@ export default function Post({ post }: { post: IPost }) {
         </div>
 
         <div className="ml-auto flex gap-1">
-          <button onClick={handleToggleLike} className="cursor-pointer">
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              e.preventDefault();
+              handleToggleLike();
+            }}
+            className="cursor-pointer"
+          >
             <Heart
               size={22}
               className={
@@ -122,6 +138,9 @@ export default function Post({ post }: { post: IPost }) {
           <p>{likeCount}</p>
         </div>
       </div>
+      {isLoginModalOpen && (
+        <LoginModal onClose={() => setIsLoginModalOpen(false)} />
+      )}
     </div>
   );
 }

@@ -12,11 +12,11 @@ import { IPost } from "@/src/app/(wide)/write/_components/WirtePageClient";
 
 export default function ActionButtons() {
   const pathname = usePathname();
-  const postId = Number(pathname.split("/")[2]);
+  const postId = pathname.split("/")[2];
   const { data: session } = useSession();
   const email = session?.user?.email as string;
-  const { data, isLoading } = useLike(postId, email);
-  const toggleLike = useToggleLike(email, postId);
+  const { data } = useLike(Number(postId), email);
+  const toggleLike = useToggleLike(email, Number(postId));
   const liked = data?.liked ?? false;
   const [post, setPost] = useState<IPost>();
   const [likeCount, setLikeCount] = useState<number | 0>(post?.likeCount || 0);

@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 
 type ModalProps = {
   children: ReactNode;
-  onClose: () => void;
+  onClose?: () => void;
 };
 
 export default function Modal({ children, onClose }: ModalProps) {

@@ -16,7 +16,7 @@ export async function getPostList(
     .from("Post")
     .select("*")
     .range(from, to)
-    .order("createdAt", { ascending: false }); // 정렬 기준은 원하는 컬럼으로 변경
+    .order("createdAt", { ascending: false }); // 최신순
 
   if (error) {
     console.error("데이터 패칭 실패", error);

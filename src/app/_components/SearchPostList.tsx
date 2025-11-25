@@ -72,8 +72,8 @@ export default function SearchResultList({ q }: { q: string }) {
     <>
       {/* 총 N건 문구 */}
       <div className="flex justify-center">
-        <h3 className="text-2xl text-gray-600">
-          총 <strong className="text-gray-800 text-3xl">{totalCount}</strong>
+        <h3 className="text-2xl text-gray-500">
+          총 <strong className="text-green-500 text-3xl">{totalCount}</strong>
           건의 포스트를 찾았습니다.
         </h3>
       </div>
@@ -85,7 +85,7 @@ export default function SearchResultList({ q }: { q: string }) {
           onClick={() => setSortType("relevance")}
           className={`border-r border-r-gray-300 pr-2 cursor-pointer ${
             sortType === "relevance"
-              ? "font-semibold text-black"
+              ? "font-semibold  text-primary"
               : "text-gray-400"
           }`}
         >
@@ -95,7 +95,9 @@ export default function SearchResultList({ q }: { q: string }) {
           type="button"
           onClick={() => setSortType("latest")}
           className={`cursor-pointer ${
-            sortType === "latest" ? "font-semibold text-black" : "text-gray-400"
+            sortType === "latest"
+              ? "font-semibold text-primary"
+              : "text-gray-400"
           }`}
         >
           최신순

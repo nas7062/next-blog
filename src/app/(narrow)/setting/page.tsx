@@ -161,14 +161,12 @@ export default function SettingPage() {
               <input
                 type="text"
                 className="border border-gray-300 focus:border-gray-800 rounded-md h-10 px-2"
-                defaultValue={userData?.name ? userData?.name : name}
                 value={name}
                 onChange={(e) => setName(e.target.value)}
               />
               <input
                 type="text"
                 className="border border-gray-300 focus:border-gray-800 rounded-md px-2 "
-                defaultValue={userData?.descript ? userData.descript : descript}
                 value={descript}
                 onChange={(e) => setdescript(e.target.value)}
               />

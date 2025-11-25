@@ -12,6 +12,9 @@ import { IPost } from "../(wide)/write/_components/WirtePageClient";
 import { useSession } from "next-auth/react";
 import ReppleForm from "../(narrow)/[name]/[postId]/_components/ReppleForm";
 import Repple from "../(narrow)/[name]/[postId]/_components/Repple";
+import { getCommentsByPost } from "../(narrow)/[name]/[postId]/_lib/getComment";
+import { toast } from "sonner";
+import ReppleList from "../(narrow)/[name]/[postId]/_components/ReppleList";
 
 dayjs.extend(relativeTime);
 dayjs.locale("ko");
@@ -27,6 +30,15 @@ export interface IUser {
   descript?: string | null;
 }
 
+export interface IRepple {
+  id: number;
+  postId: number | null;
+  content: string | null;
+  name: string | null;
+  createdAt: string;
+  updateAt: string | null;
+}
+
 export default function PostDetail({
   name,
   postId,
@@ -38,6 +50,7 @@ export default function PostDetail({
   const pathname = usePathname();
   const [post, setPost] = useState<IPost>();
   const [user, setUser] = useState<IUser | null>(null);
+  const [repple, setRepple] = useState<IRepple[] | null>(null);
   const { data: session } = useSession();
   useEffect(() => {
     if (!postId) return;
@@ -61,6 +74,19 @@ export default function PostDetail({
     getUser();
   }, [post?.email]);
 
+  useEffect(() => {
+    const fetchComment = async () => {
+      try {
+        const response = await getCommentsByPost(Number(postId));
+        setRepple(response);
+      } catch (error) {
+        console.error(error);
+        toast.error("댓글을 불러오는데 실패했습니다.");
+      }
+    };
+    fetchComment();
+  }, [postId]);
+  console.log(repple);
   const isUpdate = post?.email === session?.user?.email;
   return (
     <div className="flex flex-col gap-10">
@@ -99,9 +125,8 @@ export default function PostDetail({
           <Viewer content={post?.description || ""} />
         </div>
       </div>
-      <ReppleForm user={user} postId={postId} />
-      <Repple user={user} />
-      <Repple user={user} />
+      <ReppleForm user={user} postId={postId} reppleCount={repple?.length} />
+      <ReppleList repples={repple} user={user} />
     </div>
   );
 }

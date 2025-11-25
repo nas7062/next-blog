@@ -7,9 +7,11 @@ import { toast } from "sonner";
 export default function ReppleForm({
   user,
   postId,
+  reppleCount,
 }: {
   user: IUser | null;
   postId: string;
+  reppleCount: number;
 }) {
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
@@ -42,7 +44,7 @@ export default function ReppleForm({
 
   return (
     <div className="flex flex-col gap-4">
-      <p>4개의 댓글</p>
+      <p>{reppleCount}개의 댓글</p>
       <textarea
         ref={textareaRef}
         onInput={handleResizeHeight}

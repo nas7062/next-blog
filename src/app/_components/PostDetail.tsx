@@ -99,7 +99,8 @@ export default function PostDetail({
           <Viewer content={post?.description || ""} />
         </div>
       </div>
-      <ReppleForm />
+      <ReppleForm user={user} postId={postId} />
+      <Repple user={user} />
       <Repple user={user} />
     </div>
   );

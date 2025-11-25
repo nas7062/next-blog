@@ -32,6 +32,7 @@ export interface IPost {
   Tags?: string[] | null;
   likeCount?: number | null;
   email?: string | null;
+  reppleCount?: number;
 }
 
 export default function WritePageClient() {
@@ -66,7 +67,7 @@ export default function WritePageClient() {
       }
     };
     fetchPost();
-  }, [postId]);
+  }, [postId, supabase]);
 
   const [thumbnailPreview, setThumbnailPreview] =
     useState<AboutThumbnailPreview>();

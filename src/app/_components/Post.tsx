@@ -103,7 +103,7 @@ export default function Post({ post }: { post: IPost }) {
         </p>
         <div className="flex gap-4">
           <p>{dayjs(post.createdAt).format("YYYY년 MM월 DD일")}</p>
-          <p>1개의 댓글</p>
+          <p>{post.reppleCount}개의 댓글</p>
         </div>
       </div>
       <div className="flex  items-center gap-2 px-4">

@@ -14,6 +14,7 @@ import ReppleForm from "../(narrow)/[name]/[postId]/_components/ReppleForm";
 import { getCommentsByPost } from "../(narrow)/[name]/[postId]/_lib/getComment";
 import { toast } from "sonner";
 import ReppleList from "../(narrow)/[name]/[postId]/_components/ReppleList";
+import { deleteComment } from "../(narrow)/[name]/[postId]/_lib/deleteComment";
 
 dayjs.extend(relativeTime);
 dayjs.locale("ko");
@@ -34,6 +35,7 @@ export interface IRepple {
   postId: number | null;
   content: string | null;
   name: string | null;
+  userid?: string | null;
   createdAt: string;
   updatedat?: string | null;
 }
@@ -95,8 +97,20 @@ export default function PostDetail({
       }
     };
     fetchComment();
-  }, [postId]);
+  }, [postId, repple]);
 
+  const onDelete = async (id: number) => {
+    try {
+      const response = await deleteComment(id);
+      if (!response) {
+        setRepple((prev) => (prev ? prev.filter((r) => r.id !== id) : prev));
+        toast.success("댓글 삭제 완료");
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("댓글 삭제 실패");
+    }
+  };
   const isUpdate = post?.email === session?.user?.email;
   return (
     <div className="flex flex-col gap-10">
@@ -139,8 +153,11 @@ export default function PostDetail({
         user={userData}
         postId={postId}
         reppleCount={repple?.length}
+        onCreated={(newRepple: IRepple) => {
+          setRepple((prev) => (prev ? [newRepple, ...prev] : [newRepple]));
+        }}
       />
-      <ReppleList repples={repple} user={userData} />
+      <ReppleList repples={repple} user={userData} onDelete={onDelete} />
     </div>
   );
 }

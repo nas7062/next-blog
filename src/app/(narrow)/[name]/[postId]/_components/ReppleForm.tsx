@@ -1,17 +1,19 @@
 "use client ";
 import { useRef } from "react";
 import { createComment } from "../_lib/createComment";
-import { IUser } from "@/src/app/_components/PostDetail";
+import { IRepple, IUser } from "@/src/app/_components/PostDetail";
 import { toast } from "sonner";
 
 export default function ReppleForm({
   user,
   postId,
   reppleCount,
+  onCreated,
 }: {
   user: IUser | null;
   postId: string;
   reppleCount?: number;
+  onCreated?: (repple: IRepple) => void;
 }) {
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
@@ -35,6 +37,9 @@ export default function ReppleForm({
       if (response) {
         toast.success("댓글이 등록되었습니다.");
         textareaRef.current.value = "";
+        if (onCreated) {
+          onCreated(response);
+        }
       } else {
         toast.error("댓글 등록이 실패했습니다.");
       }

@@ -4,10 +4,11 @@ import { IRepple, IUser } from "@/src/app/_components/PostDetail";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import "dayjs/locale/ko";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { updateComment } from "../_lib/updateComment";
 import { toast } from "sonner";
-import { deleteComment } from "../_lib/deleteComment";
+import { getUserInfo } from "@/src/app/_lib/getUser";
+import { getUserById } from "@/src/app/_lib/getUserById";
 
 dayjs.extend(relativeTime);
 dayjs.locale("ko");
@@ -15,13 +16,15 @@ dayjs.locale("ko");
 export default function Repple({
   user,
   repple,
+  onDelete,
 }: {
   user: IUser | null;
   repple: IRepple;
+  onDelete: (id: number) => void;
 }) {
   const [isUpdate, setIsUpdate] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
-
+  const [reppleUser, setReppleUser] = useState<IUser | null>(null);
   const handleResizeHeight = () => {
     const el = textareaRef.current;
     if (!el) return;
@@ -52,53 +55,55 @@ export default function Repple({
     }
   };
 
-  const onDelete = async () => {
-    try {
-      const response = await deleteComment(repple.id);
-      if (!response) {
-        toast.success("댓글 삭제 완료");
-      }
-    } catch (error) {
-      console.error(error);
-      toast.error("댓글 삭제 실패");
-    }
-  };
-
+  useEffect(() => {
+    const id = repple.userid;
+    if (!id) return;
+    const getUserData = async () => {
+      const data = await getUserById(id);
+      setReppleUser(data);
+    };
+    getUserData();
+  }, [repple.userid]);
+  const isMyRepple = repple.userid === user?.id;
   return (
     <div className="flex flex-col gap-4">
       <div className="flex gap-2">
         <img
-          src={user?.image ? user?.image : "/noImage.jpg"}
+          src={reppleUser?.image ? reppleUser?.image : "/noImage.jpg"}
           alt="댓글 이미지"
           className="w-14 h-14 rounded-full"
         />
         <div className="flex flex-col gap-2">
-          <p>{user?.name}</p>
+          <p>{reppleUser?.name}</p>
           <p>{dayjs(repple?.updatedat).format("YYYY년 MM월 DD일")}</p>
         </div>
         <div className="flex gap-2 ml-auto">
-          {!isUpdate ? (
-            <button
-              className="hover:text-gray-400 cursor-pointer"
-              onClick={changeUpdate}
-            >
-              수정
-            </button>
-          ) : (
-            <button
-              className="hover:text-gray-400 cursor-pointer"
-              onClick={onUpdate}
-            >
-              수정완료
-            </button>
-          )}
+          {isMyRepple && (
+            <>
+              {!isUpdate ? (
+                <button
+                  className="hover:text-gray-400 cursor-pointer"
+                  onClick={changeUpdate}
+                >
+                  수정
+                </button>
+              ) : (
+                <button
+                  className="hover:text-gray-400 cursor-pointer"
+                  onClick={onUpdate}
+                >
+                  수정완료
+                </button>
+              )}
 
-          <button
-            className="hover:text-red-400 cursor-pointer"
-            onClick={onDelete}
-          >
-            삭제
-          </button>
+              <button
+                className="hover:text-red-400 cursor-pointer"
+                onClick={() => onDelete(repple.id)}
+              >
+                삭제
+              </button>
+            </>
+          )}
         </div>
       </div>
       {isUpdate ? (

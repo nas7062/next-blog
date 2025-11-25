@@ -5,7 +5,7 @@ export async function getTagList(email: string): Promise<TagRow[]> {
   const supabase = getSupabaseClient();
   const { data, error } = await supabase
     .from("Post")
-    .select("tags")
+    .select("Tags")
     .eq("email", email);
 
   if (error) {

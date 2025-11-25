@@ -7,8 +7,8 @@ import { useSession } from "next-auth/react";
 import { Heart } from "lucide-react";
 import { useLike } from "../hook/useLike";
 import { useState } from "react";
-import { useToggleLike } from "../_lib/postToggleLike";
 import { IPost } from "../(wide)/write/_components/WirtePageClient";
+import { useToggleLike } from "../hook/useToggleLike";
 
 export default function SinglePost({ post }: { post: IPost }) {
   const router = useRouter();

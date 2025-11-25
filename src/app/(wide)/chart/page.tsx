@@ -64,16 +64,6 @@ export default function FrameworkStatsPage() {
   const [stack, setStack] = useState<StackType>("frontend");
   const [darkMode, setDarkMode] = useState<boolean>(false);
 
-  // OS 다크 모드 기본값 반영
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const prefersDark = window.matchMedia?.(
-        "(prefers-color-scheme: dark)"
-      ).matches;
-      setDarkMode(prefersDark);
-    }
-  }, []);
-
   useEffect(() => {
     async function load() {
       setLoading(true);
@@ -109,7 +99,7 @@ export default function FrameworkStatsPage() {
   if (loading) {
     return (
       <div className={containerClass}>
-        <div className="min-h-screen bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-50 flex items-center justify-center">
+        <div className="min-h-screen min-w-7xl  text-slate-900 dark:text-slate-50 flex items-center justify-center">
           <div className="px-6 py-4 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
             로딩 중입니다...
           </div>
@@ -121,7 +111,7 @@ export default function FrameworkStatsPage() {
   if (!data || data.error) {
     return (
       <div className={containerClass}>
-        <div className="min-h-screen bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-50 flex items-center justify-center">
+        <div className="min-h-screen min-w-7xl text-slate-900 dark:text-slate-50 flex items-center justify-center">
           <div className="px-6 py-4 rounded-xl border border-red-200 dark:border-red-800 bg-red-50/60 dark:bg-red-950/40 text-red-700 dark:text-red-200">
             데이터를 불러오지 못했습니다.
           </div>
@@ -219,7 +209,7 @@ export default function FrameworkStatsPage() {
               <button
                 type="button"
                 onClick={() => setStack("frontend")}
-                className={`px-4 py-1.5 text-xs sm:text-sm rounded-full transition ${
+                className={`px-4 py-1.5 text-xs sm:text-sm rounded-full transition cursor-pointer ${
                   stack === "frontend"
                     ? "bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-50 shadow"
                     : "text-slate-500 dark:text-slate-400"
@@ -230,7 +220,7 @@ export default function FrameworkStatsPage() {
               <button
                 type="button"
                 onClick={() => setStack("backend")}
-                className={`px-4 py-1.5 text-xs sm:text-sm rounded-full transition ${
+                className={`px-4 py-1.5 text-xs sm:text-sm rounded-full transition cursor-pointer  ${
                   stack === "backend"
                     ? "bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-50 shadow"
                     : "text-slate-500 dark:text-slate-400"
@@ -338,7 +328,7 @@ export default function FrameworkStatsPage() {
               </div>
 
               {/* 백엔드 테이블 */}
-              <div className="border border-slate-200 dark:border-slate-800 rounded-2xl p-4 sm:p-5 bg-white/70 dark:bg-slate-900/70 shadow-sm">
+              <div className="border  border-slate-200 dark:border-slate-800 rounded-2xl p-4 sm:p-5 bg-white/70 dark:bg-slate-900/70 shadow-sm">
                 <h3 className="text-sm font-semibold mb-3">상세 수치</h3>
                 <div className="overflow-x-auto">
                   <table className="w-full text-sm">

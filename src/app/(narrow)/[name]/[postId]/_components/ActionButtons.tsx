@@ -1,7 +1,6 @@
 "use client";
 
 import LoginModal from "@/src/app/_components/LoginModal";
-import { useToggleLike } from "@/src/app/_lib/postToggleLike";
 import { useLike } from "@/src/app/hook/useLike";
 import { Heart, Link, Share2, Waypoints } from "lucide-react";
 import { useSession } from "next-auth/react";
@@ -10,6 +9,7 @@ import { useEffect, useState } from "react";
 import { getPostById } from "../_lib/getPostById";
 import { IPost } from "@/src/app/(wide)/write/_components/WirtePageClient";
 import { toast } from "sonner";
+import { useToggleLike } from "@/src/app/hook/useToggleLike";
 
 export default function ActionButtons() {
   const pathname = usePathname();

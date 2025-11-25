@@ -11,7 +11,7 @@ export default function ReppleForm({
 }: {
   user: IUser | null;
   postId: string;
-  reppleCount: number;
+  reppleCount?: number;
 }) {
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
@@ -24,11 +24,12 @@ export default function ReppleForm({
   };
 
   const onSubmit = async () => {
-    if (!postId || !textareaRef.current || !user?.name) return;
+    if (!postId || !textareaRef.current || !user?.name || !user?.email) return;
     try {
       const response = await createComment({
         postId: Number(postId),
         content: textareaRef.current?.value,
+        userid: user?.id,
         name: user?.name,
       });
       if (response) {

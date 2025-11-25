@@ -1,26 +1,19 @@
 import { getSupabaseClient } from "@/src/app/api/supabase";
 
-export async function createComment({
-  postId,
-  content,
-  userid,
-  name,
-}: {
-  postId: number;
-  content: string;
-  userid: string;
-  name: string;
-}) {
+export async function updateComment(
+  id: number,
+  content: string,
+  userId: string
+) {
   const supabase = getSupabaseClient();
   const { data, error } = await supabase
     .from("Repple")
-    .insert({
-      postId,
+    .update({
       content,
-      userid,
-      name,
-      createdAt: new Date().toISOString(),
+      updatedat: new Date().toISOString(),
     })
+    .eq("id", id)
+    .eq("userid", userId)
     .select()
     .single();
 

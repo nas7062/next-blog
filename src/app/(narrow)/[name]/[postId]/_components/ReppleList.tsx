@@ -6,7 +6,7 @@ export default function ReppleList({
   user,
 }: {
   repples: IRepple[] | null;
-  user: IUser;
+  user: IUser | null;
 }) {
   if (!repples) return;
   return repples.map((repple) => (

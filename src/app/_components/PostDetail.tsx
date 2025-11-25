@@ -96,7 +96,7 @@ export default function PostDetail({
     };
     fetchComment();
   }, [postId]);
-  console.log(userData);
+
   const isUpdate = post?.email === session?.user?.email;
   return (
     <div className="flex flex-col gap-10">

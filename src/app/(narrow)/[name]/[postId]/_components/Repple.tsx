@@ -7,6 +7,7 @@ import "dayjs/locale/ko";
 import { useRef, useState } from "react";
 import { updateComment } from "../_lib/updateComment";
 import { toast } from "sonner";
+import { deleteComment } from "../_lib/deleteComment";
 
 dayjs.extend(relativeTime);
 dayjs.locale("ko");
@@ -50,6 +51,19 @@ export default function Repple({
       toast.error("댓글 수정 실패");
     }
   };
+
+  const onDelete = async () => {
+    try {
+      const response = await deleteComment(repple.id);
+      if (!response) {
+        toast.success("댓글 삭제 완료");
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("댓글 삭제 실패");
+    }
+  };
+
   return (
     <div className="flex flex-col gap-4">
       <div className="flex gap-2">
@@ -79,7 +93,12 @@ export default function Repple({
             </button>
           )}
 
-          <button className="hover:text-red-400 cursor-pointer">삭제</button>
+          <button
+            className="hover:text-red-400 cursor-pointer"
+            onClick={onDelete}
+          >
+            삭제
+          </button>
         </div>
       </div>
       {isUpdate ? (

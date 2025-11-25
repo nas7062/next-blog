@@ -50,8 +50,8 @@ export default function SinglePost({ post }: { post: IPost }) {
         <img
           src={post.coverImgUrl || "/nextImage.png"}
           alt={post.title}
-          width={708}
-          height={400}
+          width={400}
+          height={600}
           className="rounded-xl overflow-hidden mx-auto"
         />
       </div>
@@ -61,9 +61,9 @@ export default function SinglePost({ post }: { post: IPost }) {
           {post.description}
         </p>
         <TagList tags={post.Tags || []} onDelete={() => {}} />
-        <div className="flex gap-4 items-center">
+        <div className="flex gap-2 items-center">
           <p>{dayjs(new Date()).format("YYYY년 MM월 DD일")}</p>
-          <p>1개의 댓글</p>
+          <p>{post.reppleCount}개의 댓글</p>
           <button onClick={handleToggleLike} className="cursor-pointer">
             {liked ? (
               <Heart className="w-6 h-6 group-hover:fill-gray-500 fill-red-500" />

@@ -10,6 +10,8 @@ import Viewer from "../(wide)/write/_components/View";
 import { getUserInfo } from "../_lib/getUser";
 import { IPost } from "../(wide)/write/_components/WirtePageClient";
 import { useSession } from "next-auth/react";
+import ReppleForm from "../(narrow)/[name]/[postId]/_components/ReppleForm";
+import Repple from "../(narrow)/[name]/[postId]/_components/Repple";
 
 dayjs.extend(relativeTime);
 dayjs.locale("ko");
@@ -59,11 +61,6 @@ export default function PostDetail({
     getUser();
   }, [post?.email]);
 
-  const textarea = useRef<null>(null);
-  const handleResizeHeight = () => {
-    textarea.current.style.height = "auto";
-    textarea.current.style.height = textarea.current?.scrollHeight + "px";
-  };
   const isUpdate = post?.email === session?.user?.email;
   return (
     <div className="flex flex-col gap-10">
@@ -102,21 +99,8 @@ export default function PostDetail({
           <Viewer content={post?.description || ""} />
         </div>
       </div>
-      <div className="flex flex-col gap-4">
-        <p>4개의 댓글</p>
-        <textarea
-          ref={textarea}
-          onInput={handleResizeHeight}
-          rows={1}
-          className="resize-none w-full min-h-16 h-auto bg-slate-200 rounded-lg text-black p-2"
-        />
-        <button className="ml-auto  border border-green-400  rounded-xl px-4 py-1 cursor-pointer bg-green-500 text-white hover:bg-green-600 transition-colors duration-300">
-          댓글 작성
-        </button>
-      </div>
-      <div>
-        
-      </div>
+      <ReppleForm />
+      <Repple user={user} />
     </div>
   );
 }

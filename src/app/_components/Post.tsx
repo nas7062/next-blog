@@ -87,8 +87,8 @@ export default function Post({ post }: { post: IPost }) {
           src={post.coverImgUrl ? post.coverImgUrl : "/noImage.jpg"}
           alt={post.title}
           width={350}
-          height={350}
-          className="rounded-md max-h-80"
+          height={200}
+          className="rounded-md max-h-60 "
         />
       </div>
       <div

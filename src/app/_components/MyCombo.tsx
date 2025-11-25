@@ -70,7 +70,7 @@ export function MyCombo({ user }: { user: User }) {
                       <Link
                         href={framework.href}
                         key={framework.label}
-                        className="block md:hidden cursor-pointer border-b hover:bg-secondary py-2"
+                        className="block md:hidden cursor-pointer border-b hover:bg-gray-300 text-primary"
                       >
                         {framework.label}
                       </Link>
@@ -80,7 +80,7 @@ export function MyCombo({ user }: { user: User }) {
                       <Link
                         href={framework.href}
                         key={framework.label}
-                        className="cursor-pointer border-b hover:bg-secondary py-2"
+                        className="cursor-pointer border-b hover:bg-gray-400 py-2"
                       >
                         {framework.label}
                       </Link>

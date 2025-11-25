@@ -11,7 +11,7 @@ export default function SignupPage() {
           <div className="flex gap-2 ">
             <label
               htmlFor="name"
-              className="text-lg bg-gray-200 px-4 py-2 rounded-md w-28 flex justify-center items-center"
+              className="text-sm bg-gray-400 px-2 py-2 rounded-md w-28 flex justify-center items-center"
             >
               이름
             </label>
@@ -28,7 +28,7 @@ export default function SignupPage() {
           <div className="flex gap-2 ">
             <label
               htmlFor="email"
-              className="text-lg bg-gray-200 px-4 py-2 rounded-md w-28 flex justify-center items-center"
+              className="text-sm bg-gray-400 px-2 py-2 rounded-md w-28 flex justify-center items-center"
             >
               이메일
             </label>
@@ -45,7 +45,7 @@ export default function SignupPage() {
           <div className="flex gap-2 ">
             <label
               htmlFor="password"
-              className="text-lg bg-gray-200 px-4 py-2 rounded-md  w-28 flex justify-center items-center "
+              className="text-sm bg-gray-400 px-2 py-2 rounded-md  w-28 flex justify-center items-center "
             >
               비밀번호
             </label>
@@ -62,7 +62,7 @@ export default function SignupPage() {
           <div className="flex gap-2 items-center ">
             <label
               htmlFor="passwordConfirm"
-              className="text-lg bg-gray-200 px-4 py-2 rounded-md  w-28 flex justify-center items-center text-center "
+              className="text-sm bg-gray-400 px-2 py-2 rounded-md  w-28 flex justify-center items-center text-center "
             >
               비밀번호 확인
             </label>
@@ -72,7 +72,7 @@ export default function SignupPage() {
               name="passwordConfirm"
               autoComplete="passwordConfirm"
               placeholder="비밀번호를 입력하세요"
-              className="border border-gray-300 rounded-md flex-1 px-2  h-12  outline-none focus:border-2 focus:border-gray-700"
+              className="border border-gray-300 rounded-md flex-1 px-2 py-2  outline-none focus:border-2 focus:border-gray-700"
               required
             />
           </div>
@@ -85,10 +85,15 @@ export default function SignupPage() {
           </button>
         </form>
         <div className="flex justify-end gap-2 text-green-500">
-          <p>이미 회원 이신가요?</p>
+          <p>이미 회원이신가요?</p>
           <Link href={"/signin"}>
-            <strong className="cursor-pointer">로그인</strong>
+            <strong className="cursor-pointer hover:text-green-400">
+              로그인
+            </strong>
           </Link>
+        </div>
+        <div className="absolute top-0 right-0">
+          <img src="/hello.png" className="w-20 h-20" />
         </div>
       </div>
     </Modal>

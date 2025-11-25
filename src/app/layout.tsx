@@ -8,7 +8,7 @@ import { ThemeProvider } from "./provider/themeProvider";
 import ReactQueryProvider from "./provider/reactqueryProvider";
 
 const geistNanum = Nanum_Gothic({
-  weight: "700",
+  weight: ["400", "700"],
   variable: "--font-geist-sans",
   subsets: ["latin"],
 });
@@ -32,9 +32,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="ko" suppressHydrationWarning>
       <body
-        className={`${geistNanum.variable} ${geistMono.variable} antialiased`}
+        className={`${geistNanum.className} ${geistMono.className} antialiased`}
       >
         <ReactQueryProvider>
           <ThemeProvider>

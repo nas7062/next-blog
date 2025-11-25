@@ -124,13 +124,13 @@ export default function PostDetail({
           {isUpdate ? (
             <div className="flex gap-2">
               <p
-                className="cursor-pointer text-gray-500 hover:text-gray-800"
+                className="cursor-pointer text-gray-500 hover:text-green-500"
                 onClick={() => router.push(`/write?id=${postId}`)}
               >
                 수정
               </p>
               <p
-                className="cursor-pointer text-gray-500 hover:text-gray-800"
+                className="cursor-pointer text-gray-500 hover:text-red-500"
                 onClick={() => router.push(`/${name}/${postId}/delete`)}
               >
                 삭제

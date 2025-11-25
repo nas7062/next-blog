@@ -6,12 +6,12 @@ import "dayjs/locale/ko";
 dayjs.extend(relativeTime);
 dayjs.locale("ko");
 
-export default function Repple({ user }: { user: IUser }) {
+export default function Repple({ user }: { user: IUser | null }) {
   return (
     <div className="flex flex-col gap-4">
       <div className="flex gap-2">
         <img
-          src={user?.image}
+          src={user?.image ? user?.image : "/noImage.jpg"}
           alt="댓글 이미지"
           className="w-14 h-14 rounded-full"
         />

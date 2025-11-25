@@ -2,17 +2,21 @@
 import { useRef } from "react";
 
 export default function ReppleForm() {
-  const textarea = useRef<null>(null);
+  const textareaRef = useRef<HTMLTextAreaElement | null>(null);
+
   const handleResizeHeight = () => {
-    textarea.current.style.height = "auto";
-    textarea.current.style.height = textarea.current?.scrollHeight + "px";
+    const el = textareaRef.current;
+    if (!el) return;
+
+    el.style.height = "auto";
+    el.style.height = `${el.scrollHeight}px`;
   };
 
   return (
     <div className="flex flex-col gap-4">
       <p>4개의 댓글</p>
       <textarea
-        ref={textarea}
+        ref={textareaRef}
         onInput={handleResizeHeight}
         rows={1}
         className="resize-none w-full min-h-16 h-auto bg-slate-200 rounded-lg text-black p-2"

@@ -1,54 +1,26 @@
 "use client";
 
 import LoginModal from "@/src/app/_components/LoginModal";
-import { useLike } from "@/src/app/hook/useLike";
 import { Heart, Link, Share2, Waypoints } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { getPostById } from "../_lib/getPostById";
-import { IPost } from "@/src/app/(wide)/write/_components/WirtePageClient";
 import { toast } from "sonner";
-import { useToggleLike } from "@/src/app/hook/useToggleLike";
+import { usePostLike } from "@/src/app/hook/usePostLIke";
+import { usePostById } from "@/src/app/hook/usePostById";
 
 export default function ActionButtons() {
   const pathname = usePathname();
   const postId = pathname.split("/")[2];
   const { data: session } = useSession();
   const email = session?.user?.email as string;
-  const { data } = useLike(Number(postId), email);
-  const toggleLike = useToggleLike(email, Number(postId));
-  const liked = data?.liked ?? false;
-  const [post, setPost] = useState<IPost>();
-  const [likeCount, setLikeCount] = useState<number | 0>(0);
+  const { data: post, isLoading: isPostLoading } = usePostById(Number(postId));
+  const { liked, likeCount, toggle } = usePostLike(Number(post?.id), email);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isShare, setIsShare] = useState(false);
   const handleToggleLike = () => {
-    if (!email) {
-      setIsLoginModalOpen(true);
-      return;
-    }
-
-    const willLike = !liked;
-
-    toggleLike.mutate(undefined, {
-      onSuccess: (data: any) => {
-        setLikeCount(data.likeCount);
-      },
-      onError: () => {
-        // 서버 실패 시 likeCount 롤백
-        setLikeCount((prev) => prev - (willLike ? 1 : -1));
-      },
-    });
+    toggle(() => setIsLoginModalOpen(true));
   };
-  useEffect(() => {
-    const fetchPost = async () => {
-      const data = await getPostById(postId);
-      setPost(data);
-      setLikeCount(data?.likeCount || 0);
-    };
-    fetchPost();
-  }, [postId]);
 
   const onShared = () => {
     setIsShare((prev) => !prev);

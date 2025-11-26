@@ -12,17 +12,20 @@ import {
 
 import Link from "next/link";
 import { signOut } from "next-auth/react";
-import { getUserInfo } from "../_lib/getUser";
 import { IUser } from "./PostDetail";
 import { User } from "next-auth";
 import Image from "next/image";
+import { useCurrentUser } from "../hook/useCurrentUser";
 
 export function MyCombo({ user }: { user: User }) {
   const [open, setOpen] = React.useState(false);
-  const [userData, setUserData] = React.useState<IUser | null>(null);
-  const email = user?.email;
+  const email = user?.email as string;
+  const {
+    user: userData,
+    isLoading: isUserLoading,
+    isError,
+  } = useCurrentUser(email);
   const id = userData?.id;
-
   const frameworks = [
     {
       href: `/${id}/posts`,
@@ -37,18 +40,7 @@ export function MyCombo({ user }: { user: User }) {
       label: "새 글 작성",
     },
   ];
-  React.useEffect(() => {
-    if (!email) return;
-    const fetchUser = async () => {
-      try {
-        const data = await getUserInfo(email);
-        setUserData(data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    fetchUser();
-  }, [email]);
+
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>

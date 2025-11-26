@@ -7,7 +7,6 @@ import "dayjs/locale/ko";
 import { useEffect, useRef, useState } from "react";
 import { updateComment } from "../_lib/updateComment";
 import { toast } from "sonner";
-import { getUserInfo } from "@/src/app/_lib/getUser";
 import { getUserById } from "@/src/app/_lib/getUserById";
 
 dayjs.extend(relativeTime);

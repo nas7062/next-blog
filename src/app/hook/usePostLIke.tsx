@@ -12,12 +12,6 @@ export const usePostLike = (postId: number, email: string) => {
   const [likeCount, setLikeCount] = useState<number>(serverLikeCount ?? 0);
   const toggleLike = useToggleLike(email, postId);
 
-  useEffect(() => {
-    if (typeof data?.likeCount === "number") {
-      setLikeCount(data.likeCount);
-    }
-  }, [data?.likeCount]);
-
   const toggle = (onRequireLogin?: () => void) => {
     if (!email) {
       onRequireLogin?.();
@@ -39,6 +33,12 @@ export const usePostLike = (postId: number, email: string) => {
       },
     });
   };
+
+  useEffect(() => {
+    if (typeof data?.likeCount === "number") {
+      setLikeCount(data?.likeCount);
+    }
+  }, [data?.likeCount]);
 
   return { liked, likeCount, toggle };
 };

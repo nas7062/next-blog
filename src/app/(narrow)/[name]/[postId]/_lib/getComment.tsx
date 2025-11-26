@@ -9,5 +9,5 @@ export async function getCommentsByPost(postId: number) {
     .order("createdAt", { ascending: true });
 
   if (error) throw error;
-  return data; // 댓글 배열
+  return data;
 }

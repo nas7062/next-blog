@@ -5,34 +5,20 @@ import { useRouter } from "next/navigation";
 import TagList from "./TagList";
 import { useSession } from "next-auth/react";
 import { Heart } from "lucide-react";
-import { useLike } from "../hook/useLike";
 import { useState } from "react";
 import { IPost } from "../(wide)/write/_components/WirtePageClient";
-import { useToggleLike } from "../hook/useToggleLike";
+import { usePostLike } from "../hook/usePostLIke";
+import LoginModal from "./LoginModal";
+import Image from "next/image";
 
 export default function SinglePost({ post }: { post: IPost }) {
   const router = useRouter();
-  const [likeCount, setLikeCount] = useState<number>(post.likeCount || 0);
   const { data: user } = useSession();
   const email = user?.user?.email as string;
-  const { data } = useLike(post.id, email);
-  const liked = data?.liked ?? false;
-  const toggleLike = useToggleLike(email, post.id);
-  const handleToggleLike = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.stopPropagation();
-    if (!email) return;
-
-    const willLike = !liked;
-
-    toggleLike.mutate(undefined, {
-      onSuccess: (data: any) => {
-        setLikeCount(data.likeCount);
-      },
-      onError: () => {
-        // 서버 실패 시 likeCount 롤백
-        setLikeCount((prev) => prev - (willLike ? 1 : -1));
-      },
-    });
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const { liked, likeCount, toggle } = usePostLike(Number(post?.id), email);
+  const handleToggleLike = () => {
+    toggle(() => setIsLoginModalOpen(true));
   };
 
   const MovePostDetail = (postId: number) => {
@@ -47,7 +33,7 @@ export default function SinglePost({ post }: { post: IPost }) {
       key={post.id}
     >
       <div>
-        <img
+        <Image
           src={post.coverImgUrl || "/nextImage.png"}
           alt={post.title}
           width={400}
@@ -74,6 +60,9 @@ export default function SinglePost({ post }: { post: IPost }) {
           <span>{likeCount}</span>
         </div>
       </div>
+      {isLoginModalOpen && (
+        <LoginModal onClose={() => setIsLoginModalOpen(false)} />
+      )}
     </div>
   );
 }

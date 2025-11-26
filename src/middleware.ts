@@ -47,6 +47,7 @@ export default auth((req) => {
     pathname.startsWith("/news") ||
     pathname.startsWith("/feed") ||
     pathname.startsWith("/chart") ||
+    pathname.startsWith("/search") ||
     isPostDetailPage ||
     isUserPostsPage;
 

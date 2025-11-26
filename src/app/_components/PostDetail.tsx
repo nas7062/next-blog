@@ -65,11 +65,9 @@ export default function PostDetail({
   const email = userData?.email as string;
   const postNumericId = post?.id as number;
 
-  // 좋아요 상태 / 개수 조회
+  // 좋아요 상태 조회
   const { data: likeData } = useLike(postNumericId, email);
   const liked = likeData?.liked ?? false;
-
-  // 좋아요 토글 mutation
   const toggleLike = useToggleLike(email, postNumericId);
 
   // 게시글 정보 조회

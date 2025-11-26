@@ -20,9 +20,7 @@ export default auth((req) => {
   const segments = pathname.split("/").filter(Boolean);
   // 1) 로그인/회원/세팅 관련 페이지
   const isAuthPage =
-    pathname.startsWith("/signin") ||
-    pathname.startsWith("/signup") || // 오타 'singup'이면 실제 라우트랑 맞춰줘
-    pathname.startsWith("/setting");
+    pathname.startsWith("/signin") || pathname.startsWith("/signup");
 
   const reserved = ["signin", "signup", "setting", "news", "feed", "chart"];
 

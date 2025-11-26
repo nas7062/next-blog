@@ -172,7 +172,7 @@ export default function FrameworkStatsPage() {
   return (
     <div className="w-full">
       <div className="min-h-screen ">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+        <div className="max-w-7xl  mx-auto  px-4 sm:px-6 lg:px-8 py-8 space-y-8">
           {/* 헤더 */}
           <header className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
@@ -233,32 +233,38 @@ export default function FrameworkStatsPage() {
 
           {/* 프론트엔드 섹션 */}
           {stack === "frontend" && (
-            <section className="space-y-4">
-              <div className="flex items-baseline justify-between gap-2">
-                <h2 className="text-lg font-semibold">프론트엔드 프레임워크</h2>
+            <section className="space-y-4 ">
+              <div className="flex flex-col  sm:flex-row items-baseline justify-between gap-2">
+                <h2 className="text-xl! font-semibold">
+                  프론트엔드 프레임워크
+                </h2>
                 <p className="text-xs text-slate-500 dark:text-slate-400">
                   React / Vue / Angular / Svelte / Next.js / Nuxt
                 </p>
               </div>
 
-              <div className="grid gap-6 md:grid-cols-2">
-                <div className="border border-slate-200 dark:border-slate-800 rounded-2xl p-4 sm:p-5 bg-white/70 dark:bg-slate-900/70 shadow-sm">
-                  <h3 className="text-sm font-medium mb-3">비율 (Doughnut)</h3>
-                  <Doughnut
-                    data={makeDoughnutData(frontendLabels, frontendValues)}
-                  />
+              <div className="grid gap-6 md:grid-cols-2  justify-items-start ">
+                <div className="w-full max-w-md md:max-w-none border border-slate-200 dark:border-slate-800 rounded-2xl p-4 sm:p-5 bg-white/70 dark:bg-slate-900/70 shadow-sm">
+                  <h3 className="text-lg! font-medium mb-3">비율 (Doughnut)</h3>
+                  <div className="relative h-64 sm:h-96 flex items-center justify-center">
+                    <Doughnut
+                      data={makeDoughnutData(frontendLabels, frontendValues)}
+                    />
+                  </div>
                 </div>
-                <div className="border border-slate-200 dark:border-slate-800 rounded-2xl p-4 sm:p-5 bg-white/70 dark:bg-slate-900/70 shadow-sm">
-                  <h3 className="text-sm font-medium mb-3">
+                <div className="w-full max-w-md md:max-w-none border border-slate-200 dark:border-slate-800 rounded-2xl p-4 sm:p-5 bg-white/70 dark:bg-slate-900/70 shadow-sm">
+                  <h3 className="text-lg! font-medium mb-3">
                     다운로드 수 (Bar)
                   </h3>
-                  <Bar
-                    data={makeBarData(
-                      frontendLabels,
-                      frontendValues,
-                      "프론트엔드 다운로드 수"
-                    )}
-                  />
+                  <div className="relative h-64 sm:h-96 flex items-center justify-center">
+                    <Bar
+                      data={makeBarData(
+                        frontendLabels,
+                        frontendValues,
+                        "프론트엔드 다운로드 수"
+                      )}
+                    />
+                  </div>
                 </div>
               </div>
 
@@ -299,31 +305,35 @@ export default function FrameworkStatsPage() {
           {/* 백엔드 섹션 */}
           {stack === "backend" && (
             <section className="space-y-4">
-              <div className="flex items-baseline justify-between gap-2">
-                <h2 className="text-lg font-semibold">백엔드 프레임워크</h2>
+              <div className="flex flex-col sm:flex-row items-baseline justify-between gap-2">
+                <h2 className="text-xl! font-semibold">백엔드 프레임워크</h2>
                 <p className="text-xs text-slate-500 dark:text-slate-400">
                   Express / NestJS / Fastify / Koa
                 </p>
               </div>
 
-              <div className="grid gap-6 md:grid-cols-2">
-                <div className="border border-slate-200 dark:border-slate-800 rounded-2xl p-4 sm:p-5 bg-white/70 dark:bg-slate-900/70 shadow-sm">
-                  <h3 className="text-sm font-medium mb-3">비율 (Doughnut)</h3>
-                  <Doughnut
-                    data={makeDoughnutData(backendLabels, backendValues)}
-                  />
+              <div className="grid gap-6 md:grid-cols-2 justify-items-start ">
+                <div className="w-full max-w-md md:max-w-none border border-slate-200 dark:border-slate-800 rounded-2xl p-4 sm:p-5 bg-white/70 dark:bg-slate-900/70 shadow-sm">
+                  <h3 className="text-lg! font-medium mb-3">비율 (Doughnut)</h3>
+                  <div className="relative h-64 sm:h-96 flex items-center justify-center">
+                    <Doughnut
+                      data={makeDoughnutData(backendLabels, backendValues)}
+                    />
+                  </div>
                 </div>
-                <div className="border border-slate-200 dark:border-slate-800 rounded-2xl p-4 sm:p-5 bg-white/70 dark:bg-slate-900/70 shadow-sm">
-                  <h3 className="text-sm font-medium mb-3">
+                <div className="w-full max-w-md md:max-w-none border border-slate-200 dark:border-slate-800 rounded-2xl p-4 sm:p-5 bg-white/70 dark:bg-slate-900/70 shadow-sm">
+                  <h3 className="text-lg! font-medium mb-3">
                     다운로드 수 (Bar)
                   </h3>
-                  <Bar
-                    data={makeBarData(
-                      backendLabels,
-                      backendValues,
-                      "백엔드 다운로드 수"
-                    )}
-                  />
+                  <div className="relative h-64 sm:h-96 flex items-center justify-center">
+                    <Bar
+                      data={makeBarData(
+                        backendLabels,
+                        backendValues,
+                        "백엔드 다운로드 수"
+                      )}
+                    />
+                  </div>
                 </div>
               </div>
 

@@ -4,6 +4,7 @@ import Modal from "@/src/app/_components/Modal";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { signIn, useSession } from "next-auth/react";
+import Image from "next/image";
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -85,9 +86,11 @@ export default function LoginPage() {
               className="f-full"
               onClick={() => signIn("kakao", { callbackUrl: "/" })}
             >
-              <img
+              <Image
                 src={"/kakao_btn.png"}
                 alt="카카오 로그인 버튼"
+                width={300}
+                height={30}
                 className="w-full h-14 cursor-pointer rounded-lg overflow-hidden"
               />
             </button>
@@ -106,7 +109,13 @@ export default function LoginPage() {
             </Link>
           </div>
           <div className="absolute top-0 right-0">
-            <img src="/hello.png" className="w-20 h-20" />
+            <Image
+              src="/hello.png"
+              alt="곰 이미지"
+              className="w-20 h-20"
+              width={40}
+              height={40}
+            />
           </div>
         </div>
       </div>

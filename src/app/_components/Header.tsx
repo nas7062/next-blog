@@ -4,6 +4,7 @@ import { auth } from "@/src/auth";
 import LogoutButton from "./LogoutButton";
 import { MyCombo } from "./MyCombo";
 import HeaderNav from "./HeaderNav";
+import Image from "next/image";
 
 export default async function Header() {
   const session = await auth();
@@ -14,7 +15,13 @@ export default async function Header() {
         className="text-2xl md:text-4xl font-semibold cursor-pointer"
         href="/"
       >
-        <img src="/logo.png" alt="로고" className="w-20 h-20" />
+        <Image
+          src="/logo.png"
+          alt="로고"
+          width={30}
+          height={30}
+          className="w-20 h-20"
+        />
       </Link>
       <HeaderNav />
       <div className="flex-1">

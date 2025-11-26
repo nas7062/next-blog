@@ -6,6 +6,7 @@ import { IPost } from "../write/_components/WirtePageClient";
 import { useSession } from "next-auth/react";
 import Post from "../../_components/Post";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 export default function FeedPage() {
   const [posts, setPost] = useState<IPost[]>();
@@ -24,7 +25,13 @@ export default function FeedPage() {
   if (!posts)
     return (
       <div className="flex flex-col justify-center items-center gap-4">
-        <img src="/character.png" className="w-72 h-72" />
+        <Image
+          src="/character.png"
+          alt="곰 이미지"
+          width={300}
+          height={300}
+          className="w-72 h-72"
+        />
         <p>로그인 하고 개인화된 기능을 사용해봐요!</p>
         <button
           onClick={() => router.push("/signin")}

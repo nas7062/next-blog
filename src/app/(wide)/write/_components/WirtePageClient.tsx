@@ -196,7 +196,10 @@ export default function WritePageClient() {
 
   return (
     <main className="h-screen w-full flex gap-9 text-primary">
-      <form onSubmit={onSubmit} className="text-center flex flex-1 flex-col">
+      <form
+        onSubmit={onSubmit}
+        className="text-center flex flex-1 flex-col gap-4"
+      >
         <input
           type="text"
           placeholder="제목을 입력하세요"
@@ -213,10 +216,24 @@ export default function WritePageClient() {
           onKeyDown={handleKeyPress}
         />
         <TagList tags={tags} onDelete={onDeleteTag} />
-        <div className="bg-white h-[500px] mt-9 text-left">
+        <div className="bg-white h-[500px] mt-9 text-left ">
           <TuiEditor content={getContent} contentChange={changeContent} />
         </div>
-
+        <div className="flex items-center lg:hidden  ">
+          <img
+            src={thumbnailPreview?.url || "/noImage.jpg"}
+            alt="이미지를 업로드해주세요"
+            width={80}
+            height={80}
+            className="rounded-full w-20 h-20"
+          />
+          <div
+            {...getRootProps()}
+            className="ml-auto w-32 h-10 px-4 py-2 text-sm bg-green-400 text-white hover:bg-green-500 rounded-lg cursor-pointer"
+          >
+            썸네일 업로드 <input {...getInputProps()} />
+          </div>
+        </div>
         <button
           type="submit"
           className="text-base py-2 px-5 bg-green-500 text-white hover:bg-green-400 cursor-pointer transition-colors duration-300 rounded-full mt-9"
@@ -224,13 +241,14 @@ export default function WritePageClient() {
           글 작성하기
         </button>
       </form>
-      <div className="w-1/2 flex flex-col">
+      <div className="w-1/2 lg:flex flex-col  hidden">
         <div className="flex items-center ">
           <img
             src={thumbnailPreview?.url || "/noImage.jpg"}
             alt="이미지를 업로드해주세요"
             width={100}
             height={100}
+            className="rounded-full"
           />
           <div
             {...getRootProps()}
@@ -240,7 +258,7 @@ export default function WritePageClient() {
           </div>
         </div>
 
-        <div className="h-screen flex-1 mt-9 text-left border border-[#ddd]">
+        <div className="h-screen flex-1 mt-9 text-left border  border-[#ddd]">
           <Viewer content={getContent} />
         </div>
       </div>

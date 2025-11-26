@@ -14,9 +14,6 @@ export async function getToggleLike(postId: number, userEmail: string | null) {
   if (error) {
     console.error("getToggleLike error:", error);
     return { liked: false };
-
-    // 에러를 react-query까지 올리고 싶으면:
-    // throw error;
   }
 
   // like가 null/undefined일 수도 있으니 안전하게 처리

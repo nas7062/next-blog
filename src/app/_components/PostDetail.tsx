@@ -15,6 +15,11 @@ import { getCommentsByPost } from "../(narrow)/[name]/[postId]/_lib/getComment";
 import { toast } from "sonner";
 import ReppleList from "../(narrow)/[name]/[postId]/_components/ReppleList";
 import { deleteComment } from "../(narrow)/[name]/[postId]/_lib/deleteComment";
+import { Heart } from "lucide-react";
+import { useLike } from "../hook/useLike";
+import { useToggleLike } from "../hook/useToggleLike";
+import LoginModal from "./LoginModal";
+import clsx from "clsx";
 
 dayjs.extend(relativeTime);
 dayjs.locale("ko");
@@ -53,39 +58,64 @@ export default function PostDetail({
   const [user, setUser] = useState<IUser | null>(null);
   const [userData, setUserData] = useState<IUser | null>(null);
   const [repple, setRepple] = useState<IRepple[] | null>(null);
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const [likeCount, setLikeCount] = useState<number>(post?.likeCount || 0);
   const { data: session } = useSession();
+
+  const email = userData?.email as string;
+  const postNumericId = post?.id as number;
+
+  // 좋아요 상태 / 개수 조회
+  const { data: likeData } = useLike(postNumericId, email);
+  const liked = likeData?.liked ?? false;
+
+  // 좋아요 토글 mutation
+  const toggleLike = useToggleLike(email, postNumericId);
+
+  // 게시글 정보 조회
   useEffect(() => {
     if (!postId) return;
+
     const getPostId = async () => {
       const data = await getPostById(postId);
-      if (data === undefined) {
+      if (!data) {
         router.back();
+        return;
       }
       setPost(data);
+      if (typeof data.likeCount === "number") {
+        setLikeCount(data.likeCount);
+      }
     };
+
     getPostId();
   }, [postId, pathname, router]);
 
+  // 글쓴이 정보 조회
   useEffect(() => {
-    const email = post?.email;
-    if (!email) return;
+    const postEmail = post?.email;
+    if (!postEmail) return;
+
     const getUser = async () => {
-      const data = await getUserInfo(email);
+      const data = await getUserInfo(postEmail);
       setUser(data);
     };
     getUser();
   }, [post?.email]);
 
+  // 현재 로그인 유저 정보 조회
   useEffect(() => {
-    const email = session?.user?.email;
-    if (!email) return;
+    const sessionEmail = session?.user?.email;
+    if (!sessionEmail) return;
+
     const getUserData = async () => {
-      const data = await getUserInfo(email);
+      const data = await getUserInfo(sessionEmail);
       setUserData(data);
     };
     getUserData();
   }, [session?.user?.email]);
 
+  // 댓글 조회 (postId 변경 시에만)
   useEffect(() => {
     const fetchComment = async () => {
       try {
@@ -96,8 +126,11 @@ export default function PostDetail({
         toast.error("댓글을 불러오는데 실패했습니다.");
       }
     };
-    fetchComment();
-  }, [postId, repple]);
+
+    if (postId) {
+      fetchComment();
+    }
+  }, [postId]);
 
   const onDelete = async (id: number) => {
     try {
@@ -111,7 +144,26 @@ export default function PostDetail({
       toast.error("댓글 삭제 실패");
     }
   };
+
+  const handleToggleLike = () => {
+    if (!email) {
+      setIsLoginModalOpen(true);
+      return;
+    }
+    if (!postNumericId) return;
+
+    toggleLike.mutate(undefined, {
+      onSuccess: (data: any) => {
+        setLikeCount(data.likeCount);
+      },
+      onError: () => {
+        toast.error("좋아요 처리에 실패했습니다.");
+      },
+    });
+  };
+
   const isUpdate = post?.email === session?.user?.email;
+
   return (
     <div className="flex flex-col gap-10">
       <div className="flex flex-col gap-4">
@@ -137,9 +189,26 @@ export default function PostDetail({
               </p>
             </div>
           ) : (
-            <button className="text-green-400 border border-green-400 bg-primary rounded-xl px-4 py-1 cursor-pointer hover:bg-green-500 hover:text-white transition-colors duration-300">
-              팔로우
-            </button>
+            <div className="flex gap-1">
+              <button className="text-green-400 border border-green-400 bg-primary rounded-xl px-2 py-1 cursor-pointer hover:bg-green-500 hover:text-white transition-colors duration-300">
+                팔로우
+              </button>
+              <button
+                onClick={handleToggleLike}
+                className="flex gap-1 border border-gray-300 px-2 py-1 rounded-lg lg:hidden"
+              >
+                <Heart
+                  className={clsx(
+                    liked
+                      ? "text-rose-500 fill-rose-500"
+                      : "text-gray-500 fill-transparent"
+                  )}
+                  fill={liked ? "currentColor" : "none"}
+                  strokeWidth={liked ? 1.75 : 2}
+                />
+                <p>{likeCount}</p>
+              </button>
+            </div>
           )}
         </div>
         <div
@@ -149,6 +218,7 @@ export default function PostDetail({
           <Viewer content={post?.description || ""} />
         </div>
       </div>
+
       <ReppleForm
         user={userData}
         postId={postId}
@@ -158,6 +228,10 @@ export default function PostDetail({
         }}
       />
       <ReppleList repples={repple} user={userData} onDelete={onDelete} />
+
+      {isLoginModalOpen && (
+        <LoginModal onClose={() => setIsLoginModalOpen(false)} />
+      )}
     </div>
   );
 }

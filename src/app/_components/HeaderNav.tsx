@@ -33,7 +33,7 @@ export default function HeaderNav() {
             >
               <Link href={href} className="flex items-center gap-2">
                 <Icon className="w-5 h-5" />
-                <span>{v.label}</span>
+                <span className="text-xs sm:text-base">{v.label}</span>
               </Link>
             </li>
           );

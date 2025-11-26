@@ -15,6 +15,7 @@ import { signOut } from "next-auth/react";
 import { getUserInfo } from "../_lib/getUser";
 import { IUser } from "./PostDetail";
 import { User } from "next-auth";
+import Image from "next/image";
 
 export function MyCombo({ user }: { user: User }) {
   const [open, setOpen] = React.useState(false);
@@ -52,9 +53,11 @@ export function MyCombo({ user }: { user: User }) {
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button variant="ghost" role="combobox" aria-expanded={open}>
-          <img
+          <Image
             src={userData?.image ? userData.image : "/noImage.jpg"}
             alt="이미지"
+            width={20}
+            height={20}
             className="w-10 h-10 rounded-full cursor-pointer"
           />
         </Button>

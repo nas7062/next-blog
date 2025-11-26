@@ -9,6 +9,11 @@ const nextConfig: NextConfig = {
         hostname: "shopping-phinf.pstatic.net",
       },
     ],
+    domains: [
+      "example.com",
+      "k.kakaocdn.net",
+      "kauoiizupgmbaysdnmce.supabase.co",
+    ],
   },
 };
 

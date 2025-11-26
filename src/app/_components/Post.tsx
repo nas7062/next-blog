@@ -2,87 +2,64 @@
 import { Heart } from "lucide-react";
 import dayjs from "dayjs";
 import { useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useSession } from "next-auth/react";
-import { IUser } from "./PostDetail";
-import { getPostUser } from "../_lib/getPostUser";
-import { useLike } from "../hook/useLike";
 import { IPost } from "../(wide)/write/_components/WirtePageClient";
 import LoginModal from "./LoginModal";
-import { useToggleLike } from "../hook/useToggleLike";
+import Image from "next/image";
+import { usePostAuthor } from "../hook/usePostAuthor";
+import { usePostLike } from "../hook/usePostLIke";
 
 export default function Post({ post }: { post: IPost }) {
-  const [likeCount, setLikeCount] = useState<number>(post.likeCount || 0);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const router = useRouter();
   const { data: user } = useSession();
   const email = user?.user?.email as string;
-  const { data } = useLike(post.id, email);
-  const liked = data?.liked ?? false;
-  const toggleLike = useToggleLike(email, post.id);
-  const [writeUser, setWriteUser] = useState<IUser | null>(null);
+  const {
+    data: writeUser,
+    isLoading: isAuthorLoading,
+    isError,
+  } = usePostAuthor(post.id);
+
+  const { liked, likeCount, toggle } = usePostLike(post.id, email);
+
+  const handleToggleLike = () => {
+    toggle(() => setIsLoginModalOpen(true));
+  };
+
   const MovePostDetail = (postId: number) => {
     if (!writeUser) return;
     router.push(`/${writeUser?.name}/${postId}`);
   };
+
   const MoveUserPosts = (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
     if (!writeUser) return;
     router.push(`/${writeUser?.id}/posts`);
   };
 
-  useEffect(() => {
-    if (!post?.id) return;
+  if (isAuthorLoading) {
+    return (
+      <div className="flex flex-col max-w-[350px] shadow-xl gap-4 pb-4 rounded-md">
+        loading...
+      </div>
+    );
+  }
 
-    const fetchUser = async () => {
-      const result = await getPostUser(post.id);
-
-      if (!result) {
-        setWriteUser(null);
-        return;
-      }
-
-      const { user } = result;
-      setWriteUser(user);
-    };
-
-    fetchUser();
-  }, [post?.id]);
-
-  const handleToggleLike = () => {
-    if (!email) {
-      setIsLoginModalOpen(true);
-      return;
-    }
-
-    const willLike = !liked;
-
-    toggleLike.mutate(undefined, {
-      onSuccess: (data: any) => {
-        setLikeCount(data.likeCount);
-      },
-      onError: () => {
-        // 서버 실패 시 likeCount 롤백
-        setLikeCount((prev) => prev - (willLike ? 1 : -1));
-      },
-    });
-  };
-
-  if (!writeUser || !post) return;
+  if (!writeUser || isError) return;
   return (
     <div
       className="flex flex-col max-w-[350px] shadow-xl gap-4 pb-4 rounded-md
                 transition-transform duration-350
                 hover:-translate-y-2 hover:shadow-2xl
                 cursor-pointer relative"
-      key={post.id}
     >
       <div
         onClick={() => {
           MovePostDetail(post.id);
         }}
       >
-        <img
+        <Image
           src={post.coverImgUrl ? post.coverImgUrl : "/noImage.jpg"}
           alt={post.title}
           width={350}
@@ -107,7 +84,7 @@ export default function Post({ post }: { post: IPost }) {
       </div>
       <div className="flex  items-center gap-2 px-4">
         <div className="flex items-center gap-2" onClick={MoveUserPosts}>
-          <img
+          <Image
             src={writeUser?.image ? writeUser?.image : "/nextImage.png"}
             width={50}
             height={50}

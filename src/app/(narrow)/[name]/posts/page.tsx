@@ -9,6 +9,7 @@ import { getUserById } from "@/src/app/_lib/getUserById";
 import { GithubIcon, MailIcon } from "lucide-react";
 import Tabs from "./_components/Tabs";
 import { IPost } from "@/src/app/(wide)/write/_components/WirtePageClient";
+import { TagSlider } from "./_components/TagSlider";
 
 export default function PostPage() {
   const id = usePathname().split("/")[1];
@@ -58,6 +59,7 @@ export default function PostPage() {
         </div>
       </div>
       <Tabs />
+      <TagSlider />
       <SinglePostList posts={posts} />
     </div>
   );

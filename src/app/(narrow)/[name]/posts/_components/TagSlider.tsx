@@ -1,12 +1,19 @@
 "use client";
-import { getTagList } from "../_lib/getTagList";
-import { useEffect, useState } from "react";
-import { getUserById } from "@/src/app/_lib/getUserById";
+
+import { CardContent } from "@/components/ui/card";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+} from "@/components/ui/carousel";
 import { IUser } from "@/src/app/_components/PostDetail";
 import { usePathname, useRouter } from "next/navigation";
-export type TagRow = { Tags: string[] | null };
+import { useEffect, useState } from "react";
+import { TagRow } from "../@sidebar/page";
+import { getUserById } from "@/src/app/_lib/getUserById";
+import { getTagList } from "../_lib/getTagList";
 
-export default function Sidebar() {
+export function TagSlider() {
   const id = usePathname().split("/")[1];
   const [userData, setUserData] = useState<IUser | null>(null);
   const [tags, setTags] = useState<TagRow[] | null>(null);
@@ -46,23 +53,26 @@ export default function Sidebar() {
   });
 
   return (
-    <div className="hidden lg:flex flex-col  h-screen mt-96  ">
-      <p className="text-lg font-semibold py-2 border-b-2 border-gray-200">
-        태그 목록
-      </p>
-      <div className="flex flex-col gap-2">
+    <Carousel
+      opts={{
+        align: "start",
+      }}
+      className="w-full max-w-4xl"
+    >
+      <CarouselContent className="flex">
         {Array.from(tagList.entries()).map(([tag, count]) => (
-          <div key={tag} className="flex gap-2">
-            <span
-              onClick={() => selectTag(tag)}
-              className="cursor-pointer hover:text-gray-500"
-            >
-              {tag}
-            </span>
-            <span>({count})</span>
-          </div>
+          <CarouselItem key={tag} className="basis-1/5 block lg:hidden">
+            <div className="py-1 w-auto ">
+              <div className="border rounded-xl bg-green-400 text-white hover:bg-green-500">
+                <CardContent className=" w-auto flex text-xs  items-center justify-center py-1">
+                  <span className="font-semibold">{tag}</span>
+                  <span>({count})</span>
+                </CardContent>
+              </div>
+            </div>
+          </CarouselItem>
         ))}
-      </div>
-    </div>
+      </CarouselContent>
+    </Carousel>
   );
 }

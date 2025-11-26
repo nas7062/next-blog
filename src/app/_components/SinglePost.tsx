@@ -42,7 +42,7 @@ export default function SinglePost({ post }: { post: IPost }) {
   if (!post) return;
   return (
     <div
-      className="flex flex-col w-3xl  gap-4 pb-4 rounded-md cursor-pointer"
+      className="flex flex-col w-2xl  gap-4 pb-4 rounded-md cursor-pointer"
       onClick={() => MovePostDetail(post.id)}
       key={post.id}
     >

@@ -1,22 +1,24 @@
 "use client";
-import SinglePostList from "@/src/app/_components/SinglePostList";
 
+import SinglePostList from "@/src/app/_components/SinglePostList";
 import { getMyPost } from "@/src/app/_lib/getMyPosts";
 import { useEffect, useState } from "react";
-import { IUser } from "@/src/app/_components/PostDetail";
 import { usePathname, useSearchParams } from "next/navigation";
-import { getUserById } from "@/src/app/_lib/getUserById";
 import { GithubIcon, MailIcon } from "lucide-react";
 import Tabs from "./_components/Tabs";
 import { IPost } from "@/src/app/(wide)/write/_components/WirtePageClient";
 import { TagSlider } from "./_components/TagSlider";
+import { useCurrentUser } from "@/src/app/hook/useCurrentUser";
+import Image from "next/image";
 
 export default function PostPage() {
   const id = usePathname().split("/")[1];
   const searchParams = useSearchParams();
   const tag = searchParams.get("tag") as string;
-  const [userData, setUserData] = useState<IUser | null>(null);
   const [posts, setPosts] = useState<IPost[] | []>([]);
+  const { user: userData, isLoading: isUserLoading } = useCurrentUser({
+    id,
+  });
   const email = userData?.email as string;
   useEffect(() => {
     const fetchPost = async () => {
@@ -25,22 +27,15 @@ export default function PostPage() {
     };
     fetchPost();
   }, [email, tag]);
-
-  useEffect(() => {
-    if (!id) return;
-    const fetchUser = async () => {
-      const data = await getUserById(id);
-      setUserData(data);
-    };
-    fetchUser();
-  }, [id]);
-
+  if (isUserLoading) return "loading...";
   return (
     <div className="bg-primary text-primary-foreground flex flex-col gap-4">
       <div className="flex flex-col">
         <div className="flex items-center gap-4 p-20 border-b border-gray-200">
-          <img
+          <Image
             src={userData?.image || "/nextImage.png"}
+            width={100}
+            height={100}
             alt="이미지"
             className="rounded-full w-32 h-32"
           />

@@ -68,7 +68,7 @@ export default function PostDetail({
     Number(post?.id)
   );
   const queryClient = useQueryClient();
-  const { mutate: deleteComment, isPending } = useDeleteComment();
+  const { mutate: deleteComment } = useDeleteComment();
 
   const handleDelete = (commentId: number) => {
     deleteComment({ id: commentId, postId: Number(postId) });

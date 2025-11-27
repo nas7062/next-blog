@@ -1,7 +1,3 @@
-"use client";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-
 const NAV = {
   posts: { label: "글" },
   about: { label: "소개" },

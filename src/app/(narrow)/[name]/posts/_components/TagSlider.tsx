@@ -6,52 +6,33 @@ import {
   CarouselContent,
   CarouselItem,
 } from "@/components/ui/carousel";
-import { IUser } from "@/src/app/_components/PostDetail";
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import { TagRow } from "../@sidebar/page";
-import { getUserById } from "@/src/app/_lib/getUserById";
-import { getTagList } from "../_lib/getTagList";
+import { useCurrentUser } from "@/src/app/hook/useCurrentUser";
+import { useTagList } from "../_hook/useTagList";
 
 export function TagSlider() {
   const id = usePathname().split("/")[1];
-  const [userData, setUserData] = useState<IUser | null>(null);
-  const [tags, setTags] = useState<TagRow[] | null>(null);
-  const email = userData?.email as string;
   const router = useRouter();
   const pathname = usePathname();
-
+  const { user: userData, isLoading: isUserLoading } = useCurrentUser({
+    id,
+  });
+  const email = userData?.email as string;
   const selectTag = (tag: string) => {
     router.push(`${pathname}?tag=${tag}`);
   };
-  useEffect(() => {
-    if (!id) return;
-    const fetchUser = async () => {
-      const data = await getUserById(id);
-      setUserData(data);
-    };
-    fetchUser();
-  }, [id]);
-
-  useEffect(() => {
-    if (!email) return;
-    const fetchTags = async () => {
-      const Tags = await getTagList(email);
-      setTags(Tags);
-    };
-    fetchTags();
-  }, [email]);
-
+  const { Tags, isLoading: isTagsLoading } = useTagList(email);
   const tagList = new Map<string, number>();
-  if (!tags) return;
-  tags.forEach((row) => {
+
+  if (!Tags) return;
+  Tags.forEach((row) => {
     const tagrow = row.Tags ?? [];
     tagrow.forEach((tag: string) => {
       const prev = tagList.get(tag) ?? 0;
       tagList.set(tag, prev + 1);
     });
   });
-
+  if (isUserLoading || isTagsLoading) return "loading..";
   return (
     <Carousel
       opts={{

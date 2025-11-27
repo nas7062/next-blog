@@ -1,25 +1,16 @@
 "use client";
 
 import Modal from "@/src/app/_components/Modal";
-import { getSupabaseClient } from "@/src/app/api/supabase";
 import { usePathname, useRouter } from "next/navigation";
-import { toast } from "sonner";
+import { useDeletePost } from "../_hook/useDeletePost";
 export default function DeletePostModal() {
   const pathname = usePathname();
   const router = useRouter();
   const postId = pathname.split("/")[2];
-  const supabase = getSupabaseClient();
-  const onDelete = async () => {
-    const respose = await supabase
-      .from("Post")
-      .delete()
-      .eq("id", Number(postId));
-    if (respose.status === 204) {
-      toast.success("데이터가 삭제되었습니다");
-      router.back();
-    } else {
-      toast.error("데이터 삭제가 실패했습니다.");
-    }
+  const { mutate: deleteComment } = useDeletePost();
+
+  const handleDelete = () => {
+    deleteComment({ id: Number(postId) });
   };
   return (
     <Modal>
@@ -36,7 +27,7 @@ export default function DeletePostModal() {
             취소
           </button>
           <button
-            onClick={onDelete}
+            onClick={handleDelete}
             className="px-4 py-2 bg-red-400 text-white flex-1 cursor-pointer hover:bg-red-500 transition-colors duration-300"
           >
             삭제

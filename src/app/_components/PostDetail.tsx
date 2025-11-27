@@ -1,20 +1,15 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import "dayjs/locale/ko";
 import Viewer from "../(wide)/write/_components/View";
 import { useSession } from "next-auth/react";
 import ReppleForm from "../(narrow)/[name]/[postId]/_components/ReppleForm";
-import { getCommentsByPost } from "../(narrow)/[name]/[postId]/_lib/getComment";
-import { toast } from "sonner";
 import ReppleList from "../(narrow)/[name]/[postId]/_components/ReppleList";
-import { deleteComment } from "../(narrow)/[name]/[postId]/_lib/deleteComment";
 import { Heart } from "lucide-react";
-import { useLike } from "../hook/useLike";
-import { useToggleLike } from "../hook/useToggleLike";
 import LoginModal from "./LoginModal";
 import clsx from "clsx";
 import { usePostAuthor } from "../hook/usePostAuthor";
@@ -22,7 +17,8 @@ import { usePostById } from "../hook/usePostById";
 import { useCurrentUser } from "../hook/useCurrentUser";
 import { usePostLike } from "../hook/usePostLIke";
 import { useGetComment } from "../hook/useGetComment";
-import { QueryClient, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
+import { useDeleteComment } from "../(narrow)/[name]/[postId]/_hook/useDeleteComment";
 
 dayjs.extend(relativeTime);
 dayjs.locale("ko");
@@ -72,20 +68,10 @@ export default function PostDetail({
     Number(post?.id)
   );
   const queryClient = useQueryClient();
-  const onDelete = async (id: number) => {
-    try {
-      const response = await deleteComment(id);
-      if (!response) {
-        queryClient.setQueryData<IRepple[] | undefined>(
-          ["comments", Number(post?.id)],
-          (prev) => (prev ? prev.filter((r) => r.id !== id) : prev)
-        );
-        toast.success("댓글 삭제 완료");
-      }
-    } catch (error) {
-      console.error(error);
-      toast.error("댓글 삭제 실패");
-    }
+  const { mutate: deleteComment, isPending } = useDeleteComment();
+
+  const handleDelete = (commentId: number) => {
+    deleteComment({ id: commentId, postId: Number(postId) });
   };
 
   const handleToggleLike = () => {
@@ -162,7 +148,12 @@ export default function PostDetail({
           );
         }}
       />
-      <ReppleList repples={comments} user={user} onDelete={onDelete} />
+      <ReppleList
+        repples={comments}
+        user={user}
+        onDelete={handleDelete}
+        postId={postId}
+      />
 
       {isLoginModalOpen && (
         <LoginModal onClose={() => setIsLoginModalOpen(false)} />

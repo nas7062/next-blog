@@ -10,6 +10,7 @@ import { toast } from "sonner";
 
 import { useCurrentUser } from "@/src/app/hook/useCurrentUser";
 import Image from "next/image";
+import { useUpdateComment } from "../_hook/useUpdateComment";
 
 dayjs.extend(relativeTime);
 dayjs.locale("ko");
@@ -18,10 +19,12 @@ export default function Repple({
   user,
   repple,
   onDelete,
+  postId,
 }: {
   user: IUser | null;
   repple: IRepple;
   onDelete: (id: number) => void;
+  postId: string;
 }) {
   const [isUpdate, setIsUpdate] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
@@ -42,24 +45,18 @@ export default function Repple({
     setIsUpdate((prev) => !prev);
   };
 
-  const onUpdate = async () => {
-    if (!repple.id || !textareaRef.current?.value || !user?.id) return;
-    try {
-      const response = await updateComment(
-        repple.id,
-        textareaRef.current?.value,
-        user.id
-      );
-      if (response) {
-        toast.success("댓글 수정 완료.");
-        changeUpdate();
-      }
-    } catch (error) {
-      console.error(error);
-      toast.error("댓글 수정 실패");
+  const { mutate: updateCommentMutate, isPending } = useUpdateComment(user?.id);
+
+  const handleUpdate = () => {
+    if (textareaRef.current?.value) {
+      changeUpdate();
+      updateCommentMutate({
+        id: repple.id,
+        postId: Number(postId),
+        content: textareaRef.current?.value,
+      });
     }
   };
-
   const isMyRepple = repple.userid === user?.id;
   if (isUserLoading) return "loading...";
   return (
@@ -89,7 +86,8 @@ export default function Repple({
               ) : (
                 <button
                   className="hover:text-gray-400 cursor-pointer"
-                  onClick={onUpdate}
+                  onClick={handleUpdate}
+                  disabled={isPending}
                 >
                   수정완료
                 </button>

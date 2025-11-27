@@ -3,6 +3,7 @@ import { useRef } from "react";
 import { createComment } from "../_lib/createComment";
 import { IRepple, IUser } from "@/src/app/_components/PostDetail";
 import { toast } from "sonner";
+import { useCreateComment } from "../_hook/useCreateComment";
 
 export default function ReppleForm({
   user,
@@ -24,28 +25,16 @@ export default function ReppleForm({
     el.style.height = "auto";
     el.style.height = `${el.scrollHeight}px`;
   };
+  const { mutate, isPending } = useCreateComment();
 
-  const onSubmit = async () => {
-    if (!postId || !textareaRef.current || !user?.name || !user?.email) return;
-    try {
-      const response = await createComment({
+  const handleSubmit = () => {
+    if (textareaRef.current?.value && user?.id && user.name)
+      mutate({
         postId: Number(postId),
         content: textareaRef.current?.value,
         userid: user?.id,
         name: user?.name,
       });
-      if (response) {
-        toast.success("댓글이 등록되었습니다.");
-        textareaRef.current.value = "";
-        if (onCreated) {
-          onCreated(response);
-        }
-      } else {
-        toast.error("댓글 등록이 실패했습니다.");
-      }
-    } catch (error) {
-      console.error(error);
-    }
   };
 
   return (
@@ -58,7 +47,8 @@ export default function ReppleForm({
         className="resize-none w-full min-h-16 h-auto bg-slate-200 rounded-lg text-black p-2"
       />
       <button
-        onClick={onSubmit}
+        onClick={handleSubmit}
+        disabled={isPending}
         className="ml-auto  border border-green-400  rounded-xl px-4 py-1 cursor-pointer bg-green-500 text-white hover:bg-green-600 transition-colors duration-300"
       >
         댓글 작성

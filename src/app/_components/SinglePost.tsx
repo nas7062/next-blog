@@ -50,7 +50,14 @@ export default function SinglePost({ post }: { post: IPost }) {
         <div className="flex gap-2 items-center">
           <p>{dayjs(new Date()).format("YYYY년 MM월 DD일")}</p>
           <p>{post.reppleCount}개의 댓글</p>
-          <button onClick={handleToggleLike} className="cursor-pointer">
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              e.preventDefault();
+              handleToggleLike();
+            }}
+            className="cursor-pointer"
+          >
             {liked ? (
               <Heart className="w-6 h-6 group-hover:fill-gray-500 fill-red-500" />
             ) : (

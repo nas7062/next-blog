@@ -32,6 +32,26 @@ export default function FeedPage() {
         </button>
       </div>
     );
+  if (posts.length === 0) {
+    return (
+      <div className="flex flex-col justify-center items-center gap-4">
+        <Image
+          src="/character.png"
+          alt="곰 이미지"
+          width={300}
+          height={300}
+          className="w-72 h-72"
+        />
+        <p>좋아하는 글이 없어요...</p>
+        <button
+          onClick={() => router.push("/")}
+          className="px-4 py-2 bg-green-400 hover:bg-green-500 text-primary rounded-xl cursor-pointer"
+        >
+          글 보러가기
+        </button>
+      </div>
+    );
+  }
   return (
     <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-4 gap-y-8">
       {posts.map((post) => (

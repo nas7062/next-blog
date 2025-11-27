@@ -5,12 +5,46 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { signIn, useSession } from "next-auth/react";
 import Image from "next/image";
+import { z } from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { toast } from "sonner";
+
+const loginSchema = z.object({
+  email: z
+    .string()
+    .trim()
+    .min(1, { message: "이메일을 입력해주세요" })
+    .max(40, { message: "이메일은 40자 이하로 입력해주세요" })
+    .email({ message: "올바른 이메일 주소를 입력해주세요" }),
+  password: z
+    .string()
+    .trim()
+    .min(6, { message: "비밀번호를 6자 이상 입력해주세요" })
+    .max(20, { message: "비밀번호를 20자 이하로 입력해주세요" })
+    .regex(/^\S+$/, {
+      message: "비밀번호에는 공백을 포함할 수 없습니다",
+    })
+    .regex(/[0-9]/, {
+      message: "비밀번호에는 숫자가 최소 1개 이상 포함되어야 합니다",
+    }),
+});
+
+type LoginFormData = z.infer<typeof loginSchema>;
+
 export default function LoginPage() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [message, setMessage] = useState("");
   const router = useRouter();
   const { data: session } = useSession();
+  const [loading, setLoading] = useState(false);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm<LoginFormData>({
+    resolver: zodResolver(loginSchema),
+  });
 
   useEffect(() => {
     if (session?.user) {
@@ -18,26 +52,35 @@ export default function LoginPage() {
     }
   }, [session, router]);
 
-  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setMessage("");
-    const res = await signIn("credentials", {
-      email,
-      password,
-      redirect: false,
-    });
+  const onSubmit = async (data: LoginFormData) => {
+    setLoading(true);
+    try {
+      const res = await signIn("credentials", {
+        email: data.email,
+        password: data.password,
+        redirect: false,
+      });
 
-    if (res?.status !== 200) {
-      setMessage("아이디 또는 비밀번호가 올바르지 않습니다.");
-      return;
-    } else router.replace("/");
+      if (res?.status !== 200) {
+        toast.error("로그인을 다시 시도해주세요");
+        return;
+      } else router.replace("/");
+      reset();
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
   };
   return (
     <Modal>
       <div>
         <div className="flex flex-col justify-center p-4 gap-4">
           <h2 className="text-3xl text-center">로그인</h2>
-          <form onSubmit={onSubmit} className="flex flex-col gap-4">
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="flex flex-col gap-4"
+          >
             <div className="flex gap-2 ">
               <label
                 htmlFor="email"
@@ -48,15 +91,16 @@ export default function LoginPage() {
               <input
                 type="text"
                 id="email"
-                name="email"
-                autoComplete="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                autoFocus
+                disabled={loading}
+                {...register("email")}
                 placeholder="이메일을 입력하세요"
-                required
                 className="border border-gray-300 rounded-md flex-1 px-2 outline-none focus:border-2 focus:border-gray-700 "
               />
             </div>
+            {errors.email && (
+              <p className="text-sm  text-red-500">{errors.email.message}</p>
+            )}
             <div className="flex gap-2 ">
               <label
                 htmlFor="password"
@@ -67,15 +111,15 @@ export default function LoginPage() {
               <input
                 type="password"
                 id="password"
-                name="password"
-                autoComplete="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                disabled={loading}
+                {...register("password")}
                 placeholder="비밀번호를 입력하세요"
                 className="border border-gray-300 rounded-md flex-1 px-2   outline-none focus:border-2 focus:border-gray-700"
-                required
               />
             </div>
+            {errors.password && (
+              <p className="text-sm text-red-500">{errors.password.message}</p>
+            )}
             <button
               type="submit"
               className=" bg-green-400 py-3 text-2xl hover:bg-emerald-400 rounded-lg text-white cursor-pointer transition-colors duration-300"
@@ -83,6 +127,7 @@ export default function LoginPage() {
               로그인
             </button>
             <button
+              type="button"
               className="f-full"
               onClick={() => signIn("kakao", { callbackUrl: "/" })}
             >
@@ -95,11 +140,6 @@ export default function LoginPage() {
               />
             </button>
           </form>
-          {message && (
-            <p className="text-sm text-red-600 pt-2" role="alert">
-              {message}
-            </p>
-          )}
           <div className="flex justify-end gap-2 text-green-500">
             <p>회원가입을 안했다면?</p>
             <Link href={"/signup"}>

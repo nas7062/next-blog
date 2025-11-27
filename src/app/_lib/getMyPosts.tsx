@@ -5,7 +5,8 @@ export async function getMyPost(userEmail: string, tag?: string) {
   const { data, error } = await supabase
     .from("Post")
     .select("*")
-    .eq("email", userEmail);
+    .eq("email", userEmail)
+    .order("createdAt", { ascending: false });
 
   if (error) {
     console.error("데이터 패칭 실패", error);

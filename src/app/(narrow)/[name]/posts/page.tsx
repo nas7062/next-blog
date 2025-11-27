@@ -1,33 +1,27 @@
 "use client";
 
 import SinglePostList from "@/src/app/_components/SinglePostList";
-import { getMyPost } from "@/src/app/_lib/getMyPosts";
-import { useEffect, useState } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
 import { GithubIcon, MailIcon } from "lucide-react";
 import Tabs from "./_components/Tabs";
-import { IPost } from "@/src/app/(wide)/write/_components/WirtePageClient";
 import { TagSlider } from "./_components/TagSlider";
 import { useCurrentUser } from "@/src/app/hook/useCurrentUser";
 import Image from "next/image";
+import { useMyPost } from "./_hook/useMyPost";
 
 export default function PostPage() {
   const id = usePathname().split("/")[1];
   const searchParams = useSearchParams();
   const tag = searchParams.get("tag") as string;
-  const [posts, setPosts] = useState<IPost[] | []>([]);
+
   const { user: userData, isLoading: isUserLoading } = useCurrentUser({
     id,
   });
   const email = userData?.email as string;
-  useEffect(() => {
-    const fetchPost = async () => {
-      const data = await getMyPost(email, tag);
-      setPosts(data);
-    };
-    fetchPost();
-  }, [email, tag]);
-  if (isUserLoading) return "loading...";
+  const { posts, isLoading: isPostsLoading } = useMyPost(email, tag);
+
+  if (isUserLoading || isPostsLoading) return "loading...";
+  if (!posts) return;
   return (
     <div className="bg-primary text-primary-foreground flex flex-col gap-4">
       <div className="flex flex-col">

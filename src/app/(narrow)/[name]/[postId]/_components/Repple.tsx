@@ -4,10 +4,12 @@ import { IRepple, IUser } from "@/src/app/_components/PostDetail";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import "dayjs/locale/ko";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { updateComment } from "../_lib/updateComment";
 import { toast } from "sonner";
-import { getUserById } from "@/src/app/_lib/getUserById";
+
+import { useCurrentUser } from "@/src/app/hook/useCurrentUser";
+import Image from "next/image";
 
 dayjs.extend(relativeTime);
 dayjs.locale("ko");
@@ -23,7 +25,11 @@ export default function Repple({
 }) {
   const [isUpdate, setIsUpdate] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
-  const [reppleUser, setReppleUser] = useState<IUser | null>(null);
+
+  const repplerUserId = repple.userid as string;
+  const { user: reppleUser, isLoading: isUserLoading } = useCurrentUser({
+    id: repplerUserId,
+  });
   const handleResizeHeight = () => {
     const el = textareaRef.current;
     if (!el) return;
@@ -54,22 +60,16 @@ export default function Repple({
     }
   };
 
-  useEffect(() => {
-    const id = repple.userid;
-    if (!id) return;
-    const getUserData = async () => {
-      const data = await getUserById(id);
-      setReppleUser(data);
-    };
-    getUserData();
-  }, [repple.userid]);
   const isMyRepple = repple.userid === user?.id;
+  if (isUserLoading) return "loading...";
   return (
     <div className="flex flex-col gap-4">
       <div className="flex gap-2">
-        <img
+        <Image
           src={reppleUser?.image ? reppleUser?.image : "/noImage.jpg"}
           alt="댓글 이미지"
+          width={20}
+          height={20}
           className="w-14 h-14 rounded-full"
         />
         <div className="flex flex-col gap-2">

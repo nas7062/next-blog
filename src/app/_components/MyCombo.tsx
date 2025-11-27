@@ -24,7 +24,7 @@ export function MyCombo({ user }: { user: User }) {
     user: userData,
     isLoading: isUserLoading,
     isError,
-  } = useCurrentUser(email);
+  } = useCurrentUser({ email });
   const id = userData?.id;
   const frameworks = [
     {

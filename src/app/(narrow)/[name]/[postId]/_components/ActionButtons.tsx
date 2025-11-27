@@ -44,7 +44,7 @@ export default function ActionButtons() {
       toast.success("클립보드에 복사되었습니다");
     }
   };
-
+  if (isPostLoading) return "loading...";
   return (
     <div className="flex flex-col h-44 w-20 rounded-4xl justify-between items-center py-2 text-primary bg-green-400 border border-green-400 overflow-x-hidden">
       {/* 좋아요 버튼 */}

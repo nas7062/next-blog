@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import type { IUser } from "../_components/PostDetail";
 import { getUserInfo } from "../_lib/getUser";
+import { getUserById } from "../_lib/getUserById";
 type UseCurrentUserResult = {
   user: IUser | null;
   isLoading: boolean;
@@ -8,16 +9,25 @@ type UseCurrentUserResult = {
   error: Error | null;
 };
 
-export function useCurrentUser(userEmail?: string): UseCurrentUserResult {
+type UseUserParams = {
+  id?: string;
+  email?: string;
+};
+
+export function useCurrentUser(params: UseUserParams): UseCurrentUserResult {
+  const { id, email } = params;
+
+  const enabled = !!id || !!email;
+
   const query = useQuery<IUser | null, Error>({
-    queryKey: ["user", userEmail ?? null],
-    enabled: !!userEmail,
+    queryKey: ["user", { id, email }],
+    enabled,
     queryFn: async () => {
-      const result = await getUserInfo(userEmail!);
-      return result;
+      if (id) return getUserById(id);
+      if (email) return getUserInfo(email);
+      return null;
     },
-    staleTime: 1000 * 60,
-    initialData: null,
+    staleTime: 60 * 60,
   });
 
   return {

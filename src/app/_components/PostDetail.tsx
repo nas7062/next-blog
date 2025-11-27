@@ -67,7 +67,7 @@ export default function PostDetail({
   const email = session?.user?.email as string;
   // 좋아요 상태 조회
   const { liked, likeCount, toggle } = usePostLike(Number(post?.id), email);
-  const { user, isLoading: isUserLoading, isError } = useCurrentUser(email);
+  const { user, isLoading: isUserLoading, isError } = useCurrentUser({ email });
   const { comments, isLoading: isReppleLoading } = useGetComment(
     Number(post?.id)
   );

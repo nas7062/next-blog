@@ -14,6 +14,5 @@ export async function getUserById(id: string): Promise<IUser | null> {
     return null;
   }
 
-  // data: IUser | null
   return data ?? null;
 }

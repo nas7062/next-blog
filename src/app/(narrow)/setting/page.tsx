@@ -1,12 +1,11 @@
 "use client";
 import { useSession } from "next-auth/react";
 import { MouseEvent, useCallback, useEffect, useState } from "react";
-import { IUser } from "../../_components/PostDetail";
-import { getUserInfo } from "../../_lib/getUser";
 import { useDropzone } from "react-dropzone";
 import { getSupabaseClient } from "../../api/supabase";
 import { useTheme } from "next-themes";
 import { userDelete } from "./_lib/userDelete";
+import { useCurrentUser } from "../../hook/useCurrentUser";
 export interface AboutThumbnailPreview {
   url: string;
   name: string;
@@ -15,14 +14,17 @@ export interface AboutThumbnailPreview {
 
 export default function SettingPage() {
   const { data: user } = useSession();
-  const [userData, setUserData] = useState<IUser | null>(null);
-  const [name, setName] = useState(userData?.name || "");
-  const [descript, setdescript] = useState(userData?.descript || "");
+  const email = user?.user?.email as string;
+  const { user: userData, isLoading: isUserLoading } = useCurrentUser({
+    email,
+  });
+  const [name, setName] = useState("");
+  const [descript, setdescript] = useState("");
   const [mode, setMode] = useState<"Update" | "Default">("Default");
   const [thumbnailFile, setThumbnailFile] = useState<File | null>(null);
   const { setTheme } = useTheme();
   const [thumbnailPreview, setThumbnailPreview] =
-    useState<AboutThumbnailPreview>();
+    useState<AboutThumbnailPreview | null>(null);
   //사진이 추가됐을 때 그 사진의 정보 상태담기
   const onDropThumbnail = useCallback((acceptedFiles: File[]) => {
     const file = acceptedFiles[0];
@@ -37,6 +39,7 @@ export default function SettingPage() {
   const handleDeleteThumbnail = (e: MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation(); // 이벤트 버블링 막기
     setThumbnailPreview(undefined);
+    setThumbnailFile(null);
   };
 
   const { getRootProps, getInputProps } = useDropzone({
@@ -47,8 +50,6 @@ export default function SettingPage() {
       "image/*": [".jpeg", ".jpg", ".png"],
     },
   });
-
-  const email = user?.user?.email as string;
 
   const updateInfo = async () => {
     if (!email) return;
@@ -94,11 +95,7 @@ export default function SettingPage() {
   };
 
   const changeMode = () => {
-    if (mode === "Default") {
-      setMode("Update");
-    } else {
-      setMode("Default");
-    }
+    setMode((prev) => (prev === "Default" ? "Update" : "Default"));
   };
   const OnSave = () => {
     setName(name);
@@ -111,17 +108,22 @@ export default function SettingPage() {
     console.log(response);
   };
 
-  useEffect(() => {
-    if (!email) return;
-    const fetchUser = async () => {
-      const data = await getUserInfo(email);
-      setUserData(data);
-    };
-    fetchUser();
-  }, [email]);
-
   const imageSrc = thumbnailPreview?.url || userData?.image || "/nextImage.png";
 
+  useEffect(() => {
+    if (!userData) return;
+    setName(userData.name ?? "");
+    setdescript(userData.descript ?? "");
+  }, [userData]);
+
+  useEffect(() => {
+    if (!thumbnailPreview?.url) return;
+    return () => {
+      URL.revokeObjectURL(thumbnailPreview.url);
+    };
+  }, [thumbnailPreview?.url]);
+
+  if (isUserLoading) return "loading...";
   if (!userData) return;
   return (
     <div className="flex flex-col min-h-screen py-20 gap-10">

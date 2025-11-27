@@ -38,7 +38,7 @@ export default function SettingPage() {
   //저장된 상태 삭제하기 ( 이미지 삭제 )
   const handleDeleteThumbnail = (e: MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation(); // 이벤트 버블링 막기
-    setThumbnailPreview(undefined);
+    setThumbnailPreview(null);
     setThumbnailFile(null);
   };
 

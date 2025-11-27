@@ -6,6 +6,8 @@ import { getSupabaseClient } from "../../api/supabase";
 import { useTheme } from "next-themes";
 import { userDelete } from "./_lib/userDelete";
 import { useCurrentUser } from "../../hook/useCurrentUser";
+import { toast } from "sonner";
+import Image from "next/image";
 export interface AboutThumbnailPreview {
   url: string;
   name: string;
@@ -63,8 +65,12 @@ export default function SettingPage() {
         .upload(`profile-${email}`, thumbnailFile, {
           upsert: true,
         });
+      if (data) {
+        toast.success("이미지 업로드 성공");
+      }
       if (error) {
-        console.log("이미지 업로드 실패:", error);
+        console.error("이미지 업로드 실패:", error);
+        toast.error("이미지 업로드 실패");
         return;
       }
 
@@ -91,7 +97,7 @@ export default function SettingPage() {
       return;
     }
 
-    alert("저장 완료!");
+    toast.success("내 정보 변경 완료");
   };
 
   const changeMode = () => {
@@ -108,7 +114,7 @@ export default function SettingPage() {
     console.log(response);
   };
 
-  const imageSrc = thumbnailPreview?.url || userData?.image || "/nextImage.png";
+  const imageSrc = thumbnailPreview?.url || userData?.image || "/hello.png";
 
   useEffect(() => {
     if (!userData) return;
@@ -129,7 +135,7 @@ export default function SettingPage() {
     <div className="flex flex-col min-h-screen py-20 gap-10">
       <div className="flex gap-10">
         <div className="flex flex-col gap-4 justify-center items-center">
-          <img
+          <Image
             src={imageSrc}
             className="rounded-full"
             alt="이미지를 업로드해주세요"

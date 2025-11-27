@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { onSubmit } from "./_lib/signup";
 import Modal from "../../_components/Modal";
+import Image from "next/image";
 
 export default function SignupPage() {
   return (
@@ -93,7 +94,13 @@ export default function SignupPage() {
           </Link>
         </div>
         <div className="absolute top-0 right-0">
-          <img src="/hello.png" className="w-20 h-20" />
+          <Image
+            src="/hello.png"
+            className="w-20 h-20"
+            width={40}
+            height={40}
+            alt="곰 이미지"
+          />
         </div>
       </div>
     </Modal>

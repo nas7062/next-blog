@@ -19,6 +19,7 @@ import TuiEditor from "./TuiEditor";
 import TagList from "@/src/app/_components/TagList";
 import Viewer from "./View";
 import { getSupabaseClient } from "@/src/app/api/supabase";
+import Image from "next/image";
 
 export interface IPost {
   coverImgUrl: string;
@@ -220,7 +221,7 @@ export default function WritePageClient() {
           <TuiEditor content={getContent} contentChange={changeContent} />
         </div>
         <div className="flex items-center lg:hidden  ">
-          <img
+          <Image
             src={thumbnailPreview?.url || "/noImage.jpg"}
             alt="이미지를 업로드해주세요"
             width={80}
@@ -243,7 +244,7 @@ export default function WritePageClient() {
       </form>
       <div className="w-1/2 lg:flex flex-col  hidden">
         <div className="flex items-center ">
-          <img
+          <Image
             src={thumbnailPreview?.url || "/noImage.jpg"}
             alt="이미지를 업로드해주세요"
             width={100}

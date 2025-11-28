@@ -77,14 +77,14 @@ export default function SignupPage() {
 
   return (
     <Modal>
-      <div className="flex flex-col justify-center p-4 gap-4">
+      <div className="flex flex-col justify-center py-2 gap-4">
         <h2 className="text-3xl text-center">회원가입</h2>
 
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
-          <div className="flex gap-2">
+          <div className="flex gap-1">
             <label
               htmlFor="name"
-              className="text-sm bg-gray-400 px-2 py-2 rounded-md w-28 flex justify-center items-center"
+              className="text-xs  sm:text-sm bg-gray-400 px-2 py-2 rounded-md w-28 flex justify-center items-center"
             >
               이름
             </label>
@@ -100,10 +100,10 @@ export default function SignupPage() {
             <p className="text-sm text-red-500">{errors.name.message}</p>
           )}
 
-          <div className="flex gap-2">
+          <div className="flex gap-1">
             <label
               htmlFor="email"
-              className="text-sm bg-gray-400 px-2 py-2 rounded-md w-28 flex justify-center items-center"
+              className="text-xs  sm:text-sm bg-gray-400 px-2 py-2 rounded-md w-28 flex justify-center items-center"
             >
               이메일
             </label>
@@ -119,10 +119,10 @@ export default function SignupPage() {
             <p className="text-sm text-red-500">{errors.email.message}</p>
           )}
 
-          <div className="flex gap-2">
+          <div className="flex gap-1">
             <label
               htmlFor="password"
-              className="text-sm bg-gray-400 px-2 py-2 rounded-md w-28 flex justify-center items-center"
+              className="text-xs  sm:text-sm bg-gray-400 px-2 py-2 rounded-md w-28 flex justify-center items-center"
             >
               비밀번호
             </label>
@@ -138,10 +138,10 @@ export default function SignupPage() {
             <p className="text-sm text-red-500">{errors.password.message}</p>
           )}
 
-          <div className="flex gap-2 items-center">
+          <div className="flex gap-1 items-center">
             <label
               htmlFor="passwordConfirm"
-              className="text-sm bg-gray-400 px-2 py-2 rounded-md w-28 flex justify-center items-center text-center"
+              className="text-xs  sm:text-sm bg-gray-400 px-2 py-2 rounded-md w-28 flex justify-center items-center text-center"
             >
               비밀번호 확인
             </label>

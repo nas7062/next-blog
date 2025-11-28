@@ -6,7 +6,7 @@ export default function PostsLayout({
   sidebar: React.ReactNode;
 }) {
   return (
-    <main className="flex mx-auto">
+    <main className="flex  flex-col lg:flex-row mx-auto">
       <div className="min-w-40 hidden lg:block">{sidebar}</div>
       <div className="flex-1">{children}</div>
     </main>

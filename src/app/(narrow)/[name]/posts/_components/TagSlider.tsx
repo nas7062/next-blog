@@ -42,13 +42,16 @@ export function TagSlider() {
     >
       <CarouselContent className="flex">
         {Array.from(tagList.entries()).map(([tag, count]) => (
-          <CarouselItem key={tag} className="basis-1/5 block lg:hidden">
+          <CarouselItem
+            key={tag}
+            className="basis-1/3 sm:basis-1/5 block lg:hidden"
+          >
             <div className="py-1 w-auto ">
               <div
                 className="border rounded-xl bg-green-400 text-white hover:bg-green-500"
                 onClick={() => selectTag(tag)}
               >
-                <CardContent className=" w-auto flex text-xs  items-center justify-center py-1">
+                <CardContent className=" w-auto flex text-xs  items-center justify-center px-2 py-1">
                   <span className="font-semibold">{tag}</span>
                   <span>({count})</span>
                 </CardContent>

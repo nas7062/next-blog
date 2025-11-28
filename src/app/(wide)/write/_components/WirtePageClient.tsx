@@ -196,10 +196,10 @@ export default function WritePageClient() {
   };
 
   return (
-    <main className="h-screen w-full flex flex-col lg:flex-row gap-9 text-primary">
+    <main className="h-screen w-full flex flex-col sm:flex-row  gap-4  sm:gap-9 text-primary">
       <form
         onSubmit={onSubmit}
-        className="text-center flex flex-1 flex-col gap-4"
+        className="text-center flex flex-1 flex-col gap-2 sm:gap-4"
       >
         <input
           type="text"
@@ -217,7 +217,7 @@ export default function WritePageClient() {
           onKeyDown={handleKeyPress}
         />
         <TagList tags={tags} onDelete={onDeleteTag} />
-        <div className="bg-white h-[500px] mt-9 text-left ">
+        <div className="bg-white h-[500px]  text-left ">
           <TuiEditor content={getContent} contentChange={changeContent} />
         </div>
         <div className="flex items-center lg:hidden  ">

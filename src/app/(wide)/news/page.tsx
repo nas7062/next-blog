@@ -6,7 +6,9 @@ export default async function ItNewsPage() {
 
   return (
     <main className=" mx-auto py-10 text-primary flex flex-col gap-10 ">
-      <h1 className="text-2xl font-bold mb-6">IT 최신 뉴스</h1>
+      <h1 className="text-3xl! text-center sm:text-4xl! font-bold mb-6">
+        IT 최신 뉴스
+      </h1>
       <ul className=" grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {posts.map((p, idx) => (
           <li

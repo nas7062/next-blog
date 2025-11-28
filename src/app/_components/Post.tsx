@@ -64,11 +64,11 @@ export default function Post({ post }: { post: IPost }) {
           alt={post.title}
           width={350}
           height={200}
-          className="rounded-md max-h-60 "
+          className="rounded-md max-h-60 aspect-square"
         />
       </div>
       <div
-        className="max-w-[330px] px-4 flex flex-col justify-around h-32"
+        className="max-w-[330px] px-4 flex flex-col justify-around h-32 mt-auto"
         onClick={() => {
           MovePostDetail(post.id);
         }}
@@ -82,7 +82,7 @@ export default function Post({ post }: { post: IPost }) {
           <p>{post.reppleCount}개의 댓글</p>
         </div>
       </div>
-      <div className="flex  items-center gap-2 px-4">
+      <div className="flex  items-center gap-2 px-4 mt-auto">
         <div className="flex items-center gap-2" onClick={MoveUserPosts}>
           <Image
             src={writeUser?.image ? writeUser?.image : "/nextImage.png"}

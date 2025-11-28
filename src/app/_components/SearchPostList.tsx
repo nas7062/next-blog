@@ -72,8 +72,11 @@ export default function SearchResultList({ q }: { q: string }) {
     <>
       {/* 총 N건 문구 */}
       <div className="flex justify-center">
-        <h3 className="text-2xl text-gray-500">
-          총 <strong className="text-green-500 text-3xl">{totalCount}</strong>
+        <h3 className="text-lg! sm:text-2xl! text-gray-500">
+          총
+          <strong className="text-green-500 text-xl! sm:text-3xl!">
+            {totalCount}
+          </strong>
           건의 포스트를 찾았습니다.
         </h3>
       </div>

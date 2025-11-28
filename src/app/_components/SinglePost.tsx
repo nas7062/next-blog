@@ -28,7 +28,7 @@ export default function SinglePost({ post }: { post: IPost }) {
   if (!post) return;
   return (
     <div
-      className="flex flex-col w-2xl  gap-4 pb-4 rounded-md cursor-pointer"
+      className="flex flex-col w-full gap-4 pb-4  rounded-md cursor-pointer"
       onClick={() => MovePostDetail(post.id)}
       key={post.id}
     >
@@ -38,7 +38,7 @@ export default function SinglePost({ post }: { post: IPost }) {
           alt={post.title}
           width={400}
           height={600}
-          className="rounded-xl overflow-hidden  w-80 sm:w-auto sm:mx-auto "
+          className="rounded-xl overflow-hidden  w-80 mx-auto "
         />
       </div>
       <div className="max-w-[740px] px-4 flex flex-col justify-around min-h-32 gap-4">

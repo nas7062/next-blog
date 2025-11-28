@@ -132,7 +132,7 @@ export default function SettingPage() {
   if (isUserLoading) return "loading...";
   if (!userData) return;
   return (
-    <div className="flex flex-col min-h-screen py-20 gap-10">
+    <div className="flex flex-col min-h-screen py-20 px-2 gap-10">
       <div className="flex gap-10">
         <div className="flex flex-col gap-4 justify-center items-center">
           <Image

@@ -308,7 +308,7 @@ export const metadata: Metadata = {
 };
 ```
 
-**비공개 페이지** (대시보드, 데이터, 설정):
+**비공개 페이지** (피드/ 글 쓰기 / 수정 / 설정 페이지):
 
 ```typescript
 import { Metadata } from "next";

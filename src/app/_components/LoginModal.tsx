@@ -8,7 +8,7 @@ export default function LoginModal({ onClose }: LoginModalProps) {
   return (
     <Modal onClose={onClose}>
       <div className="flex flex-col  gap-4 p-4">
-        <h2 className="text-2xl! font-semibold text-center">
+        <h2 className="text-lg!  sm:text-2xl! font-semibold text-center">
           로그인을 해야만 가능합니다.
         </h2>
         <p className="text-gray-500 text-center">

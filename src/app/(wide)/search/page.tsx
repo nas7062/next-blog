@@ -32,10 +32,10 @@ export default async function SearchPage({
   searchParams: Promise<{ q?: string | string[] }>;
 }) {
   const { q: raw } = await searchParams;
-  const q = Array.isArray(raw) ? raw[0] : raw ?? "";
+  const q = Array.isArray(raw) ? raw[0] : (raw ?? "");
 
   return (
-    <main className="flex flex-col justify-center mx-auto  gap-8">
+    <main className="flex flex-col justify-center mx-auto px-10  gap-8">
       <SearchInput q={q} />
       <SearchResultList q={q} />
     </main>

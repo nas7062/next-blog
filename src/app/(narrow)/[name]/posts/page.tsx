@@ -25,7 +25,7 @@ export default function PostPage() {
   return (
     <div className="bg-primary text-primary-foreground flex flex-col gap-4">
       <div className="flex flex-col">
-        <div className="flex items-center gap-4 p-20 border-b border-gray-200">
+        <div className="flex items-center  gap-4 p-4 border-b border-gray-200">
           <Image
             src={userData?.image || "/nextImage.png"}
             width={100}

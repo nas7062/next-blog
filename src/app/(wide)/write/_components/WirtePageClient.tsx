@@ -196,7 +196,7 @@ export default function WritePageClient() {
   };
 
   return (
-    <main className="h-screen w-full flex gap-9 text-primary">
+    <main className="h-screen w-full flex flex-col lg:flex-row gap-9 text-primary">
       <form
         onSubmit={onSubmit}
         className="text-center flex flex-1 flex-col gap-4"

@@ -1,5 +1,15 @@
 import Link from "next/link";
 import { getItNewsPosts } from "./_lib/getItNewsPosts";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "뉴스 페이지 | 10012",
+  description: "10012 에서 최신 뉴스를 확인해봐요",
+  robots: {
+    index: true,
+    follow: true,
+  },
+};
 
 export default async function ItNewsPage() {
   const posts = await getItNewsPosts();

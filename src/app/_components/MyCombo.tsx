@@ -46,7 +46,7 @@ export function MyCombo({ user }: { user: User }) {
       <PopoverTrigger asChild>
         <Button variant="ghost" role="combobox" aria-expanded={open}>
           <Image
-            src={userData?.image ? userData.image : "/noImage.jpg"}
+            src={userData?.image ? userData.image : "/hello.png"}
             alt="이미지"
             width={20}
             height={20}

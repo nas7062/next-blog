@@ -20,6 +20,7 @@ import { useGetComment } from "../hook/useGetComment";
 import { useQueryClient } from "@tanstack/react-query";
 import { useDeleteComment } from "../(narrow)/[name]/[postId]/_hook/useDeleteComment";
 import { createFollow } from "../_lib/createFollow";
+import { FollowButton } from "./FollowButton";
 
 dayjs.extend(relativeTime);
 dayjs.locale("ko");
@@ -80,19 +81,11 @@ export default function PostDetail({
     toggle(() => setIsLoginModalOpen(true));
   };
 
-  const onFollow = async () => {
-    if (!writeUser?.id || !user?.id) return;
-    try {
-      const response = await createFollow(user.id, writeUser.id);
-      console.log(response);
-    } catch (error) {
-      console.error(error);
-    }
-  };
   const isUpdate = post?.email === session?.user?.email;
   if (isAuthorLoading || isPostLoading || isUserLoading || isReppleLoading)
     return "loading...";
   if (isError) return;
+  if (!writeUser?.id || !user?.id) return;
   return (
     <div className="flex flex-col gap-10">
       <div className="flex flex-col gap-4">
@@ -119,12 +112,7 @@ export default function PostDetail({
             </div>
           ) : (
             <div className="flex gap-1">
-              <button
-                onClick={onFollow}
-                className="text-green-400 border border-green-400 bg-primary rounded-xl px-2 py-1 cursor-pointer hover:bg-green-500 hover:text-white transition-colors duration-300"
-              >
-                팔로우
-              </button>
+              <FollowButton userId={user.id} targetId={writeUser.id} />
               <button
                 onClick={handleToggleLike}
                 className="flex gap-1 border border-gray-300 px-2 py-1 rounded-lg lg:hidden"

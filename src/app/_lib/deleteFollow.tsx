@@ -1,9 +1,8 @@
 import { getSupabaseClient } from "../api/supabase";
 import { checkFollow } from "./checkFollow";
 
-export async function createFollow(userId: string, targetId: string) {
+export async function deleteFollow(userId: string, targetId: string) {
   if (!userId || !targetId) return;
-
   const supabase = getSupabaseClient();
 
   const isFollowing = await checkFollow(userId, targetId);
@@ -12,15 +11,17 @@ export async function createFollow(userId: string, targetId: string) {
     return null;
   }
 
-  // 2. 팔로우가 존재하지 않으면 새로운 팔로우 추가
-  const { data: insertData, error: insertError } = await supabase
+  // 3. 팔로우가 존재하면 삭제
+  const { data: deleteData, error: deleteError } = await supabase
     .from("follows")
-    .insert({ follower_id: userId, following_id: targetId });
+    .delete()
+    .eq("follower_id", userId)
+    .eq("following_id", targetId);
 
-  if (insertError) {
-    console.error("팔로우 추가 오류", insertError);
+  if (deleteError) {
+    console.error("언팔로우 오류", deleteError);
     return null;
   }
 
-  return insertData;
+  return deleteData;
 }

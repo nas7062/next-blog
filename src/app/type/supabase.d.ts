@@ -47,6 +47,39 @@ export type Database = {
         }
         Relationships: []
       }
+      follows: {
+        Row: {
+          created_at: string
+          follower_id: string
+          following_id: string
+        }
+        Insert: {
+          created_at?: string
+          follower_id: string
+          following_id: string
+        }
+        Update: {
+          created_at?: string
+          follower_id?: string
+          following_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "follows_follower_id_fkey"
+            columns: ["follower_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "follows_following_id_fkey"
+            columns: ["following_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       Post: {
         Row: {
           coverImgUrl: string
@@ -55,6 +88,7 @@ export type Database = {
           email: string | null
           id: number
           likeCount: number | null
+          reppleCount: number
           searchIndex: string | null
           Tags: string[] | null
           title: string
@@ -68,6 +102,7 @@ export type Database = {
           email?: string | null
           id?: number
           likeCount?: number | null
+          reppleCount?: number
           searchIndex?: string | null
           Tags?: string[] | null
           title: string
@@ -81,6 +116,7 @@ export type Database = {
           email?: string | null
           id?: number
           likeCount?: number | null
+          reppleCount?: number
           searchIndex?: string | null
           Tags?: string[] | null
           title?: string
@@ -96,6 +132,8 @@ export type Database = {
           id: number
           name: string
           postId: number
+          updatedat: string | null
+          userid: string | null
         }
         Insert: {
           content: string
@@ -103,6 +141,8 @@ export type Database = {
           id?: number
           name: string
           postId: number
+          updatedat?: string | null
+          userid?: string | null
         }
         Update: {
           content?: string
@@ -110,6 +150,8 @@ export type Database = {
           id?: number
           name?: string
           postId?: number
+          updatedat?: string | null
+          userid?: string | null
         }
         Relationships: [
           {
@@ -117,6 +159,13 @@ export type Database = {
             columns: ["postId"]
             isOneToOne: false
             referencedRelation: "Post"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "Repple_userid_fkey"
+            columns: ["userid"]
+            isOneToOne: false
+            referencedRelation: "users"
             referencedColumns: ["id"]
           },
         ]

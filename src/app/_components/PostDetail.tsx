@@ -19,6 +19,7 @@ import { usePostLike } from "../hook/usePostLIke";
 import { useGetComment } from "../hook/useGetComment";
 import { useQueryClient } from "@tanstack/react-query";
 import { useDeleteComment } from "../(narrow)/[name]/[postId]/_hook/useDeleteComment";
+import { createFollow } from "../_lib/createFollow";
 
 dayjs.extend(relativeTime);
 dayjs.locale("ko");
@@ -61,6 +62,7 @@ export default function PostDetail({
 
   const { data: post, isLoading: isPostLoading } = usePostById(Number(postId));
   const email = session?.user?.email as string;
+
   // 좋아요 상태 조회
   const { liked, likeCount, toggle } = usePostLike(Number(post?.id), email);
   const { user, isLoading: isUserLoading, isError } = useCurrentUser({ email });
@@ -78,6 +80,15 @@ export default function PostDetail({
     toggle(() => setIsLoginModalOpen(true));
   };
 
+  const onFollow = async () => {
+    if (!writeUser?.id || !user?.id) return;
+    try {
+      const response = await createFollow(user.id, writeUser.id);
+      console.log(response);
+    } catch (error) {
+      console.error(error);
+    }
+  };
   const isUpdate = post?.email === session?.user?.email;
   if (isAuthorLoading || isPostLoading || isUserLoading || isReppleLoading)
     return "loading...";
@@ -108,7 +119,10 @@ export default function PostDetail({
             </div>
           ) : (
             <div className="flex gap-1">
-              <button className="text-green-400 border border-green-400 bg-primary rounded-xl px-2 py-1 cursor-pointer hover:bg-green-500 hover:text-white transition-colors duration-300">
+              <button
+                onClick={onFollow}
+                className="text-green-400 border border-green-400 bg-primary rounded-xl px-2 py-1 cursor-pointer hover:bg-green-500 hover:text-white transition-colors duration-300"
+              >
                 팔로우
               </button>
               <button

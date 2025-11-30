@@ -6,7 +6,7 @@ export default function TagList({
   onDelete: (tagname: string) => void;
 }) {
   return (
-    <div className="flex gap-2">
+    <div className="flex gap-2 flex-wrap">
       {tags &&
         tags.map((tag, idx) => (
           <div

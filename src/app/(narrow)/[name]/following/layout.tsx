@@ -1,3 +1,32 @@
+import { getUserById } from "@/src/app/_lib/getUserById";
+import { Metadata } from "next";
+
+type RouteParams = {
+  name: string;
+};
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<RouteParams>;
+}): Promise<Metadata> {
+  const { name } = await params;
+
+  const user = await getUserById(name);
+  const userName = user?.name ?? "사용자";
+
+  return {
+    title: `${userName}님의 팔로우 | 10012`,
+    description: `${userName}님의 10012 팔로우 리스트 입니다.`,
+    robots: {
+      index: false,
+      follow: false,
+    },
+  };
+}
+
+export const revalidate = 0;
+
 export default function FollowLayout({
   children,
 }: {

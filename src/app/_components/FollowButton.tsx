@@ -7,7 +7,7 @@ export function FollowButton({
   userId,
   targetId,
 }: {
-  userId: string;
+  userId?: string | null;
   targetId: string;
 }) {
   const [isFollowing, setIsFollowing] = useState(false); // 팔로우 상태
@@ -15,6 +15,7 @@ export function FollowButton({
 
   useEffect(() => {
     // 페이지 로드 시 현재 팔로우 상태를 확인
+    if (!userId) return;
     const checkFollowStatus = async () => {
       const response = await checkFollow(userId, targetId);
       setIsFollowing(response as boolean);
@@ -25,6 +26,7 @@ export function FollowButton({
   console.log(isFollowing);
   const handleFollowToggle = async () => {
     setLoading(true);
+    if (!userId) return;
     try {
       let result;
       if (isFollowing) {

@@ -85,7 +85,7 @@ export default function PostDetail({
   if (isAuthorLoading || isPostLoading || isUserLoading || isReppleLoading)
     return "loading...";
   if (isError) return;
-  if (!writeUser?.id || !user?.id) return;
+  if (!writeUser?.id) return;
   return (
     <div className="flex flex-col gap-10">
       <div className="flex flex-col gap-4">
@@ -112,7 +112,7 @@ export default function PostDetail({
             </div>
           ) : (
             <div className="flex gap-1">
-              <FollowButton userId={user.id} targetId={writeUser.id} />
+              <FollowButton userId={user?.id} targetId={writeUser.id} />
               <button
                 onClick={handleToggleLike}
                 className="flex gap-1 border border-gray-300 px-2 py-1 rounded-lg lg:hidden"

@@ -3,15 +3,12 @@
 import SinglePostList from "@/src/app/_components/SinglePostList";
 import { usePathname, useSearchParams } from "next/navigation";
 import { GithubIcon, MailIcon } from "lucide-react";
-
 import { useCurrentUser } from "@/src/app/hook/useCurrentUser";
 import Image from "next/image";
 import { useMyPost } from "../_hook/useMyPost";
 import Tabs from "./Tabs";
 import { TagSlider } from "./TagSlider";
 import { useEffect, useState } from "react";
-import { getFollowInfo } from "@/src/app/_lib/getFollowInfo";
-import { IUser } from "@/src/app/_components/PostDetail";
 import { getFollowCounts } from "@/src/app/_lib/getFollowCount";
 
 export default function PostClient() {

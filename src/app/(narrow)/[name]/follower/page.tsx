@@ -1,10 +1,14 @@
 "use client";
 
 import { FollowButton } from "@/src/app/_components/FollowButton";
+import { useCurrentUser } from "@/src/app/hook/useCurrentUser";
 import { ChevronRight } from "lucide-react";
 import Image from "next/image";
 
 export default function FollowerPage() {
+  const { user: userData, isLoading: isUserLoading } = useCurrentUser({
+    id,
+  });
   return (
     <div>
       <div>

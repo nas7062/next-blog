@@ -9,17 +9,29 @@ import Image from "next/image";
 import { useMyPost } from "../_hook/useMyPost";
 import Tabs from "./Tabs";
 import { TagSlider } from "./TagSlider";
+import { useEffect, useState } from "react";
+import { getFollowInfo } from "@/src/app/_lib/getFollowInfo";
 
 export default function PostClient() {
   const id = usePathname().split("/")[1];
   const searchParams = useSearchParams();
   const tag = searchParams.get("tag") as string;
-
+  const [follower, setFollower] = useState(0);
+  const [following, setFollowing] = useState(0);
   const { user: userData, isLoading: isUserLoading } = useCurrentUser({
     id,
   });
   const email = userData?.email as string;
   const { posts, isLoading: isPostsLoading } = useMyPost(email, tag);
+
+  useEffect(() => {
+    if (!id) return;
+    const fetchFollow = async () => {
+      const response = await getFollowInfo(id);
+      console.log(response);
+    };
+    fetchFollow();
+  }, [id]);
 
   if (isUserLoading || isPostsLoading) return "loading...";
   if (!posts) return;

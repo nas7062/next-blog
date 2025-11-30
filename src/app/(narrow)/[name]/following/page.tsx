@@ -27,7 +27,7 @@ export default function FollowingPage() {
   if (isUserLoading) return "loading...";
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4 text-primary">
       <div className="flex gap-2  items-center">
         <Image
           src={user?.image ? user?.image : "/hello.png"}
@@ -38,12 +38,12 @@ export default function FollowingPage() {
         />
         <div>{user?.name}</div>
         <ChevronRight />
-        <div>{user?.descript}</div>
+        <div>팔로우</div>
       </div>
-      <h2>{followingCount}명을 팔로워 중</h2>
+      <h2>{followingCount}명을 팔로우 중</h2>
       {following?.map((follow) => (
         <div key={follow.id}>
-          <div className="flex gap-4 ">
+          <div className="flex gap-4 items-center">
             <Image
               src={follow?.image ? follow.image : "/hello.png"}
               alt="유저 이미지"

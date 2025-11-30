@@ -6,8 +6,7 @@ export async function deleteFollow(userId: string, targetId: string) {
   const supabase = getSupabaseClient();
 
   const isFollowing = await checkFollow(userId, targetId);
-  if (isFollowing) {
-    console.log("이미 팔로우 중입니다.");
+  if (!isFollowing) {
     return null;
   }
 

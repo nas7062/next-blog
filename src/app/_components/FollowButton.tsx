@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { deleteFollow } from "../_lib/deleteFollow";
 import { createFollow } from "../_lib/createFollow";
 import { checkFollow } from "../_lib/checkFollow";
+import clsx from "clsx";
 
 export function FollowButton({
   userId,
@@ -48,7 +49,16 @@ export function FollowButton({
   };
 
   return (
-    <button onClick={handleFollowToggle} disabled={loading}>
+    <button
+      onClick={handleFollowToggle}
+      disabled={loading}
+      className={clsx(
+        "px-2   py-1 border border-green-400 text-sm text-green-400 rounded-xl cursor-pointer  transition-colors ",
+        isFollowing
+          ? "bg-green-500 text-white hover:bg-white hover:text-green-400"
+          : "hover:bg-green-500 hover:text-white"
+      )}
+    >
       {loading ? "로딩 중..." : isFollowing ? "언팔로우" : "팔로우"}
     </button>
   );

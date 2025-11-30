@@ -1,7 +1,7 @@
 "use client";
 
 import SinglePostList from "@/src/app/_components/SinglePostList";
-import { usePathname, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { GithubIcon, MailIcon } from "lucide-react";
 import { useCurrentUser } from "@/src/app/hook/useCurrentUser";
 import Image from "next/image";
@@ -14,6 +14,7 @@ import { getFollowCounts } from "@/src/app/_lib/getFollowCount";
 export default function PostClient() {
   const id = usePathname().split("/")[1];
   const searchParams = useSearchParams();
+  const router = useRouter();
   const tag = searchParams.get("tag") as string;
   const [followerCount, setFollowerCount] = useState(0);
   const [followingCount, setFollowingCount] = useState(0);
@@ -22,6 +23,16 @@ export default function PostClient() {
   });
   const email = userData?.email as string;
   const { posts, isLoading: isPostsLoading } = useMyPost(email, tag);
+
+  const MoveFollower = () => {
+    const url = window.origin + "/" + id + "/follower";
+    router.push(url);
+  };
+
+  const MoveFollowing = () => {
+    const url = window.origin + "/" + id + "/following";
+    router.push(url);
+  };
 
   useEffect(() => {
     if (!id) return;
@@ -52,8 +63,18 @@ export default function PostClient() {
           </div>
         </div>
         <div className="flex justify-end gap-4 py-4">
-          <p>{followerCount} 팔로우</p>
-          <p>{followingCount} 팔로잉</p>
+          <p
+            onClick={MoveFollower}
+            className="cursor-pointer hover:text-gray-300"
+          >
+            {followerCount} 팔로우
+          </p>
+          <p
+            onClick={MoveFollowing}
+            className="cursor-pointer  hover:text-gray-300"
+          >
+            {followingCount} 팔로잉
+          </p>
         </div>
         <div className="flex gap-4">
           <GithubIcon className="w-8 h-8 cursor-pointer" />

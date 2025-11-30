@@ -40,6 +40,17 @@ export default auth((req) => {
     segments[0] &&
     segments[1] === "posts" &&
     !reserved.includes(segments[0]);
+  const isUserFollowerPage =
+    segments.length === 2 &&
+    segments[0] &&
+    segments[1] === "follower" &&
+    !reserved.includes(segments[0]);
+
+  const isUserFollowingPage =
+    segments.length === 2 &&
+    segments[0] &&
+    segments[1] === "following" &&
+    !reserved.includes(segments[0]);
 
   // 3) 공개 페이지 (로그인 필요 없음)
   const isPublicPage =
@@ -49,7 +60,9 @@ export default auth((req) => {
     pathname.startsWith("/chart") ||
     pathname.startsWith("/search") ||
     isPostDetailPage ||
-    isUserPostsPage;
+    isUserPostsPage ||
+    isUserFollowingPage ||
+    isUserFollowerPage;
 
   // 이미 로그인했는데 로그인/회원 페이지로 가면 → 메인으로 보냄
   if (isLoggedIn && isAuthPage) {

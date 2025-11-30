@@ -24,10 +24,11 @@ export function FollowButton({
 
     checkFollowStatus();
   }, [userId, targetId]);
-  console.log(isFollowing);
+
   const handleFollowToggle = async () => {
-    setLoading(true);
     if (!userId) return;
+    setLoading(true);
+
     try {
       let result;
       if (isFollowing) {

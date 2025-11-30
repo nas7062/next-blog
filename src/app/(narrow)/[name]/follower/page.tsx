@@ -8,6 +8,7 @@ import { ChevronRight } from "lucide-react";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import FollowUser from "../_components/FollowUser";
 
 export default function FollowerPage() {
   const id = usePathname().split("/")[1];
@@ -42,24 +43,7 @@ export default function FollowerPage() {
       </div>
       <h2>{followerCount}명의 팔로워</h2>
       {follower?.map((follow) => (
-        <div key={follow.id}>
-          <div className="flex gap-4 items-center">
-            <Image
-              src={follow?.image ? follow.image : "/hello.png"}
-              alt="유저 이미지"
-              width={40}
-              height={40}
-              className="rounded-full"
-            />
-            <div className="flex flex-col gap-1">
-              <div>{follow.name}</div>
-              <div>{follow.descript}</div>
-            </div>
-            <div className="ml-auto">
-              <FollowButton userId={user?.id} targetId={follow.id} />
-            </div>
-          </div>
-        </div>
+        <FollowUser follow={follow} user={user} key={follow.id} />
       ))}
     </div>
   );

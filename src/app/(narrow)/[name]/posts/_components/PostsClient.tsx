@@ -11,13 +11,15 @@ import Tabs from "./Tabs";
 import { TagSlider } from "./TagSlider";
 import { useEffect, useState } from "react";
 import { getFollowInfo } from "@/src/app/_lib/getFollowInfo";
+import { IUser } from "@/src/app/_components/PostDetail";
+import { getFollowCounts } from "@/src/app/_lib/getFollowCount";
 
 export default function PostClient() {
   const id = usePathname().split("/")[1];
   const searchParams = useSearchParams();
   const tag = searchParams.get("tag") as string;
-  const [follower, setFollower] = useState(0);
-  const [following, setFollowing] = useState(0);
+  const [followerCount, setFollowerCount] = useState(0);
+  const [followingCount, setFollowingCount] = useState(0);
   const { user: userData, isLoading: isUserLoading } = useCurrentUser({
     id,
   });
@@ -27,8 +29,9 @@ export default function PostClient() {
   useEffect(() => {
     if (!id) return;
     const fetchFollow = async () => {
-      const response = await getFollowInfo(id);
-      console.log(response);
+      const data = await getFollowCounts(id);
+      if (data?.followerCount) setFollowerCount(data?.followerCount);
+      if (data?.followingCount) setFollowingCount(data?.followingCount);
     };
     fetchFollow();
   }, [id]);
@@ -52,8 +55,8 @@ export default function PostClient() {
           </div>
         </div>
         <div className="flex justify-end gap-4 py-4">
-          <p>0 팔로우</p>
-          <p>0 팔로잉</p>
+          <p>{followerCount} 팔로우</p>
+          <p>{followingCount} 팔로잉</p>
         </div>
         <div className="flex gap-4">
           <GithubIcon className="w-8 h-8 cursor-pointer" />

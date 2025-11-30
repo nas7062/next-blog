@@ -66,8 +66,8 @@ export async function getFollowInfo(userId: string) {
   }
 
   return {
-    followerCount: followerIds.length,
-    followingCount: followingIds.length,
+    followerCount: followerIds.length ?? 0,
+    followingCount: followingIds.length ?? 0,
     followers: followerUsers,
     followings: followingUsers,
   };

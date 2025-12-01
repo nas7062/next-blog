@@ -19,7 +19,6 @@ import { usePostLike } from "../hook/usePostLIke";
 import { useGetComment } from "../hook/useGetComment";
 import { useQueryClient } from "@tanstack/react-query";
 import { useDeleteComment } from "../(narrow)/[name]/[postId]/_hook/useDeleteComment";
-import { createFollow } from "../_lib/createFollow";
 import { FollowButton } from "./FollowButton";
 
 dayjs.extend(relativeTime);

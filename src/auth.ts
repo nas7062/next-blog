@@ -94,7 +94,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         console.log("카카오 유저에 email 없음:", user);
         return true; // 일단 로그인은 통과시키고, DB는 안 건드림
       }
-      const id = user.id;
+
       const email = user.email;
       const supabase = getSupabaseClient();
       try {
@@ -109,7 +109,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         if (!error && data && data.length === 0) {
           const { error: upsertError } = await supabase.from("users").upsert([
             {
-              id: id,
+              id: email,
               email,
               name: user.name,
               image: (user as any).image ?? null,

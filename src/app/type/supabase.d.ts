@@ -175,7 +175,7 @@ export type Database = {
           created_at: string | null;
           descript: string | null;
           email: string;
-          id: string | null;
+          id: string;
           image: string | null;
           like: number[] | null;
           name: string | null;
@@ -195,7 +195,7 @@ export type Database = {
           created_at?: string | null;
           descript?: string | null;
           email?: string;
-          id?: string | null;
+          id?: string;
           image?: string | null;
           like?: number[] | null;
           name?: string | null;

@@ -20,6 +20,7 @@ import TagList from "@/src/app/_components/TagList";
 import Viewer from "./View";
 import { getSupabaseClient } from "@/src/app/api/supabase";
 import Image from "next/image";
+import { useCurrentUser } from "@/src/app/hook/useCurrentUser";
 
 export interface IPost {
   coverImgUrl: string;
@@ -46,6 +47,11 @@ export default function WritePageClient() {
 
   const router = useRouter();
   const { data: user } = useSession();
+
+  const email = user?.user?.email as string;
+  const { user: userData, isLoading: isUserLoading } = useCurrentUser({
+    email,
+  });
   const [thumbnailFile, setThumbnailFile] = useState<File | null>(null);
   const [getContent, setGetContent] = useState("");
   const [post, setPost] = useState<IPost>();
@@ -90,7 +96,7 @@ export default function WritePageClient() {
   const onSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
 
-    const uid = user?.user?.id;
+    const uid = userData?.id;
     if (!uid) return;
 
     if (!title || !getContent) {
@@ -194,7 +200,7 @@ export default function WritePageClient() {
   const onDeleteTag = (tagname: string) => {
     setTags((prevTags) => prevTags.filter((t) => t !== tagname));
   };
-
+  if (isUserLoading) return "loading...";
   return (
     <main className="h-screen w-full flex flex-col sm:flex-row  gap-4  sm:gap-9 text-primary">
       <form

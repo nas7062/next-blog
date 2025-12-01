@@ -1,33 +1,18 @@
 "use client";
 
 import { useSession } from "next-auth/react";
-import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { getFollowPosts } from "../../_lib/getFollowPosts";
-import { useEffect, useState } from "react";
-import { IPost } from "../write/_components/WirtePageClient";
-import { useCurrentUser } from "../../hook/useCurrentUser";
 import Post from "../../_components/Post";
+import { useRouter } from "next/navigation";
+import Image from "next/image";
+import { useLikePosts } from "../../hook/useLikePosts";
 
-export default function FeedPage() {
+export default function LikePage() {
   const router = useRouter();
   const { data: session } = useSession();
   const email = session?.user?.email as string;
-  const [posts, setPosts] = useState<IPost[] | null>([]);
-  const { user: userData, isLoading: isUserLoading } = useCurrentUser({
-    email,
-  });
-  console.log(userData);
-  useEffect(() => {
-    if (!userData?.id) return;
-    const fetchFeed = async () => {
-      const data = await getFollowPosts(userData?.id);
-      console.log(data);
-      setPosts(data);
-    };
-    fetchFeed();
-  }, [userData?.id]);
+  const { posts, isLoading: isPostLoading } = useLikePosts(email);
 
+  if (isPostLoading) return "loading...";
   if (!posts)
     return (
       <div className="flex flex-col justify-center items-center gap-4">
